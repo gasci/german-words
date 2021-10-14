@@ -4,7 +4,7 @@ from flask_classful import FlaskView, route
 
 app = Flask(__name__, template_folder='templates')
 
-class VocabView(FlaskView):
+class WordView(FlaskView):
     def __init__(self):
         with open("assets/vocab.json", "r", encoding="utf-8") as json_file:
             self.data = json.load(json_file)
@@ -13,7 +13,10 @@ class VocabView(FlaskView):
         app.config['JSON_AS_ASCII'] = False
     
     def index(self):
-        return "This is my German learning tool!"
+
+        words = self.data.keys()
+
+        return render_template('main.html', words=words) #
 
     def search(self):
         word = request.args.get("word")
@@ -28,11 +31,11 @@ class VocabView(FlaskView):
             response = self.data[word]
 
         
-        return render_template('main.html', **response) #
+        return render_template('word.html', **response) #
 
         #return jsonify(response=response)
 
-VocabView.register(app)
+WordView.register(app)
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0')
