@@ -1,9 +1,11 @@
-{"gehört": {"word": "gehören", "english": "to belong", "sentence": "Unser kleiner Sohn weiß genau, wo alle seine Spielsachen hingehören.", "sentence_eng": "Our little son knows well where all his toys belong.", "perfect": "", "conjugation": "", "request_count": 57}, "gehören": {
+{
+    "gehören": {
         "word": "gehören",
         "english": "to belong",
         "sentence": "Unser kleiner Sohn weiß genau, wo alle seine Spielsachen hingehören.",
         "sentence_eng": "Our little son knows well where all his toys belong.",
         "perfect": "",
         "conjugation": "",
-        "request_count": 57
-    }}
+        "request_count": 1
+    }
+}

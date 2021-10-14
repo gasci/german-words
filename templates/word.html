@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}Word{% endblock %}
+
 {% block body %}
-{{ word }} <br>
-{{ english }} <br>
-{{ sentence }} <br>
+<b>w:</b> {{ word }} <br>
+<!-- <b>type:</b> {{ type }} <br> -->
+<b>t eng:</b> {{ english }} <br>
+<b>s:</b> {{ sentence }} <br>
+<b>s eng:</b> {{ sentence_eng }}
 {% endblock %}
