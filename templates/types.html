@@ -4,6 +4,10 @@
 
 {% block body %}
 
+<form class="d-flex pb-2" action="/update">
+    <button class="btn btn-warning" type="submit">Update words</button>
+</form>
+
 <ul>
     {% for type in types %}
     <li><a href="/word/list?type={{type}}">{{type}}</a></li>

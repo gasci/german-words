@@ -1,82 +1,86 @@
-from flask import Flask, jsonify, request, render_template, redirect
-import json
+from flask import Flask, request, render_template, redirect
+
 from flask_classful import FlaskView
 from dotenv import load_dotenv
-import os
 
-app = Flask(__name__, template_folder='templates')
+from classes.s3 import S3
 
-# HOME = os.environ['CLUSTER_USERNAME']
-# CLUSTER_PASSWORD = os.environ['CLUSTER_USERNAME']
-
-# print(HOME)
-# print(CLUSTER_PASSWORD)
+app = Flask(__name__, template_folder="templates")
 
 # load variables
 load_dotenv(".env")
 # app config
-app.config['JSON_AS_ASCII'] = False
+app.config["JSON_AS_ASCII"] = False
+
+s3 = S3()
+DATA = s3.get_source_json()
 
 @app.route("/")
 def starting_url():
     return redirect("/type")
 
 
-class TypeView(FlaskView):
-    def __init__(self):
-        with open("assets/vocab.json", "r", encoding="utf-8") as json_file:
-            self.data = json.load(json_file)
-    
-    def index(self):
-        types = self.data.keys()
-        return render_template('types.html', types=types)
+@app.route("/update")
+def update_json():
+    global DATA
+    DATA = s3.get_source_json()
+    return redirect("/type")
 
+
+class TypeView(FlaskView):
+        
+    def index(self):
+        types = DATA.keys()
+        return render_template("types.html", types=types)
+        
 
 class WordView(FlaskView):
-    def __init__(self):
-        with open("assets/vocab.json", "r", encoding="utf-8") as json_file:
-            self.data = json.load(json_file)
-  
+    
     def list(self):
         type = request.args.get("type").lower()
-        words = self.data[type].keys()
-        print(words)
-        return render_template('words.html', words=words, type=type) #
+        words = DATA[type].keys()
+        return render_template("words.html", words=words, type=type)  #
 
-    def incr_request_count(self, word):
+    def incr_request_count(self, type, word):
         """
         increase the request count by one
         """
-        self.data[word]["request_count"] += 1
-    
+        DATA[type][word]["request_count"] += 1
+
+        s3.update_source_json(DATA)
+
     def get_word(self):
         word = request.args.get("word").lower()
         type = request.args.get("type").lower()
-        
-        word_dict = self.data[type][word]
 
-        return render_template('word.html', word_dict=word_dict, type=type ) 
+        word_dict = DATA[type][word]
+
+        #self.incr_request_count(type, word)
+
+        return render_template("word.html", word_dict=word_dict, type=type)
 
     def search(self):
         word_input = request.args.get("word").lower()
 
         all_words_dict = {}
 
-        for key in self.data.keys():
+        for key in DATA.keys():
 
-            for word in self.data[key]:
-                all_words_dict[word] = self.data[key][word]
+            for word in DATA[key]:
+                all_words_dict[word] = DATA[key][word]
 
         try:
             word_dict = all_words_dict[word_input]
-            return render_template('word.html', word_dict=word_dict, type=type) 
+            return render_template("word.html", word_dict=word_dict, type=type)
         except KeyError:
-            types = self.data.keys()
-            return render_template('types.html', types=types, message="No words")
+            types = DATA.keys()
+            return render_template("types.html", types=types, message="No words")
 
+
+s3 = S3()
 
 TypeView.register(app)
 WordView.register(app)
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0')
+    app.run(host="0.0.0.0")
