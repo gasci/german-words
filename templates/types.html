@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Types{% endblock %}
+
+{% block body %}
+
+<ul>
+    {% for type in types %}
+    <li><a href="/word/list?type={{type}}">{{type}}</a></li>
+    {% endfor %}
+</ul>
+
+
+<!-- {{words}} -->
+
+{% endblock %}

@@ -12,43 +12,65 @@ app = Flask(__name__, template_folder='templates')
 # print(HOME)
 # print(CLUSTER_PASSWORD)
 
+# load variables
+load_dotenv(".env")
+# app config
+app.config['JSON_AS_ASCII'] = False
+
 @app.route("/")
 def starting_url():
-    return redirect("/word")
+    return redirect("/type")
+
+
+class TypeView(FlaskView):
+    def __init__(self):
+        with open("assets/vocab.json", "r", encoding="utf-8") as json_file:
+            self.data = json.load(json_file)
+    
+    def index(self):
+        types = self.data.keys()
+        return render_template('types.html', types=types)
+
 
 class WordView(FlaskView):
     def __init__(self):
         with open("assets/vocab.json", "r", encoding="utf-8") as json_file:
             self.data = json.load(json_file)
+  
+    def list(self):
+        type = request.args.get("type")
+        words = self.data[type].keys()
+        print(words)
+        return render_template('words.html', words=words, type=type) #
 
-        # load variables
-        load_dotenv(".env")
-        # app config
-        app.config['JSON_AS_ASCII'] = False
+    def incr_request_count(self, word):
+        """
+        increase the request count by one
+        """
+        self.data[word]["request_count"] += 1
     
-    def index(self):
+    def get_word(self):
+        word = request.args.get("word")
+        type = request.args.get("type")
+        
+        word_dict = self.data[type][word]
 
-        words = self.data.keys()
-
-        return render_template('main.html', words=words) #
+        return render_template('word.html', word_dict=word_dict, type=type ) 
 
     def search(self):
         word = request.args.get("word")
         
-        # increase the request count by one
-        # self.data[word]["request_count"] += 1
+        words_list = {}
 
-        # print(self.data)
+        for key in self.data.keys():
+            words_list.append(self.data[key])
 
-        # with open("assets/vocab.json", "w", encoding="utf-8") as jsonFile:
-        #     json.dump(self.data, jsonFile, ensure_ascii=False)
-        response = self.data[word]
+        word_dict = words_list[word]
 
-        
-        return render_template('word.html', **response) 
+        return render_template('word.html', word_dict=word_dict, type=type) 
 
-        #return jsonify(response=response)
 
+TypeView.register(app)
 WordView.register(app)
 
 if __name__ == "__main__":

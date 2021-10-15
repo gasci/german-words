@@ -3,9 +3,11 @@
 {% block title %}Word{% endblock %}
 
 {% block body %}
-<b>w:</b> {{ word }} <br>
-<!-- <b>type:</b> {{ type }} <br> -->
-<b>t eng:</b> {{ english }} <br>
-<b>s:</b> {{ sentence }} <br>
-<b>s eng:</b> {{ sentence_eng }}
+<ul>
+    {% for key, value in word_dict.items() %}
+        {% if value not in ["", 0]  %}
+            <li>{{value}} <b>({{key}})</b></li>
+        {% endif %}
+    {% endfor %}
+</ul>
 {% endblock %}
