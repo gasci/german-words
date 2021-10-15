@@ -38,7 +38,7 @@ class WordView(FlaskView):
             self.data = json.load(json_file)
   
     def list(self):
-        type = request.args.get("type")
+        type = request.args.get("type").lower()
         words = self.data[type].keys()
         print(words)
         return render_template('words.html', words=words, type=type) #
@@ -50,15 +50,15 @@ class WordView(FlaskView):
         self.data[word]["request_count"] += 1
     
     def get_word(self):
-        word = request.args.get("word")
-        type = request.args.get("type")
+        word = request.args.get("word").lower()
+        type = request.args.get("type").lower()
         
         word_dict = self.data[type][word]
 
         return render_template('word.html', word_dict=word_dict, type=type ) 
 
     def search(self):
-        word_input = request.args.get("word")
+        word_input = request.args.get("word").lower()
 
         all_words_dict = {}
 
@@ -73,10 +73,6 @@ class WordView(FlaskView):
         except KeyError:
             types = self.data.keys()
             return render_template('types.html', types=types, message="No words")
-
-        
-
-        
 
 
 TypeView.register(app)

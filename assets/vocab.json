@@ -17,6 +17,26 @@
             "perfect": "",
             "conjugation": "",
             "request_count": 0
+        },
+        "tragen": {
+            "word": "tragen",
+            "english": "to wear",
+            "sentence": "Der junge Mann trägt immer eine Mütze.",
+            "sentence_eng": "The young man always wears a cap.",
+            "perfect": "",
+            "conjugation": "",
+            "request_count": 0
+        }
+    },
+    "nouns": {
+        "rechnung": {
+            "word": "die Rechnung",
+            "english": "invoice",
+            "sentence": "Der Kunde bezahlte die Rechnung sofort.",
+            "sentence_eng": "The client paid the invoice right away.",
+            "perfect": "",
+            "conjugation": "",
+            "request_count": 0
         }
     }
 }
