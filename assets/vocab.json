@@ -8,6 +8,15 @@
             "perfect": "",
             "conjugation": "",
             "request_count": 0
+        },
+        "bezahlen": {
+            "word": "bezahlen",
+            "english": "to pay",
+            "sentence": "Ich muss viele Rechnungen bezahlen.",
+            "sentence_eng": "I have a lot of bills to pay.",
+            "perfect": "",
+            "conjugation": "",
+            "request_count": 0
         }
     }
 }

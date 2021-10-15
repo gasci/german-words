@@ -46,7 +46,7 @@
                 </li>
             </ul> -->
             <form class="d-flex" action="/word/search">
-                <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
+                <input class="form-control me-2" name="word" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
@@ -54,10 +54,15 @@
 </nav>
 
 <body>
-    
+
 
     <div class="container pt-2">
-        
+
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+        {% endif %}
         {% block body %}{% endblock %}
     </div>
 

@@ -58,16 +58,25 @@ class WordView(FlaskView):
         return render_template('word.html', word_dict=word_dict, type=type ) 
 
     def search(self):
-        word = request.args.get("word")
-        
-        words_list = {}
+        word_input = request.args.get("word")
+
+        all_words_dict = {}
 
         for key in self.data.keys():
-            words_list.append(self.data[key])
 
-        word_dict = words_list[word]
+            for word in self.data[key]:
+                all_words_dict[word] = self.data[key][word]
 
-        return render_template('word.html', word_dict=word_dict, type=type) 
+        try:
+            word_dict = all_words_dict[word_input]
+            return render_template('word.html', word_dict=word_dict, type=type) 
+        except KeyError:
+            types = self.data.keys()
+            return render_template('types.html', types=types, message="No words")
+
+        
+
+        
 
 
 TypeView.register(app)
