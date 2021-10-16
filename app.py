@@ -62,6 +62,8 @@ class WordView(FlaskView):
             "sentence_eng": sentence_eng,
         }
 
+        types = db.list_types()
+
         # if update recreate the word
         old_word = request.args.get("old_word")
         if old_word:
@@ -69,9 +71,9 @@ class WordView(FlaskView):
 
         if word and type:
             db.add_update_word(new_word)
-            return render_template("word.html", word_dict=new_word)
+            return render_template("types.html", types=types, message="Updated database")
         else:
-            types = db.list_types()
+            
             return render_template("types.html", types=types, message="Incorrect input")
 
     def update_word_redirect(self):

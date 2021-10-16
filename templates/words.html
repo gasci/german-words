@@ -4,6 +4,10 @@
 
 {% block body %}
 
+{% with back_link="/type/", back_text="All words" %}
+{% include "snippets/back_button.html" %}
+{% endwith %}
+
 <h5 class="mb-2 mt-1">{{type.title()}}</h5>
 <div class="row">
     <div class="col-lg-4 ">

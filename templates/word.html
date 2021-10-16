@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
 
+
 {% block title %}Word{% endblock %}
 
 {% block body %}
-<ul>
+{% with back_link="/word/list/?type=" + word_dict.type , back_text=word_dict["type"].title() + "s" %}
+{% include "snippets/back_button.html" %}
+{% endwith %}
+
+<div class="jumbotron mt-4">
     {% for key, value in word_dict.items() %}
-        {% if value not in ["", 0] %}
-            {% if key not in ["_id", "type"] %}
-                <li>{{value}} <b>({{key}})</b></li>
-            {% endif %}
-        {% endif %}
+    {% if value not in ["", 0] %}
+    {% if key not in ["_id", "type"] %}
+    
+    <p class="lead">{{value}}</p>
+    <hr class="my-4">
+    {% endif %}
+    {% endif %}
     {% endfor %}
-</ul>
+</div>
 {% endblock %}
