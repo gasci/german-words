@@ -2,13 +2,14 @@
 from flask import Flask, request, render_template, redirect
 
 from flask_classful import FlaskView
-
+from urllib.parse import quote_plus
 from classes.mongo import Database
 
 app = Flask(__name__, template_folder="templates")
 
 # app config
 app.config["JSON_AS_ASCII"] = False
+app.jinja_env.filters["encode_uri"] = lambda u: quote_plus(u)
 
 db = Database(".env")
 #%%
@@ -41,7 +42,7 @@ class WordView(FlaskView):
 
     def get_word(self):
         word = request.args.get("word")
-        
+
         word_dict = db.search_word(word)
 
         # self.incr_request_count(type, word)
@@ -53,13 +54,18 @@ class WordView(FlaskView):
         type = request.args.get("type")
         sentence = request.args.get("sentence")
         sentence_eng = request.args.get("sentence_eng")
-        
+
         new_word = {
             "word": word,
             "type": type,
             "sentence": sentence,
             "sentence_eng": sentence_eng,
         }
+
+        # if update recreate the word
+        old_word = request.args.get("old_word")
+        if old_word:
+            db.delete_word(old_word)
 
         if word and type:
             db.add_update_word(new_word)
@@ -70,11 +76,11 @@ class WordView(FlaskView):
 
     def update_word_redirect(self):
         word = request.args.get("word")
-        
-        word_dict = db.search_word(word)
-        
+        word_dict = db.get_word(word)
         types = db.list_types()
-        return render_template("types.html", types=types, word_dict=word_dict)
+        return render_template(
+            "types.html", types=types, old_word=word, word_dict=word_dict
+        )
 
     def delete_word(self):
         word = request.args.get("word")
@@ -87,13 +93,13 @@ class WordView(FlaskView):
 
     def search(self):
         word = request.args.get("word").lower()
-        
+
         result = db.search_word(word)
 
         if len(result) > 0:
             word_dict = result
             return render_template("word.html", word_dict=word_dict)
-        else:        
+        else:
             types = db.list_types()
             return render_template("types.html", types=types, message="No words")
 

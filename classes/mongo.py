@@ -41,12 +41,16 @@ class Database:
         cursor = self.words.find({"type": type})
 
         for result in cursor:
-            result_list.append(result["word"])
+            result_list.append((result["word"], result["_id"]))
         
         return result_list
 
     def delete_word(self, word):
         self.words.delete_one({"word": word})
+
+    def get_word(self, word):
+        cursor = self.words.find({"word": word})
+        return cursor[0]
 
     def search_word(self, word):
         

@@ -10,23 +10,22 @@
         {% if not words %}
         <span>No words</span>
         {% endif %}
-
         {% for word in words %}
         <div class="input-group mb-2">
-            <button onclick="location.href='/word/get_word?type={{type}}&word={{word}}'" class="input-group-text"><i class="fas fa-arrow-right"></i></button>
-            <button onclick="location.href='/word/get_word?type={{type}}&word={{word}}'"
-                class="form-control btn btn-success" type="button">{{word}}</button>
-            <button onclick="location.href='/word/update_word_redirect?word={{word}}'" class="btn btn-warning"><i
+            <button onclick="location.href='/word/get_word?type={{type}}&word={{word[0]|encode_uri}}'" class="input-group-text"><i class="fas fa-arrow-right"></i></button>
+            <button onclick="location.href='/word/get_word?type={{type}}&word={{word[0]|encode_uri}}'"
+                class="form-control btn btn-success" type="button">{{word[0]}}</button>
+            <button onclick="location.href='/word/update_word_redirect?word={{word[0]|encode_uri}}'" class="btn btn-warning"><i
                     class="fas fa-pencil-alt"></i></button>
 
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-word">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-word-{{word[1]}}">
                 <i class="fas fa-trash"></i>
             </button>
         </div>
 
 
         <!-- Modal -->
-        <div class="modal fade" id="delete-word" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        <div class="modal fade" id="delete-word-{{word[1]}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -39,7 +38,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button onclick="location.href='/word/delete_word?type={{type}}&word={{word}}'"
+                        <button onclick="location.href='/word/delete_word?type={{type}}&word={{word[0]|encode_uri}}'"
                             class="btn btn-danger">Delete</button>
                     </div>
                 </div>
