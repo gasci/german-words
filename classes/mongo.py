@@ -20,42 +20,46 @@ class Database:
                 mongo_cli_username, mongo_cli_password, cluster_name
             )
         )
-
+        
         self.data = self.client[mongo_cli_username]
+        self.words = self.data["words"]
 
-    def add_update_word(self, type, word_dict):
-        self.data[f"{type}s"].update(
+         # create index
+        self.words.create_index([('word', 'text')])
+
+    def add_update_word(self, word_dict):
+        self.words.update(
             {"word": word_dict["word"]}, {"$set": word_dict}, upsert=True
         )
 
-    def list_colls(self):
-        colls = self.data.collection_names()
+    def list_types(self):
+        types = self.words.distinct("type")
+        return types
 
-        return colls
+    def get_words_type(self, type):
+        result_list = []   
+        cursor = self.words.find({"type": type})
 
-    def get_word(self, type, word):
-        results = self.data[type].find({"word": word})
-        return results[0]
+        for result in cursor:
+            result_list.append(result["word"])
+        
+        return result_list
 
-    def delete_word(self, type, word):
-        self.data[type].delete_one({"word": word})
+    def delete_word(self, word):
+        self.words.delete_one({"word": word})
 
     def search_word(self, word):
-        colls = self.list_colls()
-
+        
         result_list = []    
-        for coll in colls:
+        cursor = self.words.find( { "$text": { "$search": word } }) 
+        
+        for result in cursor:
+            result_list.append(result)
 
-            self.data[coll].create_index([('word', 'text')])
-            cursor = self.data[coll].find( { "$text": { "$search": word } }) 
+        if len(result_list) > 0:
+            return result_list[0]
+        else:
+            return []
 
             
-            for result in cursor:
-                result_list.append(result)
-
-            print(result_list)
-
-            if len(result_list) > 0:
-                return result_list[0]
-        return []
             

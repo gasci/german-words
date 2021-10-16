@@ -12,11 +12,11 @@
 
 {% for word in words %}
 <div class="input-group mb-2">
-    <a href="/word/get_word?type={{type}}&word={{word}}" class="button input-group-text"><i
-            class="fas fa-arrow-right"></i></a>
-    <a href="/word/get_word?type={{type}}&word={{word}}" class="button btn btn-success" type="button">{{word}}</a>
-    <a href="/word/update_word?type={{type}}&word={{word}}" class="button btn btn-warning"><i
-            class="fas fa-pencil-alt"></i></a>
+    <button onclick="location.href='/word/get_word?type={{type}}&word={{word}}'" class="input-group-text"><i
+            class="fas fa-arrow-right"></i></button>
+    <button onclick="location.href='/word/get_word?type={{type}}&word={{word}}'" class="btn btn-success" type="button">{{word}}</button>
+    <button onclick="location.href='/word/update_word_redirect?word={{word}}'" class="btn btn-warning"><i
+            class="fas fa-pencil-alt"></i></button>
     
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-word">
         <i class="fas fa-trash"></i>
@@ -38,7 +38,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="/word/delete_word?type={{type}}&word={{word}}" class="button btn btn-danger">Delete</a>
+                <button onclick="location.href='/word/delete_word?type={{type}}&word={{word}}'" class="btn btn-danger">Delete</button>
             </div>
         </div>
     </div>

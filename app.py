@@ -21,14 +21,14 @@ def starting_url():
 
 class TypeView(FlaskView):
     def index(self):
-        types = db.list_colls()
+        types = db.list_types()
         return render_template("types.html", types=types)
 
 
 class WordView(FlaskView):
     def list(self):
         type = request.args.get("type").lower()
-        words = db.data[type].distinct("word")
+        words = db.get_words_type(type)
         return render_template("words.html", words=words, type=type)  #
 
     # def incr_request_count(self, type, word):
@@ -40,52 +40,49 @@ class WordView(FlaskView):
     #     s3.update_source_json(DATA)
 
     def get_word(self):
-        word = request.args.get("word").lower()
-        type = request.args.get("type").lower()
-
-        word_dict = db.get_word(type, word)
+        word = request.args.get("word")
+        
+        word_dict = db.search_word(word)
 
         # self.incr_request_count(type, word)
 
-        return render_template("word.html", word_dict=word_dict, type=type)
+        return render_template("word.html", word_dict=word_dict)
 
     def add_update_word(self):
-        word = request.args.get("word").lower()
-        type = request.args.get("type").lower()
-        english = request.args.get("english")
+        word = request.args.get("word")
+        type = request.args.get("type")
         sentence = request.args.get("sentence")
         sentence_eng = request.args.get("sentence_eng")
-
+        
         new_word = {
             "word": word,
-            "english": english,
+            "type": type,
             "sentence": sentence,
             "sentence_eng": sentence_eng,
         }
 
-        if word and type and english:
-            db.add_update_word(type, new_word)
-            return render_template("word.html", word_dict=new_word, type=type)
+        if word and type:
+            db.add_update_word(new_word)
+            return render_template("word.html", word_dict=new_word)
         else:
-            types = db.list_colls()
+            types = db.list_types()
             return render_template("types.html", types=types, message="Incorrect input")
 
-    def update_word(self):
-        word = request.args.get("word").lower()
-        type = request.args.get("type").lower()
-
-        word_dict = db.get_word(type, word)
-
-        types = db.list_colls()
+    def update_word_redirect(self):
+        word = request.args.get("word")
+        
+        word_dict = db.search_word(word)
+        
+        types = db.list_types()
         return render_template("types.html", types=types, word_dict=word_dict)
 
     def delete_word(self):
-        word = request.args.get("word").lower()
-        type = request.args.get("type").lower()
+        word = request.args.get("word")
+        type = request.args.get("type")
 
-        db.delete_word(type, word)
+        db.delete_word(word)
 
-        words = db.data[type].distinct("word")
+        words = db.get_words_type(type)
         return render_template("words.html", words=words, type=type)
 
     def search(self):
@@ -95,9 +92,9 @@ class WordView(FlaskView):
 
         if len(result) > 0:
             word_dict = result
-            return render_template("word.html", word_dict=word_dict, type=type)
+            return render_template("word.html", word_dict=word_dict)
         else:        
-            types = db.list_colls()
+            types = db.list_types()
             return render_template("types.html", types=types, message="No words")
 
 
