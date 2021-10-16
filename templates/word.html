@@ -4,7 +4,7 @@
 {% block title %}Word{% endblock %}
 
 {% block body %}
-{% with back_link="/word/list/?type=" + word_dict.type , back_text=word_dict["type"].title() + "s" %}
+{% with back_link=url_for('WordView:list', type=word_dict.type), back_text=word_dict["type"].title() + "s" %}
 {% include "snippets/back_button.html" %}
 {% endwith %}
 

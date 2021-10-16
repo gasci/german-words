@@ -28,7 +28,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="/type">German Words</a>
+        <a class="navbar-brand" href="{{url_for('starting_url')}}">German Words</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -59,7 +59,7 @@
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li> -->
             </ul>
-            <form class="d-flex" action="/word/search">
+            <form class="d-flex" action="{{url_for('WordView:search')}}">
                 <input class="form-control me-2" name="word" type="search" placeholder="Word" aria-label="Search" required>
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>

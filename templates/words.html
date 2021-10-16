@@ -4,7 +4,7 @@
 
 {% block body %}
 
-{% with back_link="/type/", back_text="All words" %}
+{% with back_link=url_for('starting_url'), back_text="All words" %}
 {% include "snippets/back_button.html" %}
 {% endwith %}
 
@@ -16,10 +16,10 @@
         {% endif %}
         {% for word in words %}
         <div class="input-group mb-2">
-            <button onclick="location.href='/word/get_word?&word_id={{word[1]}}'" class="input-group-text"><i class="fas fa-arrow-right"></i></button>
-            <button onclick="location.href='/word/get_word?&word_id={{word[1]}}'" style="text-align: left;"
+            <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word[1])}}`" class="input-group-text"><i class="fas fa-arrow-right"></i></button>
+            <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word[1])}}`" style="text-align: left;"
                 class="form-control btn btn-success" type="button">{{word[0]}}</button>
-            <button onclick="location.href='/word/update_word_redirect?word_id={{word[1]}}'" class="btn btn-warning"><i
+            <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word[1])}}`" class="btn btn-warning"><i
                     class="fas fa-pencil-alt"></i></button>
 
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-word-{{word[1]}}">
@@ -42,7 +42,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button onclick="location.href='/word/delete_word?type={{type}}&word_id={{word[1]}}'"
+                        <button onclick="location.href=`{{url_for('WordView:delete_word', word_id=word[1], type=type)}}`"
                             class="btn btn-danger">Delete</button>
                     </div>
                 </div>

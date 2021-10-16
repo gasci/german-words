@@ -11,8 +11,8 @@
 
         {% for type in types %}
         <div class="input-group mb-2">
-            <button onclick="location.href='/word/list?type={{type}}'" class="input-group-text"><i class="fas fa-arrow-right"></i></button>
-            <button onclick="location.href='/word/list?type={{type}}'" class="form-control btn btn-success" style="text-align:left" type="button">{{type}}s</button>
+            <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`" class="input-group-text"><i class="fas fa-arrow-right"></i></button>
+            <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`" class="form-control btn btn-success" style="text-align:left" type="button">{{type}}s</button>
         </div>
         {% endfor %}
     </div>
