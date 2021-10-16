@@ -6,7 +6,7 @@
 <ul>
     {% for key, value in word_dict.items() %}
         {% if value not in ["", 0] %}
-            {% if key not in ["_id"] %}
+            {% if key not in ["_id", "type"] %}
                 <li>{{value}} <b>({{key}})</b></li>
             {% endif %}
         {% endif %}

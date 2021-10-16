@@ -6,17 +6,20 @@
 
 
 <div class="row">
-    <div class="col-md-6 mt-1 mb-3">
+    <div class="col-lg-4 col-md-5 mt-1 mb-3">
         <h5 class="mb-2">Word types</h5>
 
         {% for type in types %}
         <div class="input-group mb-2">
             <button onclick="location.href='/word/list?type={{type}}'" class="input-group-text"><i class="fas fa-arrow-right"></i></button>
-            <button onclick="location.href='/word/list?type={{type}}'" class="btn btn-success" type="button">{{type}}s</button>
+            <button onclick="location.href='/word/list?type={{type}}'" class="form-control btn btn-success" type="button">{{type}}s</button>
         </div>
         {% endfor %}
     </div>
-    <div class="col-md-6 ">
+    <div class="col-lg-2 col-md-1">
+
+    </div>
+    <div class="col-lg-6 col-md-6">
         {% include 'snippets/add_update.html' %}
     </div>
 
