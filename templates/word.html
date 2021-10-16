@@ -8,15 +8,15 @@
 {% include "snippets/back_button.html" %}
 {% endwith %}
 
-<div class="jumbotron mt-4">
-    {% for key, value in word_dict.items() %}
-    {% if value not in ["", 0] %}
-    {% if key not in ["_id", "type"] %}
-    
-    <p class="lead">{{value}}</p>
-    <hr class="my-4">
-    {% endif %}
-    {% endif %}
-    {% endfor %}
+<div class="row">
+    <div class="col-lg-6 ">
+        <div class="card mt-2 p-4 {{[word_dict['word'], word_dict['type']]|word_background}}">
+            <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["word"]}}</div>
+            <hr>
+            <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
+            <hr>
+            <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence_eng"]}}</div>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -1,8 +1,10 @@
-import json
+
 import os
-import re
+
 from dotenv import load_dotenv
 from pymongo import MongoClient
+
+from bson.objectid import ObjectId
 
 
 class Database:
@@ -27,9 +29,9 @@ class Database:
          # create index
         self.words.create_index([('word', 'text')])
 
-    def add_update_word(self, word_dict):
+    def add_update_word(self, word_id, word_dict):
         self.words.update(
-            {"word": word_dict["word"]}, {"$set": word_dict}, upsert=True
+            {"_id": ObjectId(word_id)}, {"$set": word_dict}, upsert=True
         )
 
     def list_types(self):
@@ -45,11 +47,11 @@ class Database:
         
         return result_list
 
-    def delete_word(self, word):
-        self.words.delete_one({"word": word})
+    def delete_word(self, word_id):
+        self.words.delete_one({"_id": ObjectId(word_id)})
 
-    def get_word(self, word):
-        cursor = self.words.find({"word": word})
+    def get_word(self, word_id):
+        cursor = self.words.find({"_id": ObjectId(word_id)})
         return cursor[0]
 
     def search_word(self, word):
