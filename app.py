@@ -63,7 +63,7 @@ class WordView(FlaskView):
             "sentence_eng": sentence_eng,
         }
 
-        if word and type and english and sentence and sentence_eng:
+        if word and type and english:
             db.add_update_word(type, new_word)
             return render_template("word.html", word_dict=new_word, type=type)
         else:
