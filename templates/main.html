@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Types{% endblock %}
+
+{% block body %}
+
+
+<div class="row">
+    <div class="col-lg-4 col-md-5 mt-1 mb-2">
+        <h5 class="mb-3">Study:</h5>
+
+        {% for type in types %}
+        <div class="shadow">
+            <div class="input-group mb-2">
+                <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`" class="input-group-text"><i
+                        class="fas fa-arrow-right"></i></button>
+                <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
+                    class="form-control btn btn-success" style="text-align:left" type="button">{{type}}s</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="col-lg-2 col-md-1">
+
+    </div>
+    <div class="col-lg-6 col-md-6">
+        <hr class="mb-4 d-sm-block d-md-none d-lg-none">
+        {% include 'snippets/add_update.html' %}
+    </div>
+
+</div>
+
+
+<!-- {{words}} -->
+
+{% endblock %}

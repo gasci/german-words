@@ -3,24 +3,24 @@
     <h5>Add a word:</h5>
     <form class="d-flex" action="{{ url_for('WordView:add_update_word') }}">
         <label class="w-100 mt-2">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" name="word" placeholder="Word" required value="">
-            </div>
-
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 shadow-sm">
                 {% include 'snippets/type_selector.html' %}
             </div>
 
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 shadow-sm">
+                <input type="text" class="form-control" name="word" placeholder="Word" required value="">
+            </div>
+
+            <div class="input-group mb-3 shadow-sm">
                 <textarea class="form-control" name="sentence" placeholder="German sentence"></textarea>
             </div>
 
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 shadow-sm">
                 <textarea class="form-control" name="sentence_eng" placeholder="English sentence"></textarea>
             </div>
 
-            <div class="input-group mb-3">
-                <button type="submit" class="btn btn-warning w-100">Add</button>
+            <div class="input-group mb-3 shadow">
+                <button type="submit" class="btn btn-warning w-100"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add</button>
             </div>
         </label>
     </form>
@@ -30,28 +30,24 @@
     <form class="d-flex" action="{{ url_for('WordView:add_update_word') }}">
         <label class="w-100 mt-2">
             <input type="hidden" name="word_id" value="{{word_id}}" />
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 shadow-sm">
+                {% include 'snippets/type_selector.html' %}
+            </div>
+
+            <div class="input-group mb-3 shadow-sm">
                 <input type="text" class="form-control" name="word" placeholder="Word" required value="{{word_dict['word']}}">
             </div>
     
-            <div class="input-group mb-3">
-    
-                <div class="input-group mb-3">
-                    {% include 'snippets/type_selector.html' %}
-                </div>
-    
-            </div>
-    
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 shadow-sm">
                 <textarea class="form-control" name="sentence" placeholder="German sentence">{{word_dict['sentence']}}</textarea>
             </div>
     
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 shadow-sm">
                 <textarea class="form-control" name="sentence_eng" placeholder="English sentence">{{word_dict['sentence_eng']}}</textarea>
             </div>
     
-            <div class="input-group mb-3">
-                <button type="submit" class="btn btn-warning w-100">Update</button>
+            <div class="input-group mb-3 shadow">
+                <button type="submit" class="btn btn-warning w-100"><i class="fas fa-save"></i>&nbsp;&nbsp;Update</button>
             </div>
         </label>
     </form>

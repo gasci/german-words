@@ -11,13 +11,13 @@ db = Database(".env")
 
 @app.route("/")
 def starting_url():
-    return redirect("/type")
+    return redirect("/main")
 
 
-class TypeView(FlaskView):
+class MainView(FlaskView):
     def index(self):
         types = db.list_types()
-        return render_template("types.html", types=types)
+        return render_template("main.html", types=types)
 
 
 class WordView(FlaskView):
@@ -49,17 +49,17 @@ class WordView(FlaskView):
 
         if word and type:
             db.add_update_word(word_id, new_word)
-            return render_template("types.html", types=types, message="Updated database")
+            return render_template("main.html", types=types, message="Updated database")
         else:
             
-            return render_template("types.html", types=types, message="Incorrect input")
+            return render_template("main.html", types=types, message="Incorrect input")
 
     def update_word_redirect(self):
         word_id = request.args.get("word_id")
         word_dict = db.get_word(word_id)
         types = db.list_types()
         return render_template(
-            "types.html", types=types, word_id=word_id, word_dict=word_dict
+            "main.html", types=types, word_id=word_id, word_dict=word_dict
         )
 
     def delete_word(self):
@@ -81,10 +81,10 @@ class WordView(FlaskView):
             return render_template("word.html", word_dict=word_dict)
         else:
             types = db.list_types()
-            return render_template("types.html", types=types, message="No words")
+            return render_template("main.html", types=types, message="No words")
 
 
-TypeView.register(app)
+MainView.register(app)
 WordView.register(app)
 
 if __name__ == "__main__":

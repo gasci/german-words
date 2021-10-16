@@ -3,14 +3,17 @@
 
 {% block title %}Word{% endblock %}
 
-{% block body %}
-{% with back_link=url_for('WordView:list', type=word_dict.type), back_text=word_dict["type"].title() + "s" %}
+{% block back_button %}
+{% with back_link=url_for('WordView:list', type=word_dict.type)%}
 {% include "snippets/back_button.html" %}
 {% endwith %}
+{% endblock %}
 
-<div class="row">
+{% block body %}
+
+<div class="row ">
     <div class="col-lg-6 ">
-        <div class="card mt-2 p-4 {{[word_dict['word'], word_dict['type']]|word_background}}">
+        <div class="card shadow mt-2 p-4 {{[word_dict['word'], word_dict['type']]|word_background}}">
             <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["word"]}}</div>
             <hr>
             <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
