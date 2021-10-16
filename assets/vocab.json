@@ -1,5 +1,5 @@
 {
-    "verbs": {
+    "verb": {
         "gehören": {
             "word": "gehören",
             "english": "to belong",
@@ -28,7 +28,7 @@
             "request_count": 0
         }
     },
-    "nouns": {
+    "noun": {
         "rechnung": {
             "word": "die Rechnung",
             "english": "invoice",

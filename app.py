@@ -26,7 +26,6 @@ def update_json():
     DATA = s3.get_source_json()
     return redirect("/type")
 
-
 class TypeView(FlaskView):
         
     def index(self):
@@ -58,6 +57,31 @@ class WordView(FlaskView):
         #self.incr_request_count(type, word)
 
         return render_template("word.html", word_dict=word_dict, type=type)
+
+    def add_update_word(self):
+        word = request.args.get("word").lower()
+        type = request.args.get("type").lower()
+        english = request.args.get("english")
+        sentence = request.args.get("sentence")
+        sentence_eng = request.args.get("sentence_eng")
+
+        new_word = {
+           "word": word ,
+           "english": english,
+           "sentence": sentence,
+           "sentence_eng": sentence_eng
+        }
+
+        if word and type:
+            current_data = s3.get_source_json()
+            current_data[type][word] = new_word
+            s3.update_source_json(current_data)
+            word_dict = current_data[type][word]
+            return render_template("word.html", word_dict=word_dict, type=type)
+        else:
+            types = DATA.keys()
+            return render_template("types.html", types=types, message="Incorrect input")
+        
 
     def search(self):
         word_input = request.args.get("word").lower()

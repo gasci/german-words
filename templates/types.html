@@ -4,15 +4,24 @@
 
 {% block body %}
 
-<form class="d-flex pb-2" action="/update">
-    <button class="btn btn-warning" type="submit">Update words</button>
-</form>
 
-<ul>
-    {% for type in types %}
-    <li><a href="/word/list?type={{type}}">{{type}}</a></li>
-    {% endfor %}
-</ul>
+<div class="row">
+    <div class="col-md-6 mt-1">
+        <h5>Word types</h5>
+        <ul>
+            {% for type in types %}
+            <li><a href="/word/list?type={{type}}">{{type}}s</a></li>
+            {% endfor %}
+        </ul>
+        <form class="d-flex pb-3" action="/update">
+            <button class="btn btn-warning" type="submit">Update words</button>
+        </form>
+    </div>
+    <div class="col-md-6 ">
+        {% include 'snippets/add_update.html' %}
+    </div>
+
+</div>
 
 
 <!-- {{words}} -->
