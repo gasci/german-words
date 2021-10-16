@@ -5,8 +5,10 @@
 {% block body %}
 <ul>
     {% for key, value in word_dict.items() %}
-        {% if value not in ["", 0]  %}
-            <li>{{value}} <b>({{key}})</b></li>
+        {% if value not in ["", 0] %}
+            {% if key not in ["_id"] %}
+                <li>{{value}} <b>({{key}})</b></li>
+            {% endif %}
         {% endif %}
     {% endfor %}
 </ul>
