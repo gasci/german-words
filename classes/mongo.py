@@ -44,9 +44,9 @@ class Database:
 
     def get_words_type(self, session, type):
         user_id = session["user_id"]
-        result_list = []   
         cursor = self.words.find({"type": type, "user_id": ObjectId(user_id)})
 
+        result_list = [] 
         for result in cursor:
             result_list.append(result)
         
@@ -60,6 +60,12 @@ class Database:
         user_id = session["user_id"]
         cursor = self.words.find({"_id": ObjectId(word_id), "user_id": ObjectId(user_id)})
         return cursor[0]
+
+    def get_type_word_ids(self, session, type):
+        user_id = session["user_id"]
+        ids = self.words.find({"user_id": ObjectId(user_id), "type": type}).distinct("_id")
+        
+        return ids
 
     def search_word(self, session, word):
         user_id = session["user_id"]

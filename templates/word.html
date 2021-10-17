@@ -11,8 +11,26 @@
 
 {% block body %}
 
+{% set current_index = ids.index(word_dict['_id']|str) + 1 %}
+{% set deck_length = ids|len %}
+
 <div class="row justify-content-md-center">
     <div class="col-sm-12 col-md-6 col-lg-5">
+        <div class="input-group mt-1 mb-3 shadow">
+            {% if current_index - 1 != 0 %}
+            <button onclick="location.href=`{{url_for('WordView:get_word', word_id=ids[current_index - 2])}}`"
+                class="btn btn-dark form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
+            {% endif %}
+
+            <button class="btn btn-outline-dark form-control btn-lg">{{current_index}} / {{deck_length}}</button>
+
+            {% if current_index < deck_length %} <button
+                onclick="location.href=`{{url_for('WordView:get_word', word_id=ids[current_index])}}`"
+                class="btn btn-dark form-control btn-lg">
+                <i class="fas fa-arrow-right"></i>
+                </button>
+            {% endif %}
+        </div>
         <div class="card shadow mt-2 p-4 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
             <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["artikel"]}} {{word_dict["word"]}}</div>
             {% if word_dict["sentence"] %}
@@ -27,18 +45,20 @@
                 <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word_dict['_id'])}}`"
                     class="btn btn-warning form-control btn-lg"><i class="fas fa-pencil-alt"></i></button>
 
-                <button type="button" class="btn btn-danger form-control btn-lg" data-bs-toggle="modal"
+                <button class="btn btn-danger form-control btn-lg" data-bs-toggle="modal"
                     data-bs-target="#delete-word-{{word_dict['_id']}}">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
+
+
         </div>
     </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="delete-word-{{word_dict['_id']}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="delete-word-{{word_dict['_id']}}" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -50,7 +70,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button onclick="location.href=`{{url_for('WordView:delete_word', word_id=word_dict['_id'], type=type)}}`"
+                <button
+                    onclick="location.href=`{{url_for('WordView:delete_word', word_id=word_dict['_id'], type=type)}}`"
                     class="btn btn-danger">Delete</button>
             </div>
         </div>

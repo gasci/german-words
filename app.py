@@ -131,7 +131,8 @@ class WordView(FlaskView):
 
         word_id = request.args.get("word_id")
         word_dict = db.get_word(session, word_id)
-        return render_template("word.html", word_dict=word_dict, session=session)
+        ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
+        return render_template("word.html", word_dict=word_dict, ids=ids, session=session)
 
     def add_update_word(self):
 
@@ -200,7 +201,8 @@ class WordView(FlaskView):
 
         if len(result) > 0:
             word_dict = result
-            return render_template("word.html", word_dict=word_dict, session=session)
+            ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
+            return render_template("word.html", word_dict=word_dict, ids=ids, session=session)
         else:
             types = db.list_types(session)
             return render_template("index.html", types=types, message="No words", session=session)

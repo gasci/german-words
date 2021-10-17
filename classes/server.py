@@ -12,6 +12,8 @@ class Server:
         self.app.config["JSON_AS_ASCII"] = False
         self.app.jinja_env.filters["word_background"] = lambda var_list: self.word_background_fixer(var_list)
         self.app.jinja_env.filters["word_text_color"] = lambda var_list: self.word_text_color_fixer(var_list)
+        self.app.jinja_env.filters["str"] = lambda u: str(u)
+        self.app.jinja_env.filters["len"] = lambda u: len(u)
     
 
     def word_background_fixer(self, var_list):
