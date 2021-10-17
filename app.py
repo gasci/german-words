@@ -8,6 +8,7 @@ from classes.server import Server
 from bson.objectid import ObjectId
 import bcrypt
 import os
+from random import shuffle
 # import asyncio
 
 server = Server()
@@ -115,6 +116,9 @@ class MainView(FlaskView):
 
 
 class WordView(FlaskView):
+    def __init__(self):
+        self.word_ids = []
+
     def list(self):
 
         if "email" not in session:
@@ -130,9 +134,16 @@ class WordView(FlaskView):
             return redirect(url_for('login'))
 
         word_id = request.args.get("word_id")
+        word_ids = request.args.get("word_ids", None)
         word_dict = db.get_word(session, word_id)
-        ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
-        return render_template("word.html", word_dict=word_dict, ids=ids, session=session)
+
+        if not word_ids:
+            ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
+            shuffle(ids)
+            self.word_ids = ids
+        else:
+            ids = self.word_ids
+        return render_template("word.html", word_dict=word_dict, ids=ids, session=session, study_mode=True)
 
     def add_update_word(self):
 
@@ -203,7 +214,7 @@ class WordView(FlaskView):
         if len(result) > 0:
             word_dict = result
             ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
-            return render_template("word.html", word_dict=word_dict, ids=ids, session=session)
+            return render_template("word.html", word_dict=word_dict, ids=ids, session=session, study_mode=False)
         else:
             types = db.list_types(session)
             return render_template("index.html", types=types, message="No words", session=session)
