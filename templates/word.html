@@ -19,14 +19,14 @@
         {% if study_mode %}
         <div class="input-group mt-1 mb-3 shadow">
             {% if current_index - 1 != 0 %}
-            <button onclick="location.href=`{{url_for('WordView:get_word', study_mode=True, word_id=ids[current_index - 2])}}`"
+            <button onclick="location.href=`{{url_for('WordView:get_word', shuffle_words=False, word_id=ids[current_index - 2])}}`"
                 class="btn btn-dark form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
             {% endif %}
 
             <button class="btn btn-outline-dark form-control btn-lg">{{current_index}} / {{deck_length}}</button>
 
             {% if current_index < deck_length %} <button
-                onclick="location.href=`{{url_for('WordView:get_word', study_mode=True, word_id=ids[current_index])}}`"
+                onclick="location.href=`{{url_for('WordView:get_word', shuffle_words=False, word_id=ids[current_index])}}`"
                 class="btn btn-dark form-control btn-lg">
                 <i class="fas fa-arrow-right"></i>
                 </button>

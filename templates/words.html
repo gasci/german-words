@@ -20,9 +20,9 @@
         {% for word in words %}
         <div class="shadow">
             <div class="input-group mb-2">
-                <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word['_id'])}}`"
+                <button onclick="location.href=`{{url_for('WordView:get_word', shuffle_words='True', word_id=word['_id'])}}`"
                     class="input-group-text"><i class="fas fa-arrow-right"></i></button>
-                <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word['_id'])}}`"
+                <button onclick="location.href=`{{url_for('WordView:get_word', shuffle_words='True', word_id=word['_id'])}}`"
                     style="text-align: left;" class="form-control btn btn-success" type="button">
                     {% if word['type'] == 'noun' %}{{word['artikel']}}{% endif %} {{word['word']}}
                 </button>
