@@ -14,6 +14,7 @@ from random import shuffle
 server = Server()
 app = server.app
 db = Database(".env")
+word_ids = None
 
 can_register = os.environ.get("CAN_REGISTER")
 
@@ -134,15 +135,15 @@ class WordView(FlaskView):
             return redirect(url_for('login'))
 
         word_id = request.args.get("word_id")
-        # study_mode = request.args.get("study_mode", None)
+        study_mode = request.args.get("study_mode", None)
         word_dict = db.get_word(session, word_id)
 
-        # if study_mode and self.word_ids:
-        #     ids = self.word_ids
-        # else:
-        #     ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
-        #     shuffle(ids)
-        #     self.word_ids = ids
+        if study_mode and self.word_ids:
+            ids = self.word_ids
+        else:
+            ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
+            shuffle(ids)
+            self.word_ids = ids
 
         ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
             
