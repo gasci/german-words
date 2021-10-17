@@ -25,7 +25,7 @@
                     style="text-align: left;" class="form-control btn btn-success" type="button">
                     {% if word['type'] == 'noun' %}{{word['artikel']}}{% endif %} {{word['word']}}
                 </button>
-                {% if authenticated %}
+                {% if session['user_id'] %}
                 <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word['_id'])}}`"
                     class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button>
 

@@ -27,7 +27,7 @@
     <div class="col-lg-2 col-md-1">
 
     </div>
-    {% if authenticated %}
+    {% if session['user_id'] %}
     <div class="col-lg-6 col-md-6">
         <hr class="mb-4 d-sm-block d-md-none d-lg-none">
         {% include 'snippets/add_update.html' %}
