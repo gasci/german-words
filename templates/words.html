@@ -13,6 +13,7 @@
 <h5 class="mb-3 mt-1">{{type.title()}}s:</h5>
 <div class="row">
     <div class="col-md-8 col-lg-6">
+        <button onclick="location.href=`{{url_for('MainView:index')}}`" class="shadow btn btn-warning mb-2 w-100"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add new word</button>
         {% if not words %}
         <span>No words</span>
         {% endif %}
@@ -59,7 +60,6 @@
             </div>
         </div>
         {% endfor %}
-
     </div>
 
 </div>
