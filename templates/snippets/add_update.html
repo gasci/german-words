@@ -7,6 +7,10 @@
                 {% include 'snippets/type_selector.html' %}
             </div>
 
+            <div class="artikel-selector-dev input-group mb-3 shadow-sm">
+                {% include 'snippets/artikel_selector.html' %}
+            </div>
+
             <div class="input-group mb-3 shadow-sm">
                 <input type="text" class="form-control" name="word" placeholder="Word" required value="">
             </div>
@@ -34,22 +38,55 @@
                 {% include 'snippets/type_selector.html' %}
             </div>
 
-            <div class="input-group mb-3 shadow-sm">
-                <input type="text" class="form-control" name="word" placeholder="Word" required value="{{word_dict['word']}}">
+            <div class="artikel-selector-dev input-group mb-3 shadow-sm">
+                {% include 'snippets/artikel_selector.html' %}
             </div>
-    
+
             <div class="input-group mb-3 shadow-sm">
-                <textarea class="form-control" name="sentence" placeholder="German sentence">{{word_dict['sentence']}}</textarea>
+                <input type="text" class="form-control" name="word" placeholder="Word" required
+                    value="{{word_dict['word']}}">
             </div>
-    
+
             <div class="input-group mb-3 shadow-sm">
-                <textarea class="form-control" name="sentence_eng" placeholder="English sentence">{{word_dict['sentence_eng']}}</textarea>
+                <textarea class="form-control" name="sentence"
+                    placeholder="German sentence">{{word_dict['sentence']}}</textarea>
             </div>
-    
+
+            <div class="input-group mb-3 shadow-sm">
+                <textarea class="form-control" name="sentence_eng"
+                    placeholder="English sentence">{{word_dict['sentence_eng']}}</textarea>
+            </div>
+
             <div class="input-group mb-3 shadow">
-                <button type="submit" class="btn btn-warning w-100"><i class="fas fa-save"></i>&nbsp;&nbsp;Update</button>
+                <button type="submit" class="btn btn-warning w-100"><i
+                        class="fas fa-save"></i>&nbsp;&nbsp;Update</button>
             </div>
         </label>
     </form>
     {% endif %}
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+
+<script>
+    $("#type-select").on('change', () => {
+        if ($("#type-select").val() === "noun") {
+            $(".artikel-selector-dev").removeClass("d-none")
+        } else {
+            $(".artikel-selector-dev").addClass("d-none")
+        }
+    });
+</script>
+
+{% if word_dict %}
+<script>
+    $("#type-select").val("{{word_dict['type']}}");
+
+    if ($("#type-select").val() !== "noun"){
+        $(".artikel-selector-dev").addClass("d-none")
+    }
+</script>
+{% endif %}

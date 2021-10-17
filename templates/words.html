@@ -3,38 +3,42 @@
 {% block title %}Words{% endblock %}
 
 {% block back_button %}
-{% with back_link=url_for('starting_url')%}
+{% with back_link=url_for('MainView:index')%}
 {% include "snippets/back_button.html" %}
 {% endwith %}
 {% endblock %}
 
 {% block body %}
 
-<h5 class="mb-2 mt-1">{{type.title()}}</h5>
+<h5 class="mb-3 mt-1">{{type.title()}}s:</h5>
 <div class="row">
-    <div class="col-md-8 ">
+    <div class="col-md-8 col-lg-6">
         {% if not words %}
         <span>No words</span>
         {% endif %}
         {% for word in words %}
         <div class="shadow">
             <div class="input-group mb-2">
-                <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word[1])}}`"
+                <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word['_id'])}}`"
                     class="input-group-text"><i class="fas fa-arrow-right"></i></button>
-                <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word[1])}}`"
-                    style="text-align: left;" class="form-control btn btn-success" type="button">{{word[0]}}</button>
-                <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word[1])}}`"
+                <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word['_id'])}}`"
+                    style="text-align: left;" class="form-control btn btn-success" type="button">
+                    {% if word['type'] == 'noun' %}{{word['artikel']}}{% endif %} {{word['word']}}
+                </button>
+                {% if authenticated %}
+                <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word['_id'])}}`"
                     class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button>
 
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                    data-bs-target="#delete-word-{{word[1]}}">
+                    data-bs-target="#delete-word-{{word['_id']}}">
                     <i class="fas fa-trash"></i>
                 </button>
+                {% endif %}
             </div>
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="delete-word-{{word[1]}}" data-bs-backdrop="static" data-bs-keyboard="false"
+        <div class="modal fade" id="delete-word-{{word['_id']}}" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -48,7 +52,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button
-                            onclick="location.href=`{{url_for('WordView:delete_word', word_id=word[1], type=type)}}`"
+                            onclick="location.href=`{{url_for('WordView:delete_word', word_id=word['_id'], type=type)}}`"
                             class="btn btn-danger">Delete</button>
                     </div>
                 </div>

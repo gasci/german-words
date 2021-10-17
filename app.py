@@ -1,39 +1,146 @@
 #%%
-from flask import request, render_template, redirect
-
+from flask import request, render_template, redirect, session, url_for
 from flask_classful import FlaskView
-from classes.mongo import Database
-from classes.app import App
 
-app = App().init
+from classes.mongo import Database
+from classes.server import Server
+
+from bson.objectid import ObjectId
+from dotenv import load_dotenv
+import bcrypt
+import os
+
+server = Server()
+app = server.app
 db = Database(".env")
 
+can_register = os.environ.get("CAN_REGISTER")
 
-@app.route("/")
+@app.route("/", methods=['post', 'get'])
 def starting_url():
-    return redirect("/main")
+    return redirect(url_for('register'))
+
+
+@app.route("/register", methods=['post', 'get'])
+def register():
+
+    if not can_register == "True":
+        message = 'Currently, registration is not allowed. Contact: drgoktugasci@gmail.com'
+        return render_template('auth/login.html', message=message)
+
+
+    message = 'Please register'
+    server.is_authenticated_check(session)
+    if "email" in session:
+        return redirect(url_for('MainView:index', authenticated=server.is_authenticated))
+    if request.method == "POST":
+        
+        user = request.form.get("fullname")
+        email = request.form.get("email")
+        
+        password1 = request.form.get("password1")
+        password2 = request.form.get("password2")
+        
+        user_found = db.users.find_one({"name": user})
+        email_found = db.users.find_one({"email": email})
+        if user_found:
+            message = 'There already is a user by that name'
+            return render_template('auth/register.html', message=message)
+        if email_found:
+            message = 'This email already exists in database'
+            return render_template('auth/register.html', message=message)
+        if password1 != password2:
+            message = 'Passwords should match!'
+            return render_template('auth/register.html', message=message)
+        else:
+            hashed = bcrypt.hashpw(password2.encode('utf-8'), bcrypt.gensalt())
+            user_input = {'name': user, 'email': email, 'password': hashed}
+            db.users.insert_one(user_input)
+            
+            user_data = db.users.find_one({"email": email})
+            new_email = user_data['email']
+            session["email"] = user_data['email']
+            session["user_id"] = str(user_data['_id'])
+            server.is_authenticated_check(session)
+            return render_template('index.html', email=new_email, authenticated=server.is_authenticated)
+    return render_template('auth/register.html')
+
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    message = ''
+    server.is_authenticated_check(session)
+    if "email" in session:
+        return redirect(url_for('MainView:index', authenticated=server.is_authenticated))
+
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        user_data = db.users.find_one({"email": email})
+        if user_data:
+            email_val = user_data['email']
+            passwordcheck = user_data['password']
+            
+            if bcrypt.checkpw(password.encode('utf-8'), passwordcheck):
+                session["email"] = email_val
+                session["user_id"] = str(user_data['_id'])
+                server.is_authenticated_check(session)
+                return redirect(url_for('MainView:index', authenticated=server.is_authenticated))
+            else:
+                message = 'Wrong password'
+                return render_template('auth/login.html', message=message)
+                    
+        else:
+            message = 'Email not found'
+            return render_template('auth/login.html', message=message)
+    return render_template('auth/login.html', message=message)
+
+
+@app.route("/logout", methods=["POST", "GET"])
+def logout():
+    session.pop("email", None)
+    server.is_authenticated_check(session)
+    return render_template("auth/login.html")
 
 
 class MainView(FlaskView):
     def index(self):
-        types = db.list_types()
-        return render_template("main.html", types=types)
+
+        if "email" not in session:
+            return redirect(url_for('login'))
+
+        types = db.list_types(session)
+        return render_template("index.html", types=types, authenticated=server.is_authenticated)
 
 
 class WordView(FlaskView):
     def list(self):
+
+        if "email" not in session:
+            return redirect(url_for('login'))
+
         type = request.args.get("type").lower()
-        words = db.get_words_type(type)
-        return render_template("words.html", words=words, type=type)  #
+        words = db.get_words_type(session, type)
+        return render_template("words.html", words=words, type=type, authenticated=server.is_authenticated)
 
     def get_word(self):
+
+        if "email" not in session:
+            return redirect(url_for('login'))
+
         word_id = request.args.get("word_id")
-        word_dict = db.get_word(word_id)
-        return render_template("word.html", word_dict=word_dict)
+        word_dict = db.get_word(session, word_id)
+        return render_template("word.html", word_dict=word_dict, authenticated=server.is_authenticated)
 
     def add_update_word(self):
+
+        if "email" not in session:
+            return redirect(url_for('login'))
+
         word_id = request.args.get("word_id")
+        user_id = session["user_id"]
         word = request.args.get("word")
+        artikel = request.args.get("artikel", None)
         type = request.args.get("type")
         sentence = request.args.get("sentence")
         sentence_eng = request.args.get("sentence_eng")
@@ -41,47 +148,61 @@ class WordView(FlaskView):
         new_word = {
             "word": word,
             "type": type,
+            "user_id": ObjectId(user_id),
             "sentence": sentence,
             "sentence_eng": sentence_eng,
         }
 
-        types = db.list_types()
+        if type == "noun":
+            new_word["artikel"] = artikel
+
+        types = db.list_types(session)
 
         if word and type:
-            db.add_update_word(word_id, new_word)
-            return render_template("main.html", types=types, message="Updated database")
+            db.add_update_word(session, word_id, new_word)
+            return render_template("index.html", types=types, message="Updated database", authenticated=server.is_authenticated)
         else:
-            
-            return render_template("main.html", types=types, message="Incorrect input")
+            return render_template("index.html", types=types, message="Incorrect input", authenticated=server.is_authenticated)
 
     def update_word_redirect(self):
+
+        if "email" not in session:
+            return redirect(url_for('login'))
+
         word_id = request.args.get("word_id")
-        word_dict = db.get_word(word_id)
-        types = db.list_types()
+        word_dict = db.get_word(session, word_id)
+        types = db.list_types(session)
         return render_template(
-            "main.html", types=types, word_id=word_id, word_dict=word_dict
+            "index.html", types=types, word_id=word_id, word_dict=word_dict, authenticated=server.is_authenticated
         )
 
     def delete_word(self):
+
+        if "email" not in session:
+            return redirect(url_for('login'))
+
         word_id = request.args.get("word_id")
         type = request.args.get("type")
 
-        db.delete_word(word_id)
+        db.delete_word(session, word_id)
 
-        words = db.get_words_type(type)
-        return render_template("words.html", words=words, type=type)
+        words = db.get_words_type(session, type)
+        return render_template("words.html", words=words, type=type, authenticated=server.is_authenticated)
 
     def search(self):
-        word = request.args.get("word").lower()
 
-        result = db.search_word(word)
+        if "email" not in session:
+            return redirect(url_for('login'))
+
+        word = request.args.get("word").lower()
+        result = db.search_word(session, word)
 
         if len(result) > 0:
             word_dict = result
-            return render_template("word.html", word_dict=word_dict)
+            return render_template("word.html", word_dict=word_dict, authenticated=server.is_authenticated)
         else:
-            types = db.list_types()
-            return render_template("main.html", types=types, message="No words")
+            types = db.list_types(session)
+            return render_template("index.html", types=types, message="No words", authenticated=server.is_authenticated)
 
 
 MainView.register(app)

@@ -11,14 +11,48 @@
 
 {% block body %}
 
-<div class="row ">
-    <div class="col-lg-6 ">
-        <div class="card shadow mt-2 p-4 {{[word_dict['word'], word_dict['type']]|word_background}}">
-            <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["word"]}}</div>
+<div class="row justify-content-md-center">
+    <div class="col-sm-12 col-md-6 col-lg-5">
+        <div class="card shadow mt-2 p-4 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
+            <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["artikel"]}} {{word_dict["word"]}}</div>
+            {% if word_dict["sentence"] %}
             <hr>
             <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
+            {% endif %}
+            {% if word_dict["sentence_eng"] %}
             <hr>
             <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence_eng"]}}</div>
+            {% endif %}
+            <div class="input-group mt-3 shadow-sm">
+                <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word_dict['_id'])}}`"
+                    class="btn btn-warning form-control btn-lg"><i class="fas fa-pencil-alt"></i></button>
+
+                <button type="button" class="btn btn-danger form-control btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#delete-word-{{word_dict['_id']}}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="delete-word-{{word_dict['_id']}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Word</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this word?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button onclick="location.href=`{{url_for('WordView:delete_word', word_id=word_dict['_id'], type=type)}}`"
+                    class="btn btn-danger">Delete</button>
+            </div>
         </div>
     </div>
 </div>

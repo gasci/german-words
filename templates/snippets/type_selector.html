@@ -7,12 +7,3 @@
     <option value="adverb">Adverb</option>
     <option value="phrase">Phrase</option>
 </select>
-
-{% if word_dict %}
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-    crossorigin="anonymous"></script>
-<script>
-    $("#type-select").val("{{word_dict['type']}}");
-</script>
-{% endif %}
