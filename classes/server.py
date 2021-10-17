@@ -46,3 +46,4 @@ class Server:
             self.is_authenticated = True
         else:
             self.is_authenticated = False
+            

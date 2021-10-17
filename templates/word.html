@@ -11,23 +11,22 @@
 
 {% block body %}
 
-
 {% set current_index = ids.index(word_dict['_id']|str) + 1 %}
 {% set deck_length = ids|len %}
 
 <div class="row justify-content-md-center">
     <div class="col-sm-12 col-md-6 col-lg-5">
-        {% if study_mode %}
+        {% if shuffle_study %}
         <div class="input-group mt-1 mb-3 shadow">
             {% if current_index - 1 != 0 %}
-            <button onclick="location.href=`{{url_for('WordView:get_word', shuffle_words=False, word_id=ids[current_index - 2])}}`"
+            <button onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index - 2])}}`"
                 class="btn btn-dark form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
             {% endif %}
 
             <button class="btn btn-outline-dark form-control btn-lg">{{current_index}} / {{deck_length}}</button>
 
             {% if current_index < deck_length %} <button
-                onclick="location.href=`{{url_for('WordView:get_word', shuffle_words=False, word_id=ids[current_index])}}`"
+                onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index])}}`"
                 class="btn btn-dark form-control btn-lg">
                 <i class="fas fa-arrow-right"></i>
                 </button>

@@ -131,25 +131,38 @@ class WordView(FlaskView):
         if "email" not in session:
             return redirect(url_for('login'))
 
-        word_id = request.args.get("word_id")
-        shuffle_words = request.args.get("shuffle_words", None)
-        word_dict = db.get_word(session, word_id)
+        word_id = request.args.get("word_id", False)
+        type = request.args.get("type", False)
+        shuffle_study = request.args.get("shuffle_study", False)
+        shuffle_words = request.args.get("shuffle_words", False)
 
-        print(shuffle_words)
+        if shuffle_study:
+            shuffle_study = True
 
-        if shuffle_words == "False" and session['word_ids']:
-            print("not shuffled")
-            ids = session['word_ids']
-            print(ids)
-        else:
-            print("shuffled")
-            ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
+        if shuffle_words:
+            shuffle_words = True
+
+        #print(shuffle_study)
+        #print(shuffle_words)
+
+        if shuffle_words and shuffle_study:
+            #print("shuffled")
+            ids = [str(x) for x in db.get_type_word_ids(session, type)]
             shuffle(ids)
-            session['word_ids'] = ids
-            print(ids)    
-            
-
-        return render_template("word.html", word_dict=word_dict, ids=ids, session=session, study_mode=True)
+            #print(ids)
+            session['word_ids'] = ids 
+            word_id = ids[0]
+            word_dict = db.get_word(session, word_id)
+        elif not shuffle_words and shuffle_study:
+            #print("not shuffled")
+            word_dict = db.get_word(session, word_id)
+            ids = session['word_ids']
+            #print(ids)
+        else:
+            word_dict = db.get_word(session, word_id)
+            ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]        
+        
+        return render_template("word.html", word_dict=word_dict, ids=ids, session=session, shuffle_study=shuffle_study)
 
     def add_update_word(self):
 
@@ -220,7 +233,7 @@ class WordView(FlaskView):
         if len(result) > 0:
             word_dict = result
             ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
-            return render_template("word.html", word_dict=word_dict, ids=ids, session=session, study_mode=False)
+            return render_template("word.html", word_dict=word_dict, ids=ids, session=session)
         else:
             types = db.list_types(session)
             return render_template("index.html", types=types, message="No words", session=session)
