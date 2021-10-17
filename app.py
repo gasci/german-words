@@ -117,7 +117,7 @@ class MainView(FlaskView):
 
 class WordView(FlaskView):
     def __init__(self):
-        self.word_ids = []
+        self.word_ids = None
 
     def list(self):
 
