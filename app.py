@@ -134,15 +134,16 @@ class WordView(FlaskView):
             return redirect(url_for('login'))
 
         word_id = request.args.get("word_id")
-        word_ids = request.args.get("word_ids", None)
+        study_mode = request.args.get("study_mode", None)
         word_dict = db.get_word(session, word_id)
 
-        if not word_ids:
+        if study_mode and self.word_ids:
+            ids = self.word_ids
+        else:
             ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
             shuffle(ids)
             self.word_ids = ids
-        else:
-            ids = self.word_ids
+            
         return render_template("word.html", word_dict=word_dict, ids=ids, session=session, study_mode=True)
 
     def add_update_word(self):
