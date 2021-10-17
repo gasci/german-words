@@ -43,11 +43,11 @@
             <hr>
             <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence_eng"]}}</div>
             {% endif %}
-            <div class="input-group mt-3 shadow-sm">
+            <div class="input-group mt-4 shadow-sm">
                 <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word_dict['_id'])}}`"
-                    class="btn btn-warning form-control btn-lg"><i class="fas fa-pencil-alt"></i></button>
+                    class="btn btn-outline-dark bg-white form-control btn-lg"><i class="fas fa-pencil-alt"></i></button>
 
-                <button class="btn btn-danger form-control btn-lg" data-bs-toggle="modal"
+                <button class="btn btn-outline-dark bg-white form-control btn-lg" data-bs-toggle="modal"
                     data-bs-target="#delete-word-{{word_dict['_id']}}">
                     <i class="fas fa-trash"></i>
                 </button>
