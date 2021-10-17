@@ -134,15 +134,17 @@ class WordView(FlaskView):
             return redirect(url_for('login'))
 
         word_id = request.args.get("word_id")
-        study_mode = request.args.get("study_mode", None)
+        # study_mode = request.args.get("study_mode", None)
         word_dict = db.get_word(session, word_id)
 
-        if study_mode and self.word_ids:
-            ids = self.word_ids
-        else:
-            ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
-            shuffle(ids)
-            self.word_ids = ids
+        # if study_mode and self.word_ids:
+        #     ids = self.word_ids
+        # else:
+        #     ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
+        #     shuffle(ids)
+        #     self.word_ids = ids
+
+        ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
             
         return render_template("word.html", word_dict=word_dict, ids=ids, session=session, study_mode=True)
 
