@@ -117,9 +117,6 @@ class MainView(FlaskView):
 
 
 class WordView(FlaskView):
-    def __init__(self):
-        self.word_ids = None
-
     def list(self):
 
         if "email" not in session:
@@ -140,15 +137,15 @@ class WordView(FlaskView):
 
         print(shuffle_words)
 
-        if shuffle_words == "False" and self.word_ids:
+        if shuffle_words == "False" and session['word_ids']:
             print("not shuffled")
-            ids = self.word_ids
+            ids = session['word_ids']
             print(ids)
         else:
             print("shuffled")
             ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
             shuffle(ids)
-            self.word_ids = ids
+            session['word_ids'] = ids
             print(ids)    
             
 
