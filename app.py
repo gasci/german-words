@@ -6,9 +6,9 @@ from classes.mongo import Database
 from classes.server import Server
 
 from bson.objectid import ObjectId
-from dotenv import load_dotenv
 import bcrypt
 import os
+# import asyncio
 
 server = Server()
 app = server.app
