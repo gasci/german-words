@@ -117,6 +117,9 @@ class MainView(FlaskView):
 
 
 class WordView(FlaskView):
+
+    default_methods = ['GET', 'POST']
+
     def list(self):
 
         if "email" not in session:
