@@ -162,7 +162,7 @@ class WordView(FlaskView):
             db.add_update_word(session, word_id, new_word)
             types = db.list_types(session)
             words = db.get_words_type(session, type)
-            return render_template("words.html", words=words, type=new_word["type"], session=session)
+            return render_template("words.html", words=words, type=new_word["type"], session=session, message="Updated database")
         else:
             types = db.list_types(session)
             return render_template("index.html", types=types, message="Incorrect input", session=session)
