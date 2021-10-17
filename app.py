@@ -172,7 +172,8 @@ class WordView(FlaskView):
         word_id = request.args.get("word_id")
         user_id = session["user_id"]
         word = request.args.get("word")
-        artikel = request.args.get("artikel", None)
+        artikel = request.args.get("artikel", "")
+        plural = request.args.get("plural", "")
         type = request.args.get("type")
         sentence = request.args.get("sentence")
         sentence_eng = request.args.get("sentence_eng")
@@ -187,6 +188,8 @@ class WordView(FlaskView):
 
         if type == "noun":
             new_word["artikel"] = artikel
+            new_word["plural"] = plural
+            
 
         if word and type:
             db.add_update_word(session, word_id, new_word)

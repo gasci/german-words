@@ -15,6 +15,10 @@
                 <input type="text" class="form-control" name="word" placeholder="Word" required value="">
             </div>
 
+            <div class="plural-input input-group mb-3 shadow-sm d-none">
+                <input type="text" class="form-control" name="plural" placeholder="Plural">
+            </div>
+
             <div class="input-group mb-3 shadow-sm">
                 <textarea class="form-control" name="sentence" placeholder="German sentence"></textarea>
             </div>
@@ -47,6 +51,10 @@
                     value="{{word_dict['word']}}">
             </div>
 
+            <div class="plural-input input-group mb-3 shadow-sm d-none">
+                <input type="text" class="form-control" name="plural" placeholder="Plural" value="{{word_dict['plural']}}">
+            </div>
+            
             <div class="input-group mb-3 shadow-sm">
                 <textarea class="form-control" name="sentence"
                     placeholder="German sentence">{{word_dict['sentence']}}</textarea>
@@ -74,9 +82,9 @@
 <script>
     $("#type-select").on('change', () => {
         if ($("#type-select").val() === "noun") {
-            $(".artikel-selector-dev").removeClass("d-none")
+            $(".artikel-selector-dev, .plural-input").removeClass("d-none")
         } else {
-            $(".artikel-selector-dev").addClass("d-none")
+            $(".artikel-selector-dev, .plural-input").addClass("d-none")
         }
     });
 </script>
@@ -87,6 +95,9 @@
 
     if ($("#type-select").val() !== "noun"){
         $(".artikel-selector-dev").addClass("d-none")
+    } else {
+        $(".plural-input").removeClass("d-none")
+        $("#artikel-select").val("{{word_dict['artikel']}}");
     }
 </script>
 {% endif %}

@@ -35,6 +35,10 @@
         {% endif %}
         <div class="card shadow mt-2 p-4 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
             <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["artikel"]}} {{word_dict["word"]}}</div>
+            {% if word_dict["plural"] %}
+            <hr>
+            <div class="lead {{word_dict['type']|word_text_color}}">die {{word_dict["plural"]}}</div>
+            {% endif %}
             {% if word_dict["sentence"] %}
             <hr>
             <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
@@ -45,9 +49,9 @@
             {% endif %}
             <div class="input-group mt-4 shadow-sm">
                 <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word_dict['_id'])}}`"
-                    class="btn btn-outline-dark bg-white form-control btn-lg"><i class="fas fa-pencil-alt"></i></button>
+                    class="text-dark btn btn-outline-dark bg-white form-control btn-lg"><i class="fas fa-pencil-alt"></i></button>
 
-                <button class="btn btn-outline-dark bg-white form-control btn-lg" data-bs-toggle="modal"
+                <button class="text-dark btn btn-outline-dark bg-white form-control btn-lg" data-bs-toggle="modal"
                     data-bs-target="#delete-word-{{word_dict['_id']}}">
                     <i class="fas fa-trash"></i>
                 </button>
