@@ -3,7 +3,10 @@
 
 {% block body %}
 <div class="row justify-content-md-center p-2">
-  <div class="col-sm-12 col-md-6 col-lg-5 card shadow p-4">
+  <div class="col-md-6 card shadow p-4 mb-2">
+    {% include 'snippets/intro.html' %}
+  </div>
+  <div class="col-md-6 card shadow p-4">
     <form action="{{url_for('login')}}" method="post">
       <h3 class="mb-3">Login:</h3>
       <div class="form-group">
@@ -16,10 +19,10 @@
         <input type="password" name="password" class="form-control" id="InputPassword" placeholder="Password">
         <small id="emailHelp" class="form-text text-muted">Enter your password</small>
       </div>
-      <button type="submit" class="btn btn-warning mt-3 w-100"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Log in</button>
+      <button type="submit" class="btn btn-warning mt-3 w-100"><i class="shadow fas fa-sign-in-alt"></i>&nbsp;&nbsp;Log in</button>
 
     </form>
-    <button onclick="location.href=`{{url_for('register')}}`" class="btn btn-outline-dark mt-1 w-100"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Register</button>
+    <button onclick="location.href=`{{url_for('register')}}`" class="shadow btn btn-outline-dark mt-1 w-100"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Register</button>
   </div>
 </div>
 </div>

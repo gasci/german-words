@@ -7,8 +7,11 @@
 
 <div class="row p-2">
     {% if not word_dict %}
-    <div class="card shadow p-3 col-md-5 col-lg-5 mb-3">
+    <div class="col-md-5 col-lg-5 mb-3">
         <h5 class="mb-3">Study:</h5>
+        {% if not types %}
+        <span>No words</span>
+        {% endif %}
 
         {% for type in types %}
         <div>
