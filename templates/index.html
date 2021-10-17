@@ -7,16 +7,16 @@
 
 <div class="row p-2">
     {% if not word_dict %}
-    <div class="col-md-5 col-lg-5 mb-3">
+    <div class="card shadow p-3 col-md-5 col-lg-5 mb-3">
         <h5 class="mb-3">Study:</h5>
 
         {% for type in types %}
         <div>
             <div class="input-group mb-2">
-                <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`" class="input-group-text shadow"><i
+                <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`" class="btn-lg input-group-text shadow"><i
                         class="fas fa-arrow-right"></i></button>
                 <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
-                    class="form-control btn btn-success shadow" style="text-align:left"
+                    class="btn-lg form-control btn btn-success shadow" style="text-align:left"
                     type="button">{{type.title()}}s</button>
             </div>
         </div>
