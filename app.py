@@ -226,7 +226,7 @@ class WordView(FlaskView):
         word_dict = db.get_word(word_id)
         types = db.list_types()
         return render_template(
-            "index.html", types=types, word_dict=word_dict
+            "index.html", types=types, word_dict=word_dict, word_id=word_id
         )
 
     def delete_word(self):
