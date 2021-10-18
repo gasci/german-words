@@ -14,7 +14,7 @@
 <div class="row justify-content-md-center">
     <div class="col-md-8 col-lg-6 p-3">
         <h5 class="mb-3">{{type.title()}}s:</h5>
-        <button onclick="location.href=`{{url_for('WordView:get_word', shuffle_words=True, shuffle_study=True, type=type)}}`" class="btn-lg shadow btn btn-dark mb-1 w-100"><i class="fas fa-random"></i>&nbsp;&nbsp;Shuffle study</button>
+        <button onclick="location.href=`{{url_for('WordView:get_word', shuffle_words=True, shuffle_study=True, type=type)}}`" class="btn-lg shadow btn btn-warning mb-1 w-100"><i class="fas fa-random"></i>&nbsp;&nbsp;Shuffle study</button>
         <button onclick="location.href=`{{url_for('MainView:index')}}`" class="btn-lg shadow btn btn-warning mb-3 w-100"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add new word</button>
         {% if not words %}
         <span>No words</span>
