@@ -14,7 +14,6 @@ from random import shuffle
 server = Server()
 app = server.app
 db = Database(".env")
-word_ids = None
 
 can_register = os.environ.get("CAN_REGISTER")
 
@@ -107,6 +106,9 @@ def logout():
 
 
 class MainView(FlaskView):
+
+    default_methods = ['GET', 'POST']
+
     def index(self):
 
         if "email" not in session:
@@ -180,6 +182,7 @@ class WordView(FlaskView):
         type = request.args.get("type")
         sentence = request.args.get("sentence")
         sentence_eng = request.args.get("sentence_eng")
+        pronunciation = request.args.get("pronunciation")
 
         new_word = {
             "word": word,
@@ -187,6 +190,7 @@ class WordView(FlaskView):
             "user_id": ObjectId(user_id),
             "sentence": sentence,
             "sentence_eng": sentence_eng,
+            "pronunciation": pronunciation,
         }
 
         if type == "noun":

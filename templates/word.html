@@ -19,7 +19,8 @@
         {% if shuffle_study %}
         <div class="input-group mt-1 mb-3 shadow">
             {% if current_index - 1 != 0 %}
-            <button onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index - 2])}}`"
+            <button
+                onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index - 2])}}`"
                 class="btn btn-dark form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
             {% endif %}
 
@@ -30,27 +31,38 @@
                 class="btn btn-dark form-control btn-lg">
                 <i class="fas fa-arrow-right"></i>
                 </button>
-            {% endif %}
+                {% endif %}
         </div>
         {% endif %}
         <div class="card shadow mt-2 p-4 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
-            <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["artikel"]}} {{word_dict["word"]}}</div>
-            {% if word_dict["plural"] %}
-            <hr>
-            <div class="lead {{word_dict['type']|word_text_color}}">die {{word_dict["plural"]}}</div>
-            {% endif %}
-            {% if word_dict["sentence"] %}
-            <hr>
-            <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
-            {% endif %}
-            {% if word_dict["sentence_eng"] %}
-            <hr>
-            <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence_eng"]}}</div>
-            {% endif %}
+            <div onclick="showCard()">
+                <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["artikel"]}} {{word_dict["word"]}}
+                </div>
+                {% if word_dict["sentence"] %}
+                <hr>
+                <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
+                {% endif %}
+                <div id="word-collapse">
+                    {% if word_dict["sentence_eng"] %}
+                    <hr>
+                    <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence_eng"]}}</div>
+                    {% endif %}
+                    {% if word_dict["plural"] %}
+                    <hr>
+                    <div class="lead {{word_dict['type']|word_text_color}}">die {{word_dict["plural"]}}</div>
+                    {% endif %}
+                    {% if word_dict["pronunciation"] %}
+                    <hr>
+                    <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["pronunciation"]}}</div>
+                    {% endif %}
+                </div>
+            </div>
             <div class="input-group mt-4 shadow-sm">
                 <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word_dict['_id'])}}`"
-                    class="text-dark btn btn-outline-dark bg-white form-control btn-lg"><i class="fas fa-pencil-alt"></i></button>
-
+                    class="text-dark btn btn-outline-dark bg-white form-control btn-lg"><i
+                        class="fas fa-pencil-alt"></i></button>
+                <button id="word-card-open-button"
+                    class="d-none text-dark btn btn-outline-dark bg-white form-control btn-lg" onclick="showCard()"><i class="fas fa-info"></i></button>
                 <button class="text-dark btn btn-outline-dark bg-white form-control btn-lg" data-bs-toggle="modal"
                     data-bs-target="#delete-word-{{word_dict['_id']}}">
                     <i class="fas fa-trash"></i>
@@ -83,4 +95,22 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+
+{% if shuffle_study %}
+<script>
+
+    showCard = () => {
+        $("#word-card-open-button").addClass("d-none");
+        $("#word-collapse").collapse("show");
+    }
+
+    $("#word-card-open-button").removeClass("d-none");
+    $("#word-collapse").addClass("collapse");
+</script>
+{% endif %}
+
 {% endblock %}
