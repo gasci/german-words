@@ -208,11 +208,9 @@ class WordView(FlaskView):
         if word and type:
             db.add_update_word(word_id, new_word)
             types = db.list_types()
-            words = db.get_words_type(type)
             return render_template(
-                "words.html",
-                words=words,
-                type=new_word["type"],
+                "index.html",
+                types=types,
                 message="Updated database",
             )
         else:
@@ -228,7 +226,7 @@ class WordView(FlaskView):
         word_dict = db.get_word(word_id)
         types = db.list_types()
         return render_template(
-            "index.html", types=types, word_id=word_id, word_dict=word_dict
+            "index.html", types=types, word_dict=word_dict
         )
 
     def delete_word(self):
