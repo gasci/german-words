@@ -33,8 +33,10 @@ class Database:
 
     def add_update_word(self, word_id, word_dict):
         user_id = session["user_id"]
+        # don't add the same word twice
+        self.delete_word_by_name(word_dict)
         self.words.update(
-            {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
+            {"word": word_dict["word"], "user_id": ObjectId(user_id)},
             {"$set": word_dict},
             upsert=True,
         )
@@ -57,6 +59,16 @@ class Database:
     def delete_word(self, word_id):
         user_id = session["user_id"]
         self.words.delete_one({"_id": ObjectId(word_id), "user_id": ObjectId(user_id)})
+
+    def delete_word_by_name(self, word_dict):
+        user_id = session["user_id"]
+        self.words.delete_one(
+            {
+                "word": word_dict["word"],
+                "type": word_dict["type"],
+                "user_id": ObjectId(user_id),
+            }
+        )
 
     def get_word(self, word_id):
         user_id = session["user_id"]
