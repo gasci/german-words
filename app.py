@@ -2,8 +2,10 @@
 from flask import request, render_template, redirect, session, url_for
 from flask_classful import FlaskView
 
+
 from classes.mongo import Database
 from classes.server import Server
+from classes.admin import FlaskAdmin
 
 from bson.objectid import ObjectId
 import bcrypt
@@ -14,6 +16,7 @@ from random import shuffle
 server = Server()
 app = server.app
 db = Database(".env")
+admin = FlaskAdmin(app, db)
 
 can_register = os.environ.get("CAN_REGISTER")
 
@@ -31,9 +34,9 @@ def register():
 
 
     message = 'Please register'
-    server.is_authenticated_check(session)
+    server.is_authenticated_check()
     if "email" in session:
-        return redirect(url_for('MainView:index', session=session))
+        return redirect(url_for('MainView:index'))
     if request.method == "POST":
         
         user = request.form.get("fullname")
@@ -62,17 +65,17 @@ def register():
             new_email = user_data['email']
             session["email"] = user_data['email']
             session["user_id"] = str(user_data['_id'])
-            server.is_authenticated_check(session)
-            return render_template('index.html', email=new_email, session=session)
+            server.is_authenticated_check()
+            return render_template('index.html', email=new_email)
     return render_template('auth/register.html')
 
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
     message = ''
-    server.is_authenticated_check(session)
+    server.is_authenticated_check()
     if "email" in session:
-        return redirect(url_for('MainView:index', session=session))
+        return redirect(url_for('MainView:index'))
 
     if request.method == "POST":
         email = request.form.get("email")
@@ -85,8 +88,8 @@ def login():
             if bcrypt.checkpw(password.encode('utf-8'), passwordcheck):
                 session["email"] = email_val
                 session["user_id"] = str(user_data['_id'])
-                server.is_authenticated_check(session)
-                return redirect(url_for('MainView:index', session=session))
+                server.is_authenticated_check()
+                return redirect(url_for('MainView:index'))
             else:
                 message = 'Wrong password'
                 return render_template('auth/login.html', message=message)
@@ -101,7 +104,7 @@ def login():
 def logout():
     session.pop("email", None)
     session.pop("user_id", None)
-    server.is_authenticated_check(session)
+    server.is_authenticated_check()
     return render_template("auth/login.html")
 
 
@@ -114,8 +117,8 @@ class MainView(FlaskView):
         if "email" not in session:
             return redirect(url_for('login'))
 
-        types = db.list_types(session)
-        return render_template("index.html", types=types, session=session)
+        types = db.list_types()
+        return render_template("index.html", types=types)
 
 
 class WordView(FlaskView):
@@ -128,8 +131,8 @@ class WordView(FlaskView):
             return redirect(url_for('login'))
 
         type = request.args.get("type").lower()
-        words = db.get_words_type(session, type)
-        return render_template("words.html", words=words, type=type, session=session)
+        words = db.get_words_type(type)
+        return render_template("words.html", words=words, type=type)
 
     def get_word(self):
 
@@ -152,22 +155,22 @@ class WordView(FlaskView):
 
         if shuffle_words and shuffle_study:
             #print("shuffled")
-            ids = [str(x) for x in db.get_type_word_ids(session, type)]
+            ids = [str(x) for x in db.get_type_word_ids(type)]
             shuffle(ids)
             #print(ids)
             session['word_ids'] = ids 
             word_id = ids[0]
-            word_dict = db.get_word(session, word_id)
+            word_dict = db.get_word(word_id)
         elif not shuffle_words and shuffle_study:
             #print("not shuffled")
-            word_dict = db.get_word(session, word_id)
+            word_dict = db.get_word(word_id)
             ids = session['word_ids']
             #print(ids)
         else:
-            word_dict = db.get_word(session, word_id)
-            ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]        
+            word_dict = db.get_word(word_id)
+            ids = [str(x) for x in db.get_type_word_ids(word_dict["type"])]        
         
-        return render_template("word.html", word_dict=word_dict, ids=ids, session=session, shuffle_study=shuffle_study)
+        return render_template("word.html", word_dict=word_dict, ids=ids, shuffle_study=shuffle_study)
 
     def add_update_word(self):
 
@@ -199,13 +202,13 @@ class WordView(FlaskView):
             
 
         if word and type:
-            db.add_update_word(session, word_id, new_word)
-            types = db.list_types(session)
-            words = db.get_words_type(session, type)
-            return render_template("words.html", words=words, type=new_word["type"], session=session, message="Updated database")
+            db.add_update_word(word_id, new_word)
+            types = db.list_types()
+            words = db.get_words_type(type)
+            return render_template("words.html", words=words, type=new_word["type"], message="Updated database")
         else:
-            types = db.list_types(session)
-            return render_template("index.html", types=types, message="Incorrect input", session=session)
+            types = db.list_types()
+            return render_template("index.html", types=types, message="Incorrect input")
 
     def update_word_redirect(self):
 
@@ -213,10 +216,10 @@ class WordView(FlaskView):
             return redirect(url_for('login'))
 
         word_id = request.args.get("word_id")
-        word_dict = db.get_word(session, word_id)
-        types = db.list_types(session)
+        word_dict = db.get_word(word_id)
+        types = db.list_types()
         return render_template(
-            "index.html", types=types, word_id=word_id, word_dict=word_dict, session=session
+            "index.html", types=types, word_id=word_id, word_dict=word_dict
         )
 
     def delete_word(self):
@@ -227,10 +230,10 @@ class WordView(FlaskView):
         word_id = request.args.get("word_id")
         type = request.args.get("type")
 
-        db.delete_word(session, word_id)
+        db.delete_word(word_id)
 
-        words = db.get_words_type(session, type)
-        return render_template("words.html", words=words, type=type, session=session)
+        words = db.get_words_type(type)
+        return render_template("words.html", words=words, type=type)
 
     def search(self):
 
@@ -238,15 +241,15 @@ class WordView(FlaskView):
             return redirect(url_for('login'))
 
         word = request.args.get("word").lower()
-        result = db.search_word(session, word)
+        result = db.search_word(word)
 
         if len(result) > 0:
             word_dict = result
-            ids = [str(x) for x in db.get_type_word_ids(session, word_dict["type"])]
-            return render_template("word.html", word_dict=word_dict, ids=ids, session=session)
+            ids = [str(x) for x in db.get_type_word_ids(word_dict["type"])]
+            return render_template("word.html", word_dict=word_dict, ids=ids)
         else:
-            types = db.list_types(session)
-            return render_template("index.html", types=types, message="No words", session=session)
+            types = db.list_types()
+            return render_template("index.html", types=types, message="No words")
 
 
 MainView.register(app)

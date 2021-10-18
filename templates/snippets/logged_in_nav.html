@@ -5,8 +5,15 @@
 </button>
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if session["email"] == 'gok.asci@gmail.com' %}
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{url_for('logout')}}">&nbsp;<i class="fas fa-sign-out"></i>&nbsp;&nbsp;Logout</a>
+            <a class="nav-link active" aria-current="page" href="{{url_for('admin.index')}}">&nbsp;<i
+                    class="fas fa-cog"></i>&nbsp;&nbsp;Admin</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('logout')}}">&nbsp;<i
+                    class="fas fa-sign-out"></i>&nbsp;&nbsp;Logout</a>
         </li>
     </ul>
     <form class="d-flex" action="{{url_for('WordView:search')}}">

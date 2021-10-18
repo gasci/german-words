@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 
 from bson.objectid import ObjectId
-
+from flask import session
 
 class Database:
     def __init__(self, env_location):
@@ -31,18 +31,18 @@ class Database:
          # create index
         self.words.create_index([('word', 'text')])
 
-    def add_update_word(self, session, word_id, word_dict):
+    def add_update_word(self, word_id, word_dict):
         user_id = session["user_id"]
         self.words.update(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)}, {"$set": word_dict}, upsert=True
         )
 
-    def list_types(self, session):
+    def list_types(self):
         user_id = session["user_id"]
         types = self.words.find({"user_id": ObjectId(user_id)}).distinct("type")
         return types
 
-    def get_words_type(self, session, type):
+    def get_words_type(self, type):
         user_id = session["user_id"]
         cursor = self.words.find({"type": type, "user_id": ObjectId(user_id)})
 
@@ -52,22 +52,22 @@ class Database:
         
         return result_list
 
-    def delete_word(self, session, word_id):
+    def delete_word(self, word_id):
         user_id = session["user_id"]
         self.words.delete_one({"_id": ObjectId(word_id), "user_id": ObjectId(user_id)})
 
-    def get_word(self, session, word_id):
+    def get_word(self, word_id):
         user_id = session["user_id"]
         cursor = self.words.find({"_id": ObjectId(word_id), "user_id": ObjectId(user_id)})
         return cursor[0]
 
-    def get_type_word_ids(self, session, type):
+    def get_type_word_ids(self, type):
         user_id = session["user_id"]
         ids = self.words.find({"user_id": ObjectId(user_id), "type": type}).distinct("_id")
         
         return ids
 
-    def search_word(self, session, word):
+    def search_word(self, word):
         user_id = session["user_id"]
         result_list = []    
         cursor = self.words.find( { "$text": { "$search": word }, "user_id": ObjectId(user_id) }) 

@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, session
 
 import os
 
@@ -41,7 +41,7 @@ class Server:
             return "text-black"
 
 
-    def is_authenticated_check(self, session):
+    def is_authenticated_check(self):
         if "email" in session:
             self.is_authenticated = True
         else:
