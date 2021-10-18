@@ -1,4 +1,3 @@
-
 import os
 
 from dotenv import load_dotenv
@@ -6,6 +5,7 @@ from pymongo import MongoClient
 
 from bson.objectid import ObjectId
 from flask import session
+
 
 class Database:
     def __init__(self, env_location):
@@ -23,18 +23,20 @@ class Database:
                 mongo_cli_username, mongo_cli_password, cluster_name
             )
         )
-        
+
         self.data = self.client[mongo_cli_database]
         self.users = self.data["users"]
         self.words = self.data["words"]
 
-         # create index
-        self.words.create_index([('word', 'text')])
+        # create index
+        self.words.create_index([("word", "text")])
 
     def add_update_word(self, word_id, word_dict):
         user_id = session["user_id"]
         self.words.update(
-            {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)}, {"$set": word_dict}, upsert=True
+            {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
+            {"$set": word_dict},
+            upsert=True,
         )
 
     def list_types(self):
@@ -46,10 +48,10 @@ class Database:
         user_id = session["user_id"]
         cursor = self.words.find({"type": type, "user_id": ObjectId(user_id)})
 
-        result_list = [] 
+        result_list = []
         for result in cursor:
             result_list.append(result)
-        
+
         return result_list
 
     def delete_word(self, word_id):
@@ -58,20 +60,26 @@ class Database:
 
     def get_word(self, word_id):
         user_id = session["user_id"]
-        cursor = self.words.find({"_id": ObjectId(word_id), "user_id": ObjectId(user_id)})
+        cursor = self.words.find(
+            {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)}
+        )
         return cursor[0]
 
     def get_type_word_ids(self, type):
         user_id = session["user_id"]
-        ids = self.words.find({"user_id": ObjectId(user_id), "type": type}).distinct("_id")
-        
+        ids = self.words.find({"user_id": ObjectId(user_id), "type": type}).distinct(
+            "_id"
+        )
+
         return ids
 
     def search_word(self, word):
         user_id = session["user_id"]
-        result_list = []    
-        cursor = self.words.find( { "$text": { "$search": word }, "user_id": ObjectId(user_id) }) 
-        
+        result_list = []
+        cursor = self.words.find(
+            {"$text": {"$search": word}, "user_id": ObjectId(user_id)}
+        )
+
         for result in cursor:
             result_list.append(result)
 
@@ -79,6 +87,3 @@ class Database:
             return result_list[0]
         else:
             return []
-
-            
-            
