@@ -28,9 +28,15 @@ CAN_REGISTER=True
 ```
 
 ```bash
+# install pip dependencies
 python3 -m venv env
 source env/bin/activate
 pip3 install -r requirements.txt
+```
+
+```bash
+# run flask server
+python3 run.py
 ```
 
 ## Contributing
