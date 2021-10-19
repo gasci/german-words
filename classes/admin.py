@@ -91,5 +91,5 @@ class FlaskAdmin:
 
     def add_links(self):
         self.admin.add_link(
-            MenuLink(name="Back to Main Website", category="", url="/login")
+            MenuLink(name="Back to Main Website", category="", url="/auth/login")
         )

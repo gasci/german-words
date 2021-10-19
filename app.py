@@ -29,7 +29,7 @@ def starting_url():
 
 class AuthView(FlaskView):
 
-    @route('/register', methods=['POST'])
+    @route('/register', methods=['GET', 'POST'])
     def register_auth(self):
         
         if not can_register == "True":
@@ -74,7 +74,7 @@ class AuthView(FlaskView):
                 return render_template("index.html", email=new_email)
         return render_template("auth/register.html")
 
-    @route('/login', methods=['POST'])
+    @route('/login', methods=['GET', 'POST'])
     def login_auth(self):
         
         message = ""
