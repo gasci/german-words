@@ -79,10 +79,15 @@ class Database:
 
     def get_type_word_ids(self, type):
         user_id = session["user_id"]
-        ids = self.words.find({"user_id": ObjectId(user_id), "type": type}).distinct(
-            "_id"
-        )
-
+        if type:
+            
+            ids = self.words.find({"user_id": ObjectId(user_id), "type": type}).distinct(
+                "_id"
+            )
+        else:
+            ids = self.words.find({"user_id": ObjectId(user_id)}).distinct(
+                "_id"
+            )      
         return ids
 
     def search_word(self, word):
