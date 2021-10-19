@@ -46,7 +46,7 @@ class WordForm(form.Form):
 
     def inaccessible_callback(self, name, **kwargs):
         # redirect to login page if user doesn't have access
-        return redirect(url_for("login"), message="You don't have permission")
+        return redirect(url_for('AuthView:login_auth'), message="You don't have permission")
 
 
 class WordView(ModelView):

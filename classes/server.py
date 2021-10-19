@@ -45,3 +45,8 @@ class Server:
             self.is_authenticated = True
         else:
             self.is_authenticated = False
+
+    def register_views(self, views):
+        for view in views:
+            view.register(self.app)
+
