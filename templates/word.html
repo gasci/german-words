@@ -21,14 +21,14 @@
             {% if current_index - 1 != 0 %}
             <button
                 onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index - 2])}}`"
-                class="btn btn-warning form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
+                class="btn btn-outline-dark form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
             {% endif %}
 
-            <button class="btn btn-warning form-control btn-lg">{{current_index}} / {{deck_length}}</button>
+            <button class="btn btn-outline-dark form-control btn-lg">{{current_index}} / {{deck_length}}</button>
 
             {% if current_index < deck_length %} <button
                 onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index])}}`"
-                class="btn btn-warning form-control btn-lg">
+                class="btn btn-outline-dark form-control btn-lg">
                 <i class="fas fa-arrow-right"></i>
                 </button>
                 {% endif %}
