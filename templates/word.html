@@ -17,14 +17,17 @@
 <div class="row justify-content-md-center">
     <div class="col-sm-12 col-md-6 col-lg-5">
         {% if shuffle_study %}
-        <div class="input-group mt-1 mb-3 shadow">
+        <div class="input-group mt-1 mb-2 shadow">
             {% if current_index - 1 != 0 %}
             <button
                 onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index - 2])}}`"
                 class="btn btn-outline-dark form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
             {% endif %}
 
-            <button class="btn btn-outline-dark form-control btn-lg">{{current_index}} / {{deck_length}}</button>
+            <button class="btn btn-outline-dark form-control btn-lg" onclick="showIndexModal()">{{current_index}} /
+                {{deck_length}}</button>
+
+            <!-- <button class="btn btn-outline-dark form-control btn-lg">{{current_index}} / {{deck_length}}</button> -->
 
             {% if current_index < deck_length %} <button
                 onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index])}}`"
@@ -34,7 +37,19 @@
                 {% endif %}
         </div>
         {% endif %}
-        <div class="card shadow mt-2 p-4 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
+
+        <div class="input-group">
+            <div class="btn-group w-100 shadow mb-2" role="group" aria-label="Basic radio toggle button group">
+                <input onclick="updateWordDifficulty(1)" type="radio" class="btn-check form-control" name="diff_radio"
+                    id="hard-radio" value="1">
+                <label class="btn btn-lg btn-outline-dark" for="hard-radio">Learning</label>
+                <input onclick="updateWordDifficulty(0)" type="radio" class="btn-check form-control" name="diff_radio"
+                    id="easy-radio" value="0">
+                <label class="btn btn-lg btn-outline-dark" for="easy-radio">Learned</label>
+            </div>
+        </div>
+
+        <div class="card shadow p-4 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
             <div onclick="showCard()">
                 <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["artikel"]}} {{word_dict["word"]}}
                 </div>
@@ -62,7 +77,8 @@
                     class="text-dark btn btn-outline-dark bg-white form-control btn-lg"><i
                         class="fas fa-pencil-alt"></i></button>
                 <button id="word-card-open-button"
-                    class="d-none text-dark btn btn-outline-dark bg-white form-control btn-lg" onclick="showCard()"><i class="fas fa-info"></i></button>
+                    class="d-none text-dark btn btn-outline-dark bg-white form-control btn-lg" onclick="showCard()"><i
+                        class="fas fa-info"></i></button>
                 <button class="text-dark btn btn-outline-dark bg-white form-control btn-lg" data-bs-toggle="modal"
                     data-bs-target="#delete-word-{{word_dict['_id']}}">
                     <i class="fas fa-trash"></i>
@@ -96,20 +112,140 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-    crossorigin="anonymous"></script>
+<div class="modal fade" id="index-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Find Word by Index</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3 form-group">
+                    <label for="go-to-word" class="mb-1">Word index:</label>
+                    <input type="number" min="1" max="5" class="form-control" id="go-to-word" value="{{current_index}}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="go-index" action="{{url_for('WordView:get_word')}}">
+                    <button type="button" onclick="submitIndex()" class="btn btn-primary">Go</button>
+                    <input type="hidden" name="word_id" value="" />
+                    <input type="hidden" name="shuffle_study" value="" />
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+    $(() => {
+        var difficulty = parseInt('{{word_dict["difficulty"]}}')
+
+        switch (difficulty) {
+            case 0:
+                $("#easy-radio").attr('checked', true);
+                break;
+            case 1:
+                $("#hard-radio").attr('checked', true);
+                break;
+            default:
+                $("#hard-radio").attr('checked', true);
+        }
+
+
+    });
+
+    updateWordDifficulty = (diff = 1) => {
+
+        word_id = "{{word_dict['_id']}}"
+
+        $.ajax({
+            url: `{{url_for('WordView:update_difficulty')}}`,
+            type: "POST",
+            dataType: 'json',
+            contentType: "application/json",
+            data: JSON.stringify({
+                "word_id": word_id,
+                "difficulty": diff
+            })
+        })
+
+    }
+</script>
+
 
 {% if shuffle_study %}
 <script>
+
+    $(() => {
+        var difficulty = parseInt('{{word_dict["difficulty"]}}')
+
+        switch (difficulty) {
+            case 0:
+                $("#easy-radio").attr('checked', true);
+                break;
+            case 1:
+                $("#hard-radio").attr('checked', true);
+                break;
+            default:
+                $("#hard-radio").attr('checked', true);
+        }
+
+        $("#word-card-open-button").removeClass("d-none");
+        $("#word-collapse").addClass("collapse");
+    });
+
+    showIndexModal = () => {
+        $('#index-modal').modal("show")
+    }
+
+    submitIndex = () => {
+
+        var ids = JSON.parse('{{ids|tojson}}')
+        var deckLength = parseInt('{{deck_length}}')
+        var wordIndex = $("#go-to-word").val()
+
+        if (wordIndex < 1) {
+            wordIndex = 1
+        } else if (wordIndex > deckLength) {
+            wordIndex = deckLength
+        }
+
+        var formInfo = document.forms['go-index'];
+        formInfo.word_id.value = ids[wordIndex - 1].toString();
+        formInfo.shuffle_study.value = true
+        $("#go-index").submit()
+    }
+
+    indexSubmit = () => {
+
+        var ids = JSON.parse('{{ids|tojson}}')
+
+        $.ajax({
+            url: `{{url_for('WordView:get_word')}}`,
+            type: "GET",
+            dataType: 'json',
+            data: {
+                "shuffle_study": true,
+                "word_id": ids[$("#go-to-word").val()].toString()
+            }
+        })
+    }
 
     showCard = () => {
         $("#word-card-open-button").addClass("d-none");
         $("#word-collapse").collapse("show");
     }
 
-    $("#word-card-open-button").removeClass("d-none");
-    $("#word-collapse").addClass("collapse");
+
+
+
 </script>
 {% endif %}
 

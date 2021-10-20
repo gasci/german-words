@@ -9,7 +9,6 @@ class ModelView(ModelView):
     def is_accessible(self):
         session_email = session.get("email", None)
         if session_email and session_email == "gok.asci@gmail.com":
-            print("helo")
             return True
 
         else:
@@ -30,13 +29,13 @@ class UserView(ModelView):
 class WordForm(form.Form):
     artikel = fields.StringField("artikel")
     plural = fields.StringField("plural")
-    user_id = fields.StringField("user_id")
     pronuncation = fields.StringField("pronuncation")
     artikel = fields.StringField("artikel")
     word = fields.StringField("word")
     type = fields.StringField("type")
     sentence = fields.StringField("sentence")
     sentence_eng = fields.StringField("sentence_eng")
+    difficulty = fields.IntegerField("difficulty")
 
     def is_accessible(self):
         if session["email"] == "gok.asci@gmail.com":
@@ -53,12 +52,12 @@ class WordView(ModelView):
     column_list = (
         "artikel",
         "word",
+        "difficulty",
         "type",
         "sentence",
         "sentence_eng",
         "plural",
         "pronunciation",
-        "user_id",
     )
     form = WordForm
 

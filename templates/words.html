@@ -2,14 +2,37 @@
 
 {% block title %}Words{% endblock %}
 
+{% block back_button %}
+{% with back_link=url_for('MainView:index')%}
+{% include "snippets/back_button.html" %}
+{% endwith %}
+{% endblock %}
+
 {% block body %}
 
 
 <div class="row justify-content-md-center">
     <div class="col-md-8 col-lg-6 p-3">
         <h5 class="mb-3">{{type.title()}}s:</h5>
-        <button onclick="location.href=`{{url_for('WordView:get_word', shuffle_words=True, shuffle_study=True, type=type)}}`" class="btn-lg shadow btn btn-warning mb-1 w-100"><i class="fas fa-random"></i>&nbsp;&nbsp;Shuffle study</button>
-        <button onclick="location.href=`{{url_for('MainView:index')}}`" class="btn-lg shadow btn btn-warning mb-2 w-100"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add new word</button>
+        <form action="{{url_for('WordView:get_word')}}" id="shuffle-study">
+            <div class="input-group mb-2 shadow-sm">
+                <input type="hidden" name="shuffle_words" value="" />
+                <input type="hidden" name="shuffle_study" value="" />
+                <input type="hidden" name="type" value="" />
+                <input type="hidden" name="difficulty" value="" />
+                <select class="form-select" id="difficulty-select">
+                    <option selected value="1">Learning</option>
+                    <option value="0">Learned</option>
+                    <option value="2">All</option>
+                </select>
+                <button onclick="shuffleStudy()" class="btn-lg  btn btn-warning"><i
+                        class="fas fa-random"></i>&nbsp;&nbsp;Study</button>
+            </div>
+        </form>
+
+        <button onclick="location.href=`{{url_for('MainView:index')}}`"
+            class="btn-lg shadow-sm btn btn-warning mb-2 w-100"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add new
+            word</button>
         {% if not words %}
         <span>No words</span>
         {% endif %}
@@ -61,5 +84,22 @@
 </div>
 
 <!-- {{words}} -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+    shuffleStudy = () => {
+
+        var formInfo = document.forms['shuffle-study'];
+        formInfo.shuffle_words.value = true
+        formInfo.shuffle_study.value = true
+        formInfo.type.value = "{{type}}"
+        formInfo.difficulty.value = $("#difficulty-select").val()
+        $("#shuffle-study").submit()
+
+    }
+
+</script>
 
 {% endblock %}

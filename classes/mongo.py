@@ -35,8 +35,9 @@ class Database:
         user_id = session["user_id"]
         # don't add the same word twice
         self.delete_word_by_name(word_dict)
-        self.words.update(
-            {"word": word_dict["word"], "user_id": ObjectId(user_id)},
+        word_dict["difficulty"] = 1
+        self.words.update_one(
+            {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
             {"$set": word_dict},
             upsert=True,
         )
@@ -77,18 +78,38 @@ class Database:
         )
         return cursor[0]
 
-    def get_type_word_ids(self, type):
+    def get_type_word_ids(self, type, diff):
+        
         user_id = session["user_id"]
         if type:
-            
-            ids = self.words.find({"user_id": ObjectId(user_id), "type": type}).distinct(
-                "_id"
-            )
+            if diff != 2:
+                ids = self.words.find(
+                    {"user_id": ObjectId(user_id), "type": type, "difficulty": diff}
+                ).distinct("_id")
+            else:
+                ids = self.words.find(
+                    {"user_id": ObjectId(user_id), "type": type}
+                ).distinct("_id")
         else:
-            ids = self.words.find({"user_id": ObjectId(user_id)}).distinct(
-                "_id"
-            )      
+            if diff != 2:
+                ids = self.words.find(
+                    {"user_id": ObjectId(user_id), "difficulty": diff}
+                ).distinct("_id")
+            else:
+                ids = self.words.find({"user_id": ObjectId(user_id)}).distinct("_id")
         return ids
+
+    def update_difficulty(self, word_id, diff):
+        user_id = session["user_id"]
+        word_dict = self.words.find(
+            {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)}
+        )[0]
+        word_dict["difficulty"] = diff
+        self.words.update(
+            {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
+            {"$set": word_dict},
+            upsert=True,
+        )
 
     def search_word(self, word):
         user_id = session["user_id"]
