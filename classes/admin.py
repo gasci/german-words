@@ -18,11 +18,12 @@ class UserForm(form.Form):
     first_name = fields.StringField("first_name")
     last_name = fields.StringField("last_name")
     username = fields.StringField("username")
-    email = fields.StringField("Email")
+    email = fields.StringField("email")
+    admin = fields.BooleanField("admin")
     
 
 class UserView(ModelView):
-    column_list = ("first_name", "last_name", "username", "email")
+    column_list = ("first_name", "last_name", "username", "admin", "email")
     form = UserForm
 
 
