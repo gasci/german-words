@@ -38,7 +38,7 @@ class WordForm(form.Form):
     difficulty = fields.IntegerField("difficulty")
 
     def is_accessible(self):
-        if session["email"] == "gok.asci@gmail.com":
+        if session.get("admin", False) == True:
             return True
         else:
             return False

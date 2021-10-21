@@ -84,13 +84,19 @@ class AuthView(FlaskView):
                 db.users.insert_one(user_input)
 
                 user_data = db.users.find_one({"email": email})
-                new_email = user_data["email"]
-                session["email"] = user_data["email"]
-                session["username"] = user_data["username"]
-                session["user_id"] = str(user_data["_id"])
+                self.create_user_session(user_data)
                 server.is_authenticated_check()
-                return render_template("index.html", email=new_email)
+                return render_template("index.html")
         return render_template("auth/register.html")
+
+    def create_user_session(self, data):
+
+        for key, value in data.items():
+            if key == "_id":
+                key = "user_id"
+                value = str(value)
+            if key not in ["csrf_token", "word_ids", "password"]:
+                session[key] = value
 
     @route("/login", methods=["GET", "POST"])
     def login_auth(self):
@@ -107,13 +113,10 @@ class AuthView(FlaskView):
                 {"$or": [{"email": username}, {"username": username}]}
             )
             if user_data:
-                email_val = user_data["email"]
                 passwordcheck = user_data["password"]
 
                 if bcrypt.checkpw(password.encode("utf-8"), passwordcheck):
-                    session["email"] = email_val
-                    session["user_id"] = str(user_data["_id"])
-                    session["username"] = user_data["username"]
+                    self.create_user_session(user_data)
                     server.is_authenticated_check()
                     return redirect(url_for("MainView:index"))
                 else:
@@ -126,10 +129,8 @@ class AuthView(FlaskView):
         return render_template("auth/login.html", message=message)
 
     @route("/logout", methods=["GET", "POST"])
-    @login_required
     def logout_auth(self):
-        session.pop("email", None)
-        session.pop("user_id", None)
+        session.clear()
         server.is_authenticated_check()
         return redirect(url_for("AuthView:login_auth"))
 
