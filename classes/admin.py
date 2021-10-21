@@ -15,13 +15,15 @@ class ModelView(ModelView):
 
 
 class UserForm(form.Form):
-    name = fields.StringField("Name")
+    first_name = fields.StringField("first_name")
+    last_name = fields.StringField("last_name")
+    username = fields.StringField("username")
     email = fields.StringField("Email")
     password = fields.StringField("Password")
 
 
 class UserView(ModelView):
-    column_list = ("name", "email", "password")
+    column_list = ("first_name", "last_name", "username", "email")
     form = UserForm
 
 
