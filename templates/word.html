@@ -14,6 +14,14 @@
 
 {% block bottom_nav %}
 
+<style>
+    .collapse {
+        -webkit-transition: none;
+
+        transition: height 0.01s;
+    }
+</style>
+
 <div id="bottom-nav" class="fixed-bottom">
 
     <div class="row justify-content-md-center">
@@ -98,8 +106,7 @@
                         class="fas fa-pencil-alt"></i></button>
                 <button id="word-card-open-button"
                     class="d-none text-dark btn btn-outline-dark bg-white form-control btn-lg" onclick="showCard()"><i
-                        class="fas fa-info info-logo"></i><i
-                        class="fas fa-times info-logo d-none"></i></button>
+                        class="fas fa-info info-logo"></i></button>
                 <button class="text-dark btn btn-outline-dark bg-white form-control btn-lg" data-bs-toggle="modal"
                     data-bs-target="#delete-word-{{word_dict['_id']}}">
                     <i class="fas fa-trash"></i>
@@ -181,18 +188,15 @@
 
         if ($(window).width() < 768) {
             $("#bottom-nav").addClass("fixed-bottom")
-            console.log("hh")
         }
         else {
             $("#bottom-nav").removeClass("fixed-bottom")
-            console.log("h22")
         }
     });
 
     document.onkeydown = (e) => {
 
         var code = e.keyCode || e.which;
-        console.log(code)
         switch (code) {
             case 37: // left
                 $("#prev-word").click();
@@ -298,7 +302,7 @@
     }
 
     showCard = () => {
-        $(".info-logo").toggleClass("d-none");
+        // $("#word-card-open-button").toggleClass("d-none");
         $("#word-collapse").collapse("toggle");
     }
 
