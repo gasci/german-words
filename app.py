@@ -235,10 +235,14 @@ class WordView(FlaskView):
 
     @login_required
     def update_difficulty(self):
+        print(request.form)
+        print(request.json)
+        word_id = request.form.get("word_id")
+        print(word_id)
         word_id = request.json["word_id"]
         difficulty = request.json["difficulty"]
-        # print(word_id)
-        # print(difficulty)
+        print(word_id)
+        print(difficulty)
 
         db.update_difficulty(word_id, int(difficulty))
         return "success", 200
