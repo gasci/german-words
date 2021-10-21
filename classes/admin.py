@@ -19,8 +19,7 @@ class UserForm(form.Form):
     last_name = fields.StringField("last_name")
     username = fields.StringField("username")
     email = fields.StringField("Email")
-    password = fields.StringField("Password")
-
+    
 
 class UserView(ModelView):
     column_list = ("first_name", "last_name", "username", "email")
