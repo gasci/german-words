@@ -1,5 +1,5 @@
 from flask import Flask, session
-
+from flask_wtf.csrf import CSRFProtect
 import os
 
 
@@ -19,6 +19,9 @@ class Server:
         ] = lambda var_list: self.word_text_color_fixer(var_list)
         self.app.jinja_env.filters["str"] = lambda u: str(u)
         self.app.jinja_env.filters["len"] = lambda u: len(u)
+
+        csrf = CSRFProtect()
+        csrf.init_app(self.app)
 
     def word_background_fixer(self, var_list):
         if var_list[1] == "noun":

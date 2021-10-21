@@ -40,7 +40,7 @@
     {% endif %}
     {% if word_dict %}
     <h5>Update a word:</h5>
-    <form class="d-flex" action="{{ url_for('WordView:add_update_word') }}">
+    <form class="d-flex" action="{{ url_for('UpdatePasswordView') }}">
         <label class="w-100 mt-2">
             <input type="hidden" name="word_id" value="{{word_dict['_id']}}">
             <div class="input-group mb-3 shadow-sm">

@@ -19,31 +19,39 @@
   </div>
   <div class="col-md-6 card shadow p-4">
     <form action="{{url_for('AuthView:register_auth')}}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <h3 class="mb-3">Register:</h3>
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="Fullname">Full name</label>
-        <input name="fullname" class="form-control" id="inputFullName" aria-describedby="emailHelp"
-          placeholder="Enter full name" required>
+        <div class="input-group">
+          <input type="text" class="form-control" name="first_name" placeholder="First name">
+          <input type="text" class="form-control" name="last_name" placeholder="Last name">
+        </div>
         <small id="fullName" class="form-text text-muted">Please enter your full name</small>
       </div>
-      <div class="form-group">
-        <label for="InputEmail">Email address</label>
-        <input name="email" class="form-control" id="InputEmail" placeholder="Enter email" required>
-        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      <div class="form-group mb-2">
+        <label for="InputEmail">Username</label>
+        <input name="username" class="form-control" placeholder="Enter username" required>
+        <small id="emailHelp" class="form-text text-muted">Select a single-word, memorizable username </small>
       </div>
-      <div class="form-group">
+      <div class="form-group mb-2">
+        <label for="InputEmail">E-mail address</label>
+        <input name="email" class="form-control" placeholder="Enter e-mail" required>
+        <small id="emailHelp" class="form-text text-muted">We'll never share your e-mail with anyone else.</small>
+      </div>
+      <div class="form-group mb-2">
         <label for="InputPassword">Password</label>
         <input type="password" name="password1" class="form-control" id="InputPassword" placeholder="Password" required>
         <small id="emailHelp" class="form-text text-muted">Enter a secure password</small>
       </div>
 
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="InputPassword2">Repeat Password</label>
         <input type="password" name="password2" class="form-control" id="InputPassword2" placeholder="Repeat Password"
           required>
         <small id="emailHelp" class="form-text text-muted">Confirm your password</small>
       </div>
-      <button type="submit " class="btn-lg shadow-sm btn btn-warning mt-3 w-100"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Register</button>
+      <button type="submit " class="btn-lg shadow-sm btn btn-warning mt-1 w-100"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Register</button>
       
     </form>
     <button onclick="location.href=`{{url_for('AuthView:login_auth')}}`" class="btn-lg shadow-sm btn btn-outline-dark mt-1 w-100"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Login</button>

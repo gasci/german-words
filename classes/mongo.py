@@ -47,11 +47,16 @@ class Database:
         types = self.words.find({"user_id": ObjectId(user_id)}).distinct("type")
         return types
 
-
     def get_current_user(self):
         user_id = session["user_id"]
         cursor = self.users.find({"_id": ObjectId(user_id)})
         return cursor[0]
+
+    def update_password(self, password):
+        user_id = session["user_id"]
+        self.users.update_one(
+            {"_id": ObjectId(user_id)}, {"$set": {"password": password}}
+        )
 
     def get_words_type(self, type):
         user_id = session["user_id"]
@@ -85,7 +90,7 @@ class Database:
         return cursor[0]
 
     def get_type_word_ids(self, type, diff):
-        
+
         user_id = session["user_id"]
         if type:
             if diff != 2:

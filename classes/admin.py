@@ -7,10 +7,9 @@ from flask_admin.menu import MenuLink
 # overwrite methods in the class
 class ModelView(ModelView):
     def is_accessible(self):
-        session_email = session.get("email", None)
-        if session_email and session_email == "gok.asci@gmail.com":
+        session_username = session.get("username", None)
+        if session_username and session_username == "gokasci":
             return True
-
         else:
             return False
 

@@ -13,14 +13,32 @@
 
 
 <div class="row justify-content-md-center">
-    <div class="col-sm-12 col-md-6 col-lg-5">
-        {{user_dict}}
+    <div class="col-sm-12 col-md-6 col-lg-5 mt-3">
+        <div class="card shadow p-3">
+            <div class="mb-1">Name: {{user_dict["first_name"]}} {{user_dict["last_name"]}}</div>
+            <div class="mb-1">Username: {{user_dict["username"]}}</div>
+            <div class="mb-1">Email: {{user_dict["email"]}}</div>
+            <form action="{{url_for('AuthView:update_password_auth')}}" method="post" class="mt-2"
+                oninput='password2.setCustomValidity(password2.value != password1.value ? "Passwords do not match." : "")'>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="input-group mb-2 shadow-sm">
+                    <input type="password" class="form-control" name="old_password" placeholder="Old password" required>
+                </div>
+
+                <div class="input-group mb-2 shadow-sm">
+                    <input type="password" class="form-control" name="password1" placeholder="New password" required>
+                </div>
+
+                <div class="plural-input input-group mb-2 shadow-sm+">
+                    <input type="password" class="form-control" name="password2" placeholder="Confirm" required>
+                </div>
+
+                <div class="input-group shadow">
+                    <button type="submit" class="btn-lg btn btn-warning w-100"><i
+                            class="fas fa-save"></i>&nbsp;&nbsp;Update</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script></script>
-
-
 {% endblock %}

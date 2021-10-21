@@ -5,16 +5,16 @@
 </button>
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        {% if session["email"] == 'gok.asci@gmail.com' %}
+        {% if session["username"] == 'gokasci' %}
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{url_for('admin.index')}}">&nbsp;<i
                     class="fas fa-cog"></i>&nbsp;&nbsp;Admin</a>
         </li>
         {% endif %}
-        <!-- <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{url_for('MainView:profile')}}">&nbsp;<i
-                    class="fas fa-user"></i>&nbsp;&nbsp;Profile</a>
-        </li> -->
+                    class="fas fa-user"></i>&nbsp;&nbsp;Update Info</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{url_for('AuthView:logout_auth')}}">&nbsp;<i
                     class="fas fa-sign-out"></i>&nbsp;&nbsp;Logout</a>

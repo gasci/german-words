@@ -20,7 +20,7 @@
         <div class="col-sm-12 col-md-5 col-lg-5 p-3 pb-1">
 
             <div class="input-group">
-                <div class="btn-group w-100 shadow-sm mb-1" role="group" aria-label="Basic radio toggle button group">
+                <div class="btn-group w-100 shadow-sm" role="group" aria-label="Basic radio toggle button group">
                     <input onclick="updateWordDifficulty(1)" type="radio" class="btn-check form-control"
                         name="diff_radio" id="hard-radio" value="1">
                     <label class="btn btn-lg btn-outline-dark" for="hard-radio">Learning</label>
@@ -31,9 +31,9 @@
             </div>
 
             {% if shuffle_study %}
-            <div class="input-group shadow-sm">
+            <div class="input-group shadow-sm mt-1">
                 {% if current_index - 1 != 0 %}
-                <button
+                <button id="prev-word"
                     onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index - 2])}}`"
                     class="btn btn-outline-dark form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
                 {% endif %}
@@ -43,7 +43,7 @@
 
                 <!-- <button class="btn btn-outline-dark form-control btn-lg">{{current_index}} / {{deck_length}}</button> -->
 
-                {% if current_index < deck_length %} <button
+                {% if current_index < deck_length %} <button id="next-word"
                     onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index])}}`"
                     class="btn btn-outline-dark form-control btn-lg">
                     <i class="fas fa-arrow-right"></i>
@@ -66,10 +66,10 @@
 
 
 <div class="row justify-content-md-center">
-    <div class="col-sm-12 col-md-6 col-lg-5">
+    <div class="col-sm-12 col-md-6 col-lg-5 p-1">
 
 
-        <div class="card shadow p-4 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
+        <div class="card shadow p-3 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
             <div onclick="showCard()">
                 <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["artikel"]}} {{word_dict["word"]}}
                 </div>
@@ -98,7 +98,8 @@
                         class="fas fa-pencil-alt"></i></button>
                 <button id="word-card-open-button"
                     class="d-none text-dark btn btn-outline-dark bg-white form-control btn-lg" onclick="showCard()"><i
-                        class="fas fa-info"></i></button>
+                        class="fas fa-info info-logo"></i><i
+                        class="fas fa-times info-logo d-none"></i></button>
                 <button class="text-dark btn btn-outline-dark bg-white form-control btn-lg" data-bs-toggle="modal"
                     data-bs-target="#delete-word-{{word_dict['_id']}}">
                     <i class="fas fa-trash"></i>
@@ -188,7 +189,35 @@
         }
     });
 
+    document.onkeydown = (e) => {
 
+        var code = e.keyCode || e.which;
+        console.log(code)
+        switch (code) {
+            case 37: // left
+                $("#prev-word").click();
+                break;
+
+            case 39: // right
+                $("#next-word").click();
+                break;
+
+            case 49: // 1
+                $("#hard-radio").click();
+                break;
+
+            case 50: // 2
+                $("#easy-radio").click();
+                break;
+            case 32: // 2
+                $("#word-card-open-button").click();
+                break;
+
+            default: return; // exit this handler for other keys
+        }
+        e.preventDefault(); // prevent the default action (scroll / move caret)
+
+    };
 
     updateWordDifficulty = (diff = 1) => {
 
@@ -269,12 +298,9 @@
     }
 
     showCard = () => {
-        $("#word-card-open-button").addClass("d-none");
-        $("#word-collapse").collapse("show");
+        $(".info-logo").toggleClass("d-none");
+        $("#word-collapse").collapse("toggle");
     }
-
-
-
 
 </script>
 {% endif %}

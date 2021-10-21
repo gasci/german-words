@@ -1,4 +1,3 @@
-#%%
 from flask import request, render_template, redirect, session, url_for
 from flask_classful import FlaskView, route
 
@@ -38,6 +37,9 @@ def login_required(func):
 
 
 class AuthView(FlaskView):
+
+    default_methods = ["GET", "POST"]
+
     @route("/register", methods=["GET", "POST"])
     def register_auth(self):
 
@@ -51,31 +53,40 @@ class AuthView(FlaskView):
             return redirect(url_for("MainView:index"))
         if request.method == "POST":
 
-            user = request.form.get("fullname")
+            first_name = request.form.get("first_name")
+            last_name = request.form.get("last_name")
+            username = request.form.get("username")
             email = request.form.get("email")
 
             password1 = request.form.get("password1")
             password2 = request.form.get("password2")
 
-            user_found = db.users.find_one({"name": user})
-            email_found = db.users.find_one({"email": email})
-            if user_found:
-                message = "There already is a user by that name"
+            username_found = db.users.find_one({"username": username})
+            # email_found = db.users.find_one({"email": email})
+            if username_found:
+                message = "There already is a user by that username"
                 return render_template("auth/register.html", message=message)
-            if email_found:
-                message = "This email already exists in database"
-                return render_template("auth/register.html", message=message)
+            # if email_found:
+            #     message = "This email already exists in database"
+            #     return render_template("auth/register.html", message=message)
             if password1 != password2:
                 message = "Passwords should match!"
                 return render_template("auth/register.html", message=message)
             else:
                 hashed = bcrypt.hashpw(password2.encode("utf-8"), bcrypt.gensalt())
-                user_input = {"name": user, "email": email, "password": hashed}
+                user_input = {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "username": username,
+                    "email": email,
+                    "password": hashed,
+                }
                 db.users.insert_one(user_input)
 
                 user_data = db.users.find_one({"email": email})
                 new_email = user_data["email"]
                 session["email"] = user_data["email"]
+                session["username"] = user_data["username"]
                 session["user_id"] = str(user_data["_id"])
                 server.is_authenticated_check()
                 return render_template("index.html", email=new_email)
@@ -90,9 +101,11 @@ class AuthView(FlaskView):
             return redirect(url_for("MainView:index"))
 
         if request.method == "POST":
-            email = request.form.get("email")
+            username = request.form.get("username")
             password = request.form.get("password")
-            user_data = db.users.find_one({"email": email})
+            user_data = db.users.find_one(
+                {"$or": [{"email": username}, {"username": username}]}
+            )
             if user_data:
                 email_val = user_data["email"]
                 passwordcheck = user_data["password"]
@@ -100,6 +113,7 @@ class AuthView(FlaskView):
                 if bcrypt.checkpw(password.encode("utf-8"), passwordcheck):
                     session["email"] = email_val
                     session["user_id"] = str(user_data["_id"])
+                    session["username"] = user_data["username"]
                     server.is_authenticated_check()
                     return redirect(url_for("MainView:index"))
                 else:
@@ -114,11 +128,33 @@ class AuthView(FlaskView):
     @route("/logout", methods=["GET", "POST"])
     @login_required
     def logout_auth(self):
-
         session.pop("email", None)
         session.pop("user_id", None)
         server.is_authenticated_check()
-        return render_template("auth/login.html")
+        return redirect(url_for("AuthView:login_auth"))
+
+    @route("/update_password", methods=["GET", "POST"])
+    @login_required
+    def update_password_auth(self):
+        if request.method == "POST":
+            old_password = request.form.get("old_password")
+            password = request.form.get("password1")
+
+            user_dict = db.get_current_user()
+            password_match = bcrypt.checkpw(
+                old_password.encode("utf-8"), user_dict["password"]
+            )
+
+            if password_match:
+                new_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+                db.update_password(new_password)
+                return render_template(
+                    "profile.html", message="Password updated", user_dict=user_dict
+                )
+
+            return render_template(
+                "profile.html", message="Old password is wrong", user_dict=user_dict
+            )
 
 
 class MainView(FlaskView):
@@ -134,6 +170,7 @@ class MainView(FlaskView):
     def profile(self):
         user_dict = db.get_current_user()
         return render_template("profile.html", user_dict=user_dict)
+
 
 class WordView(FlaskView):
 
@@ -235,10 +272,14 @@ class WordView(FlaskView):
 
         if word and type:
             db.add_update_word(word_id, new_word)
-            
+
             if update:
-                return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
-            
+                return (
+                    json.dumps({"success": True}),
+                    200,
+                    {"ContentType": "application/json"},
+                )
+
             types = db.list_types()
             return render_template(
                 "index.html",
