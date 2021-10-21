@@ -130,6 +130,10 @@ class MainView(FlaskView):
         types = db.list_types()
         return render_template("index.html", types=types)
 
+    @login_required
+    def profile(self):
+        user_dict = db.get_current_user()
+        return render_template("profile.html", user_dict=user_dict)
 
 class WordView(FlaskView):
 

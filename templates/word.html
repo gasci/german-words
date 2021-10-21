@@ -9,45 +9,65 @@
 {% endwith %}
 {% endblock %}
 
-{% block body %}
-
 {% set current_index = ids.index(word_dict['_id']|str) + 1 %}
 {% set deck_length = ids|len %}
 
-<div class="row justify-content-md-center">
-    <div class="col-sm-12 col-md-6 col-lg-5">
-        {% if shuffle_study %}
-        <div class="input-group mt-1 mb-2 shadow">
-            {% if current_index - 1 != 0 %}
-            <button
-                onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index - 2])}}`"
-                class="btn btn-outline-dark form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
+{% block bottom_nav %}
+
+<div id="bottom-nav" class="fixed-bottom">
+
+    <div class="row justify-content-md-center">
+        <div class="col-sm-12 col-md-5 col-lg-5 p-3 pb-1">
+
+            <div class="input-group">
+                <div class="btn-group w-100 shadow-sm mb-1" role="group" aria-label="Basic radio toggle button group">
+                    <input onclick="updateWordDifficulty(1)" type="radio" class="btn-check form-control"
+                        name="diff_radio" id="hard-radio" value="1">
+                    <label class="btn btn-lg btn-outline-dark" for="hard-radio">Learning</label>
+                    <input onclick="updateWordDifficulty(0)" type="radio" class="btn-check form-control"
+                        name="diff_radio" id="easy-radio" value="0">
+                    <label class="btn btn-lg btn-outline-dark" for="easy-radio">Learned</label>
+                </div>
+            </div>
+
+            {% if shuffle_study %}
+            <div class="input-group shadow-sm">
+                {% if current_index - 1 != 0 %}
+                <button
+                    onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index - 2])}}`"
+                    class="btn btn-outline-dark form-control btn-lg"><i class="fas fa-arrow-left"></i></button>
+                {% endif %}
+
+                <button class="btn btn-outline-dark form-control btn-lg" onclick="showIndexModal()">{{current_index}} /
+                    {{deck_length}}</button>
+
+                <!-- <button class="btn btn-outline-dark form-control btn-lg">{{current_index}} / {{deck_length}}</button> -->
+
+                {% if current_index < deck_length %} <button
+                    onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index])}}`"
+                    class="btn btn-outline-dark form-control btn-lg">
+                    <i class="fas fa-arrow-right"></i>
+                    </button>
+                    {% endif %}
+            </div>
             {% endif %}
 
-            <button class="btn btn-outline-dark form-control btn-lg" onclick="showIndexModal()">{{current_index}} /
-                {{deck_length}}</button>
 
-            <!-- <button class="btn btn-outline-dark form-control btn-lg">{{current_index}} / {{deck_length}}</button> -->
 
-            {% if current_index < deck_length %} <button
-                onclick="location.href=`{{url_for('WordView:get_word', shuffle_study=True, word_id=ids[current_index])}}`"
-                class="btn btn-outline-dark form-control btn-lg">
-                <i class="fas fa-arrow-right"></i>
-                </button>
-                {% endif %}
         </div>
-        {% endif %}
+    </div>
 
-        <div class="input-group">
-            <div class="btn-group w-100 shadow mb-2" role="group" aria-label="Basic radio toggle button group">
-                <input onclick="updateWordDifficulty(1)" type="radio" class="btn-check form-control" name="diff_radio"
-                    id="hard-radio" value="1">
-                <label class="btn btn-lg btn-outline-dark" for="hard-radio">Learning</label>
-                <input onclick="updateWordDifficulty(0)" type="radio" class="btn-check form-control" name="diff_radio"
-                    id="easy-radio" value="0">
-                <label class="btn btn-lg btn-outline-dark" for="easy-radio">Learned</label>
-            </div>
-        </div>
+</div>
+{% endblock %}
+
+
+{% block body %}
+
+
+
+<div class="row justify-content-md-center">
+    <div class="col-sm-12 col-md-6 col-lg-5">
+
 
         <div class="card shadow p-4 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
             <div onclick="showCard()">
@@ -158,8 +178,17 @@
                 $("#hard-radio").attr('checked', true);
         }
 
-
+        if ($(window).width() < 768) {
+            $("#bottom-nav").addClass("fixed-bottom")
+            console.log("hh")
+        }
+        else {
+            $("#bottom-nav").removeClass("fixed-bottom")
+            console.log("h22")
+        }
     });
+
+
 
     updateWordDifficulty = (diff = 1) => {
 
@@ -197,9 +226,10 @@
                 $("#hard-radio").attr('checked', true);
         }
 
-        $("#word-card-open-button").removeClass("d-none");
-        $("#word-collapse").addClass("collapse");
     });
+
+    $("#word-card-open-button").removeClass("d-none");
+    $("#word-collapse").addClass("collapse");
 
     showIndexModal = () => {
         $('#index-modal').modal("show")

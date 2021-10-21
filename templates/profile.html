@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Profile{% endblock %}
+
+{% block back_button %}
+{% with back_link=url_for('MainView:index')%}
+{% include "snippets/back_button.html" %}
+{% endwith %}
+{% endblock %}
+
+{% block body %}
+
+
+<div class="row justify-content-md-center">
+    <div class="col-sm-12 col-md-6 col-lg-5">
+        {{user_dict}}
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script></script>
+
+
+{% endblock %}
