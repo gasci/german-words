@@ -13,7 +13,12 @@
 
 <div class="row justify-content-md-center">
     <div class="col-md-8 col-lg-6 p-3">
+        {% if type=="Search" %}
+        <h5 class="mb-3">{{type.title()}}:</h5>
+        {% else %}
         <h5 class="mb-3">{{type.title()}}s:</h5>
+        {% endif %}
+        {% if not type=="Search" %}
         <form action="{{url_for('WordView:get_word')}}" id="shuffle-study">
             <div class="input-group mb-2 shadow-sm">
                 <input type="hidden" name="shuffle_words" value="" />
@@ -29,10 +34,12 @@
                         class="fas fa-random"></i>&nbsp;&nbsp;Study</button>
             </div>
         </form>
-
+        {% endif %}
+        {% if not type=="Search" %}
         <button onclick="location.href=`{{url_for('MainView:index')}}`"
             class="btn-lg shadow-sm btn btn-warning mb-2 w-100"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add new
             word</button>
+        {% endif %}
         {% if not words %}
         <span>No words</span>
         {% endif %}

@@ -89,7 +89,7 @@ class Database:
         )
         return cursor[0]
 
-    def get_type_word_ids(self, type, diff):
+    def get_type_word_ids(self, type, diff=2):
 
         user_id = session["user_id"]
         if type:
@@ -122,17 +122,22 @@ class Database:
             upsert=True,
         )
 
-    def search_word(self, word):
+    def search_word(self, search_term):
         user_id = session["user_id"]
         result_list = []
+
         cursor = self.words.find(
-            {"$text": {"$search": word}, "user_id": ObjectId(user_id)}
+            {
+                "$text": {"$search": search_term},
+                "user_id": ObjectId(user_id),
+            },
+            {"score": {"$meta": "textScore"}},
         )
 
         for result in cursor:
             result_list.append(result)
 
-        if len(result_list) > 0:
-            return result_list[0]
-        else:
-            return []
+        print(search_term)
+        print(result_list)
+
+        return result_list

@@ -308,7 +308,6 @@ class WordView(FlaskView):
     def delete_word(self):
         word_id = request.args.get("word_id")
         type = request.args.get("type")
-
         db.delete_word(word_id)
 
         words = db.get_words_type(type)
@@ -316,13 +315,11 @@ class WordView(FlaskView):
 
     @login_required
     def search(self):
-        word = request.args.get("word").lower()
-        result = db.search_word(word)
+        search_term = request.args.get("search_term").lower()
+        words = db.search_word(search_term)
 
-        if len(result) > 0:
-            word_dict = result
-            ids = [str(x) for x in db.get_type_word_ids(word_dict["type"])]
-            return render_template("word.html", word_dict=word_dict, ids=ids)
+        if len(words) > 0:
+            return render_template("words.html", words=words, type="Search")
         else:
             types = db.list_types()
             return render_template("index.html", types=types, message="No words")
@@ -335,4 +332,3 @@ server.register_views(views)
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
 
-# %%
