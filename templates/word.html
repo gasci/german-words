@@ -53,6 +53,11 @@
                     class="btn btn-outline-dark form-control btn-lg">
                     <i class="fas fa-arrow-right"></i>
                     </button>
+                    {% else %}
+                    <button id="next-word" onclick="location.href=`{{url_for('MainView:index')}}`"
+                        class="btn btn-outline-dark form-control btn-lg">
+                        <i class="fas fa-check"></i>
+                    </button>
                     {% endif %}
             </div>
             {% endif %}
