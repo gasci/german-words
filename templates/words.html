@@ -96,6 +96,11 @@
 
 <script>
 
+    $(() => {
+        var type = '{{type}}'
+        getCounts(type)
+    });
+
     shuffleStudy = () => {
 
         var formInfo = document.forms['shuffle-study'];

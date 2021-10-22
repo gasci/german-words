@@ -235,15 +235,10 @@ class WordView(FlaskView):
 
     @login_required
     def update_difficulty(self):
-        print(request.form)
-        print(request.json)
         word_id = request.form.get("word_id")
-        print(word_id)
         word_id = request.json["word_id"]
         difficulty = request.json["difficulty"]
-        print(word_id)
-        print(difficulty)
-
+        
         db.update_difficulty(word_id, int(difficulty))
         return "success", 200
 
@@ -323,6 +318,13 @@ class WordView(FlaskView):
         else:
             types = db.list_types()
             return render_template("index.html", types=types, message="No words")
+
+    @login_required
+    def get_counts(self):
+        type = request.args.get("type", False)
+        counts = db.count_words(type)
+        return counts, 200
+
 
 
 views = [MainView, WordView, AuthView]

@@ -25,12 +25,13 @@
             text-decoration: none;
         }
     </style>
+    {% include 'snippets/common_scripts.html' %}
 </head>
 
 <nav class="navbar navbar-expand-lg {% block fixed_navbar %}{% endblock %} navbar-dark bg-dark shadow-sm">
     <div class="container">
         {% block back_button %}{% endblock %}
-        
+
         {% if session['user_id'] %}
         {% include 'snippets/logged_in_nav.html' %}
         {% else %}

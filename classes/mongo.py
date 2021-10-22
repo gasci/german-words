@@ -122,6 +122,56 @@ class Database:
             upsert=True,
         )
 
+    def count_words(self, type=""):
+        type_list = []
+    
+        if type:
+            type_list.append(type)
+        else:
+            type_list = self.list_types()
+
+        # print(type)
+        # print(type_list)
+
+        cursor = self.words.aggregate(
+            [
+                {
+                    "$facet": {
+                        "All": [
+                            {
+                                "$match": {
+                                    "difficulty": {"$exists": True},
+                                    "type": {"$in": type_list},
+                                }
+                            },
+                            {"$count": "All"},
+                        ],
+                        "Easy": [
+                            {"$match": {"difficulty": 0, "type": {"$in": type_list}}},
+                            {"$count": "Easy"},
+                        ],
+                        "Hard": [
+                            {"$match": {"difficulty": 1, "type": {"$in": type_list}}},
+                            {"$count": "Hard"},
+                        ],
+                    }
+                },
+                {
+                    "$project": {
+                        "All": {"$arrayElemAt": ["$All.All", 0]},
+                        "Easy": {"$arrayElemAt": ["$Easy.Easy", 0]},
+                        "Hard": {"$arrayElemAt": ["$Hard.Hard", 0]},
+                    }
+                },
+            ]
+        )
+
+        results = []
+        for item in cursor:
+            results.append(item)
+
+        return results[0]
+
     def search_word(self, search_term):
         user_id = session["user_id"]
         result_list = []
@@ -136,8 +186,5 @@ class Database:
 
         for result in cursor:
             result_list.append(result)
-
-        print(search_term)
-        print(result_list)
 
         return result_list
