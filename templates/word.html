@@ -100,6 +100,8 @@
                     <hr>
                     <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["pronunciation"]}}</div>
                     {% endif %}
+                    <hr>
+                    <div class="lead {{word_dict['type']|word_text_color}} fw-bold">{{word_dict["type"]}}</div>
                 </div>
             </div>
             <div class="input-group mt-4 shadow-sm">
@@ -199,24 +201,21 @@
     document.onkeydown = (e) => {
 
         var code = e.keyCode || e.which;
-        // console.log(code)
+        console.log(code)
         switch (code) {
             case 37: // left
                 $("#prev-word").click();
                 break;
-
             case 39: // right
                 $("#next-word").click();
                 break;
-
-            case 65: // A
+            case 40: // down
                 $("#hard-radio").click();
                 break;
-
-            case 83: // S
+            case 38: // top
                 $("#easy-radio").click();
                 break;
-            case 32: // 2
+            case 32: // space
                 $("#word-card-open-button").click();
                 break;
 
