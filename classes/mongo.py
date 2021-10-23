@@ -195,10 +195,7 @@ class Database:
         result_list = []
 
         cursor = self.words.find(
-            {
-                "user_id": ObjectId(user_id),
-                "sentence": ""
-            }
+            {"user_id": ObjectId(user_id), "type": { "$ne": "phrase"}, "sentence": ""}
         )
 
         for result in cursor:
