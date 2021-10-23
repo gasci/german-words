@@ -78,6 +78,7 @@
 <div class="row justify-content-md-center">
     <div class="col-sm-12 col-md-6 col-lg-5 p-1">
 
+        {% include 'snippets/add_update_button.html' %}
 
         <div class="card shadow p-3 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
             <div onclick="showCard()">
@@ -105,7 +106,7 @@
                 </div>
             </div>
             <div class="input-group mt-4 shadow-sm">
-                <button onclick="location.href=`{{url_for('WordView:update_word_redirect', word_id=word_dict['_id'])}}`"
+                <button onclick="location.href=`{{url_for('WordView:update_word_redirect', update=True, word_id=word_dict['_id'])}}`"
                     class="text-dark btn btn-outline-dark bg-white form-control btn-lg"><i
                         class="fas fa-pencil-alt"></i></button>
                 <button id="word-card-open-button"

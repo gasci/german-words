@@ -31,11 +31,13 @@ class Database:
         # create index
         self.words.create_index([("word", "text")])
 
-    def add_update_word(self, word_id, word_dict):
+    def add_update_word(self, word_id, word_dict, update=False):
         user_id = session["user_id"]
         # don't add the same word twice
         self.delete_word_by_name(word_dict)
-        word_dict["difficulty"] = 1
+        # words are hard by default
+        if not update:
+            word_dict["difficulty"] = 1
         self.words.update_one(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
             {"$set": word_dict},
@@ -124,7 +126,7 @@ class Database:
 
     def count_words(self, type=""):
         type_list = []
-    
+
         if type:
             type_list.append(type)
         else:
@@ -180,8 +182,23 @@ class Database:
             {
                 "$text": {"$search": search_term},
                 "user_id": ObjectId(user_id),
-            },
-            {"score": {"$meta": "textScore"}},
+            }
+        )
+
+        for result in cursor:
+            result_list.append(result)
+
+        return result_list
+
+    def get_words_without_sentence(self):
+        user_id = session["user_id"]
+        result_list = []
+
+        cursor = self.words.find(
+            {
+                "user_id": ObjectId(user_id),
+                "sentence": ""
+            }
         )
 
         for result in cursor:

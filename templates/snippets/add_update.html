@@ -1,5 +1,5 @@
 <div class="mt-1">
-    {% if not word_dict %}
+    {% if not update %}
     <h5>Add new word:</h5>
     <form class="d-flex" action="{{ url_for('WordView:add_update_word') }}">
         <label class="w-100 mt-2">
@@ -12,7 +12,7 @@
             </div>
 
             <div class="input-group mb-3 shadow-sm">
-                <input type="text" class="form-control" name="word" placeholder="Word" required value="">
+                <input id="word-name" type="text" class="form-control" name="word" placeholder="Word" required value="">
             </div>
 
             <div class="plural-input input-group mb-3 shadow-sm">
@@ -32,13 +32,14 @@
             </div>
 
             <div class="input-group shadow">
-                <button type="submit" class="btn-lg btn btn-warning w-100"><i
+                <button type="button" onclick="upsertWord(false)" class="btn-lg btn btn-warning w-100"><i
                         class="fas fa-plus"></i>&nbsp;&nbsp;Add</button>
             </div>
+            <button type="button" data-bs-dismiss="modal" class="btn-lg btn btn-danger w-100 mt-1">Close</button>
         </label>
     </form>
     {% endif %}
-    {% if word_dict %}
+    {% if update %}
     <h5>Update a word:</h5>
     <form class="d-flex" action="{{ url_for('AuthView:update_password_auth') }}">
         <label class="w-100 mt-2">
@@ -77,9 +78,10 @@
             </div>
 
             <div class="input-group shadow">
-                <button type="button" onclick="updateWord()" class="btn-lg btn btn-warning w-100"><i
+                <button type="button" onclick="upsertWord(true)" class="btn-lg btn btn-warning w-100"><i
                         class="fas fa-save"></i>&nbsp;&nbsp;Update</button>
             </div>
+            <button type="button" onclick="window.location.href = document.referrer;" class="btn-lg btn btn-danger w-100 mt-1">Close</button>
         </label>
     </form>
     {% endif %}
@@ -100,9 +102,45 @@
             }
         });
     })
+
+    upsertWord = (update = false) => {
+
+        data = {
+            "word": $("#word-name").val(),
+            "plural": $("[name='plural']").val(),
+            "sentence": $("[name='sentence']").val(),
+            "sentence_eng": $("[name='sentence_eng']").val(),
+            "pronunciation": $("[name='pronunciation']").val(),
+            "type": $("#type-select").val(),
+            "artikel": $("[name='artikel']").val(),
+            "update": update
+        }
+
+        "{% if update %}"
+        data['word_id'] = "{{word_dict['_id']}}";
+        data['difficulty'] = "{{word_dict['difficulty']}}";
+        console.log("{{word_dict['difficulty']}}")
+        "{% endif %}"
+
+        $.ajax({
+            url: `{{url_for('WordView:add_update_word')}}`,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            data: data,
+            success: () => {
+                if (update) {
+                    window.location.href = document.referrer;
+                } else {
+                    addWordModal()
+                }
+
+            }
+        })
+    }
 </script>
 
-{% if word_dict %}
+{% if update %}
 <script>
     $(() => {
         $("#type-select").val("{{word_dict['type']}}");
@@ -114,33 +152,5 @@
             $("#artikel-select").val("{{word_dict['artikel']}}");
         }
     })
-
-    updateWord = () => {
-
-        // console.log($("[name='word']").val())
-
-        $.ajax({
-            url: `{{url_for('WordView:add_update_word')}}`,
-            type: "GET",
-            dataType: 'json',
-            contentType: "application/json",
-            data: {
-                "word": $("#word-name").val(),
-                "word_id": "{{word_dict['_id']}}",
-                "plural": $("[name='plural']").val(),
-                "sentence": $("[name='sentence']").val(),
-                "sentence_eng": $("[name='sentence_eng']").val(),
-                "pronunciation": $("[name='pronunciation']").val(),
-                "type": $("[name='type']").val(),
-                "artikel": $("[name='artikel']").val(),
-                "update": 1
-            },
-            success: () => {
-                history.back(1);
-            }
-        })
-    }
-
-
 </script>
 {% endif %}

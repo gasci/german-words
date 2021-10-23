@@ -238,7 +238,7 @@ class WordView(FlaskView):
         word_id = request.form.get("word_id")
         word_id = request.json["word_id"]
         difficulty = request.json["difficulty"]
-        
+
         db.update_difficulty(word_id, int(difficulty))
         return "success", 200
 
@@ -246,16 +246,18 @@ class WordView(FlaskView):
     def add_update_word(self):
         user_id = session["user_id"]
         word_id = request.args.get("word_id")
-        word = request.args.get("word")
+        word = request.args.get("word", False)
         artikel = request.args.get("artikel", "")
         plural = request.args.get("plural", "")
         type = request.args.get("type")
         sentence = request.args.get("sentence")
+        difficulty = request.args.get("difficulty", 1)
         sentence_eng = request.args.get("sentence_eng")
         pronunciation = request.args.get("pronunciation")
         update = request.args.get("update", False)
 
-        print(word_id)
+        if update == "false":
+            update = False
 
         new_word = {
             "word": word,
@@ -264,28 +266,35 @@ class WordView(FlaskView):
             "sentence": sentence,
             "sentence_eng": sentence_eng,
             "pronunciation": pronunciation,
+            "difficulty": difficulty,
         }
 
+        
         if type == "noun":
             new_word["artikel"] = artikel
             new_word["plural"] = plural
 
         if word and type:
-            db.add_update_word(word_id, new_word)
+            db.add_update_word(word_id, new_word, update)
+
+            message = "Updated database"
 
             if update:
+                message = "Updated database"
+
+            if word:
                 return (
-                    json.dumps({"success": True}),
+                    json.dumps({"success": True, "message": message}),
                     200,
                     {"ContentType": "application/json"},
                 )
+            else:
+                return (
+                    json.dumps({"success": False, "message": "No word entered"}),
+                    400,
+                    {"ContentType": "application/json"},
+                )
 
-            types = db.list_types()
-            return render_template(
-                "index.html",
-                types=types,
-                message="Updated database",
-            )
         else:
             types = db.list_types()
             return render_template("index.html", types=types, message="Incorrect input")
@@ -296,7 +305,7 @@ class WordView(FlaskView):
         word_dict = db.get_word(word_id)
         types = db.list_types()
         return render_template(
-            "index.html", types=types, word_dict=word_dict, word_id=word_id
+            "index.html", types=types, word_dict=word_dict, word_id=word_id, update=True
         )
 
     @login_required
@@ -320,11 +329,20 @@ class WordView(FlaskView):
             return render_template("index.html", types=types, message="No words")
 
     @login_required
+    def get_words_without_sentence(self):
+        words = db.get_words_without_sentence()
+
+        if len(words) > 0:
+            return render_template("words.html", words=words, type="Add sentence")
+        else:
+            types = db.list_types()
+            return render_template("index.html", types=types, message="No words")
+
+    @login_required
     def get_counts(self):
         type = request.args.get("type", False)
         counts = db.count_words(type)
         return counts, 200
-
 
 
 views = [MainView, WordView, AuthView]
@@ -333,4 +351,3 @@ server.register_views(views)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
-
