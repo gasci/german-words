@@ -120,7 +120,7 @@
         "{% if update %}"
         data['word_id'] = "{{word_dict['_id']}}";
         data['difficulty'] = "{{word_dict['difficulty']}}";
-        console.log("{{word_dict['difficulty']}}")
+        // console.log("{{word_dict['difficulty']}}")
         "{% endif %}"
 
         $.ajax({
@@ -133,7 +133,8 @@
                 if (update) {
                     window.location.href = document.referrer;
                 } else {
-                    addWordModal()
+                    // addWordModal()
+                    window.location.reload(false); 
                 }
 
             }
