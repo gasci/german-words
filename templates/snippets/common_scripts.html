@@ -9,8 +9,8 @@
                 "type": type
             },
             success: (data) => {
-                $('select option:contains("Learning")').text(`Learning (${data["Hard"]})`);
-                $('select option:contains("Learned")').text(`Learned (${data["Easy"]})`);
+                $('select option:contains("Learning")').text(`Learning (${data["Hard"] || 0})`);
+                $('select option:contains("Learned")').text(`Learned (${data["Easy"] || 0})`);
                 $('select option:contains("All")').text(`All (${data["All"]})`);
             }
         })
