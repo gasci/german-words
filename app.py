@@ -62,13 +62,13 @@ class AuthView(FlaskView):
             password2 = request.form.get("password2")
 
             username_found = db.users.find_one({"username": username})
-            # email_found = db.users.find_one({"email": email})
+            email_found = db.users.find_one({"email": email})
             if username_found:
                 message = "There already is a user by that username"
                 return render_template("auth/register.html", message=message)
-            # if email_found:
-            #     message = "This email already exists in database"
-            #     return render_template("auth/register.html", message=message)
+            if email_found:
+                message = "This email already exists in database"
+                return render_template("auth/register.html", message=message)
             if password1 != password2:
                 message = "Passwords should match!"
                 return render_template("auth/register.html", message=message)
