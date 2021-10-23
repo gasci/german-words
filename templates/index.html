@@ -28,7 +28,7 @@
             </form>
             {% include 'snippets/add_update_button.html' %}
             <form class="d-flex" action="{{url_for('WordView:get_words_without_sentence')}}">
-                <button type="submit" class="form-control btn-lg  btn btn-warning mb-2"><i
+                <button type="submit" class="form-control btn-lg  btn btn-outline-dark mb-2"><i
                         class="fas fa-stream"></i>&nbsp;&nbsp;Add sentence</button>
             </form>
             {% endif %}

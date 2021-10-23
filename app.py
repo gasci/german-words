@@ -266,9 +266,8 @@ class WordView(FlaskView):
             "sentence": sentence,
             "sentence_eng": sentence_eng,
             "pronunciation": pronunciation,
-            "difficulty": difficulty,
+            "difficulty": int(difficulty),
         }
-
         
         if type == "noun":
             new_word["artikel"] = artikel
