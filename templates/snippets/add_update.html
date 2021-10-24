@@ -19,7 +19,7 @@
                 <input type="text" class="form-control" name="plural" placeholder="Plural">
             </div>
 
-            <div class="input-group mb-3 shadow-sm">
+            <div class="sentence-div input-group mb-3 shadow-sm">
                 <textarea class="form-control" name="sentence" placeholder="German sentence"></textarea>
             </div>
 
@@ -63,7 +63,7 @@
                     value="{{word_dict['plural']}}">
             </div>
 
-            <div class="input-group mb-3 shadow-sm">
+            <div class="sentence-div input-group mb-3 shadow-sm">
                 <textarea class="form-control" name="sentence"
                     placeholder="German sentence">{{word_dict['sentence']}}</textarea>
             </div>
@@ -103,11 +103,11 @@
                     $(".artikel-selector-div, .plural-input").removeClass("d-none")
                     break;
                 case 'phrase':
-                    $(".artikel-selector-div, .sentence-eng-div, .plural-input").addClass("d-none")
+                    $(".artikel-selector-div, .sentence-div, .plural-input").addClass("d-none")
                     break;
                 default:
                     $(".artikel-selector-div, .plural-input").addClass("d-none")
-                    $(".sentence-eng-div").removeClass("d-none")
+                    $(".sentence-div").removeClass("d-none")
             }
 
         });
@@ -158,15 +158,15 @@
 
         switch ($("#type-select").val()) {
             case 'noun':
-                $(".plural-input, .sentence-eng-div, .artikel-selector-div").removeClass("d-none")
+                $(".plural-input, .sentence-div, .artikel-selector-div").removeClass("d-none")
                 $("#artikel-select").val("{{word_dict['artikel']}}");
                 break;
             case 'phrase':
-                $(".sentence-eng-div, .artikel-selector-div").addClass("d-none")
+                $(".sentence-div, .artikel-selector-div").addClass("d-none")
                 break;
             default:
                 $(".artikel-selector-div, .plural-input").addClass("d-none")
-                $(".sentence-eng-div").removeClass("d-none")
+                $(".sentence-div").removeClass("d-none")
         }
 
     })
