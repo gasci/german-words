@@ -310,11 +310,10 @@ class WordView(FlaskView):
     @login_required
     def delete_word(self):
         word_id = request.args.get("word_id")
-        type = request.args.get("type")
         db.delete_word(word_id)
 
-        words = db.get_words_type(type)
-        return render_template("words.html", words=words, type=type)
+        types = db.list_types()
+        return render_template("index.html", types=types, message="Word deleted")
 
     @login_required
     def search(self):
