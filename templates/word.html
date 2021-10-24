@@ -22,7 +22,7 @@
 <div id="bottom-nav" class="fixed-bottom">
 
     <div class="row justify-content-md-center">
-        <div class="col-sm-12 col-md-5 col-lg-5 p-3 pb-1">
+        <div class="col-sm-12 col-md-5 col-lg-5 p-3 pb-1 pt-1 bg-white">
 
             <div class="input-group">
                 <div class="btn-group w-100 shadow-sm" role="group" aria-label="Basic radio toggle button group">
@@ -75,7 +75,7 @@
 
 
 
-<div class="row justify-content-md-center">
+<div class="row justify-content-md-center pb-100">
     <div class="col-sm-12 col-md-6 col-lg-5 p-1">
 
         {% include 'snippets/add_update_button.html' %}
@@ -88,7 +88,7 @@
                 <hr>
                 <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
                 {% endif %}
-                <div id="word-collapse">
+                <div id="word-collapse" class="collapse">
                     {% if word_dict["sentence_eng"] %}
                     <hr>
                     <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence_eng"]}}</div>
@@ -110,9 +110,8 @@
                     onclick="location.href=`{{url_for('WordView:update_word_redirect', update=True, word_id=word_dict['_id'])}}`"
                     class="text-dark btn btn-outline-dark bg-white form-control btn-lg"><i
                         class="fas fa-pencil-alt"></i></button>
-                <button id="word-card-open-button"
-                    class="d-none text-dark btn btn-outline-dark bg-white form-control btn-lg" onclick="showCard()"><i
-                        class="fas fa-info info-logo"></i></button>
+                <button id="word-card-open-button" class="text-dark btn btn-outline-dark bg-white form-control btn-lg"
+                    onclick="showCard()"><i class="fas fa-info info-logo"></i></button>
                 <button class="text-dark btn btn-outline-dark bg-white form-control btn-lg" data-bs-toggle="modal"
                     data-bs-target="#delete-word-{{word_dict['_id']}}">
                     <i class="fas fa-trash"></i>
@@ -230,6 +229,11 @@
         };
     }
 
+    showCard = () => {
+        // $("#word-card-open-button").toggleClass("d-none");
+        $("#word-collapse").collapse("toggle");
+    }
+
     updateWordDifficulty = (diff = 1) => {
 
         var csrftoken = "{{ csrf_token() }}"
@@ -272,9 +276,6 @@
 
     });
 
-    $("#word-card-open-button").removeClass("d-none");
-    $("#word-collapse").addClass("collapse");
-
     showIndexModal = () => {
         $('#index-modal').modal("show")
     }
@@ -312,11 +313,12 @@
         })
     }
 
-    showCard = () => {
-        // $("#word-card-open-button").toggleClass("d-none");
-        $("#word-collapse").collapse("toggle");
-    }
 
+</script>
+{% else %}
+<script>
+    // $("#word-card-open-button").addClass("d-none");
+    // $("#word-collapse").addClass("collapse");
 </script>
 {% endif %}
 
