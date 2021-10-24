@@ -106,7 +106,8 @@
                 </div>
             </div>
             <div class="input-group mt-4 shadow-sm">
-                <button onclick="location.href=`{{url_for('WordView:update_word_redirect', update=True, word_id=word_dict['_id'])}}`"
+                <button
+                    onclick="location.href=`{{url_for('WordView:update_word_redirect', update=True, word_id=word_dict['_id'])}}`"
                     class="text-dark btn btn-outline-dark bg-white form-control btn-lg"><i
                         class="fas fa-pencil-alt"></i></button>
                 <button id="word-card-open-button"
@@ -199,32 +200,35 @@
         }
     });
 
-    document.onkeydown = (e) => {
+    if ($(window).width() < 768) {
+        // only if screen width lower than a breakpoint
+        document.onkeydown = (e) => {
 
-        var code = e.keyCode || e.which;
-        // console.log(code)
-        switch (code) {
-            case 37: // left
-                $("#prev-word").click();
-                break;
-            case 39: // right
-                $("#next-word").click();
-                break;
-            case 40: // down
-                $("#hard-radio").click();
-                break;
-            case 38: // top
-                $("#easy-radio").click();
-                break;
-            case 32: // space
-                $("#word-card-open-button").click();
-                break;
+            var code = e.keyCode || e.which;
+            // console.log(code)
+            switch (code) {
+                case 37: // left
+                    $("#prev-word").click();
+                    break;
+                case 39: // right
+                    $("#next-word").click();
+                    break;
+                case 40: // down
+                    $("#hard-radio").click();
+                    break;
+                case 38: // top
+                    $("#easy-radio").click();
+                    break;
+                case 32: // space
+                    $("#word-card-open-button").click();
+                    break;
 
-            default: return; // exit this handler for other keys
-        }
-        e.preventDefault(); // prevent the default action (scroll / move caret)
+                default: return; // exit this handler for other keys
+            }
+            e.preventDefault(); // prevent the default action (scroll / move caret)
 
-    };
+        };
+    }
 
     updateWordDifficulty = (diff = 1) => {
 
