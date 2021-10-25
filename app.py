@@ -243,6 +243,12 @@ class WordView(FlaskView):
         return "success", 200
 
     @login_required
+    def reset_word_difficulties(self):
+        db.reset_word_difficulties()
+        types = db.list_types()
+        return render_template("index.html", types=types, message="Word difficulties resetted")
+
+    @login_required
     def add_update_word(self):
         user_id = session["user_id"]
         word_id = request.args.get("word_id")

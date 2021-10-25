@@ -28,9 +28,13 @@
             </form>
             {% include 'snippets/add_update_button.html' %}
             <form class="d-flex" action="{{url_for('WordView:get_words_without_sentence')}}">
-                <button type="submit" class="form-control btn-lg  btn btn-outline-dark mb-2"><i
+                <button type="submit" class="form-control btn-lg  btn btn-outline-dark mb-1"><i
                         class="fas fa-stream"></i>&nbsp;&nbsp;Add sentence</button>
             </form>
+
+            <button onclick='$("#reset-modal").modal("show");' class="form-control btn-lg  btn btn-outline-dark mb-2"><i class="fas fa-info"></i>&nbsp;&nbsp;Reset
+                difficulties</button>
+
             {% endif %}
             {% for type in types %}
             <div>
@@ -49,6 +53,28 @@
 
 
 <!-- {{words}} -->
+
+<!-- Modal -->
+<div class="modal fade" id="reset-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Word Difficulties</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reset the word difficulties?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form class="d-flex" action="{{url_for('WordView:reset_word_difficulties')}}">
+                    <button type="submit" class="btn btn-danger">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 

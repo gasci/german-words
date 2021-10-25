@@ -44,6 +44,14 @@ class Database:
             upsert=True,
         )
 
+    def reset_word_difficulties(self):
+        user_id = session["user_id"]
+        self.words.update(
+            {"user_id": ObjectId(user_id)},
+            {"$set": {"difficulty": 1}},
+            multi=True
+        )
+
     def list_types(self):
         user_id = session["user_id"]
         types = self.words.find({"user_id": ObjectId(user_id)}).distinct("type")
@@ -114,14 +122,10 @@ class Database:
 
     def update_difficulty(self, word_id, diff):
         user_id = session["user_id"]
-        word_dict = self.words.find(
-            {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)}
-        )[0]
-        word_dict["difficulty"] = diff
         self.words.update(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
-            {"$set": word_dict},
-            upsert=True,
+            {"$set": {"difficulty": diff}},
+            multi=True
         )
 
     def count_words(self, type=""):
@@ -195,7 +199,7 @@ class Database:
         result_list = []
 
         cursor = self.words.find(
-            {"user_id": ObjectId(user_id), "type": { "$ne": "phrase"}, "sentence": ""}
+            {"user_id": ObjectId(user_id), "type": {"$ne": "phrase"}, "sentence": ""}
         )
 
         for result in cursor:
