@@ -80,7 +80,7 @@
 
         {% include 'snippets/add_update_button.html' %}
 
-        <div class="card shadow p-3 {{[word_dict['artikel'], word_dict['type']]|word_background}}">
+        <div class="card shadow p-3 bg-{{[word_dict['artikel'], word_dict['type']]|word_background}}">
             <div>
                 <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["artikel"]}} {{word_dict["word"]}}
                 </div>

@@ -13,7 +13,7 @@
             <span>No words</span>
             {% else %}
             <form action="{{url_for('WordView:get_word')}}" id="shuffle-study">
-                <div class="input-group mb-2 shadow-sm">
+                <div class="input-group mb-1 shadow-sm">
                     <input type="hidden" name="shuffle_words" value="" />
                     <input type="hidden" name="shuffle_study" value="" />
                     <input type="hidden" name="difficulty" value="" />
@@ -22,7 +22,7 @@
                         <option value="0">Learned</option>
                         <option value="2">All</option>
                     </select>
-                    <button onclick="shuffleStudy()" class="btn-lg  btn btn-warning"><i
+                    <button onclick="shuffleStudy()" class="btn-lg btn btn-outline-dark"><i
                             class="fas fa-random"></i>&nbsp;&nbsp;Study</button>
                 </div>
             </form>
@@ -38,11 +38,11 @@
             {% endif %}
             {% for type in types %}
             <div>
-                <div class="input-group mb-2">
+                <div class="input-group mb-2 shadow">
                     <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
-                        class="btn-lg input-group-text shadow"><i class="fas fa-arrow-right"></i></button>
+                        class="btn-lg btn btn-outline-dark"><i class="fas fa-arrow-right"></i></button>
                     <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
-                        class="btn-lg form-control btn btn-success shadow" style="text-align:left"
+                        class="btn-lg form-control btn btn-outline-dark" style="text-align:left"
                         type="button">{{type.title()}}s</button>
                 </div>
             </div>

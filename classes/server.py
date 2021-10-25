@@ -27,16 +27,16 @@ class Server:
     def word_background_fixer(self, var_list):
         if var_list[1] == "noun":
 
-            color_dic = {"der": "bg-primary", "die": "bg-danger", "das": "bg-secondary"}
+            color_dic = {"der": "primary", "die": "danger", "das": "secondary"}
 
             value = color_dic.get(var_list[0], None)
 
             if value:
                 return value
             else:
-                return ""
+                return "outline-dark"
         else:
-            return ""
+            return "outline-dark"
 
     def word_text_color_fixer(self, type):
         if type == "noun":

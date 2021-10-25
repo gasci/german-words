@@ -18,7 +18,7 @@
         {% else %}
         <h5 class="mb-3">{{type|cap}}s:</h5>
         <form action="{{url_for('WordView:get_word')}}" id="shuffle-study">
-            <div class="input-group mb-2 shadow-sm">
+            <div class="input-group mb-1 shadow-sm">
                 <input type="hidden" name="shuffle_words" value="" />
                 <input type="hidden" name="shuffle_study" value="" />
                 <input type="hidden" name="type" value="" />
@@ -28,7 +28,7 @@
                     <option value="0">Learned</option>
                     <option value="2">All</option>
                 </select>
-                <button onclick="shuffleStudy()" class="btn-lg  btn btn-warning"><i
+                <button onclick="shuffleStudy()" class="btn-lg btn btn-outline-dark"><i
                         class="fas fa-random"></i>&nbsp;&nbsp;Study</button>
             </div>
         </form>
@@ -42,20 +42,19 @@
         <div>
             <div class="input-group mb-2 shadow">
                 <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word['_id'])}}`"
-                    class="input-group-text"><i class="fas fa-arrow-right"></i></button>
+                    class="input-group-text btn btn-outline-dark"><i class="fas fa-arrow-right"></i></button>
                 <button onclick="location.href=`{{url_for('WordView:get_word', word_id=word['_id'])}}`"
-                    style="text-align: left;" class="form-control btn btn-success" type="button">
+                    style="text-align: left;" class="form-control btn btn-{{([word['artikel'], word['type']])|word_background}}" type="button">
                     {% if word['type'] == 'noun' %}{{word['artikel']}}{% endif %} {{word['word']}}
                 </button>
-                {% if session['user_id'] %}
-                <button onclick="location.href=`{{url_for('WordView:update_word_redirect', update=True, word_id=word['_id'])}}`"
-                    class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button>
+                <button
+                    onclick="location.href=`{{url_for('WordView:update_word_redirect', update=True, word_id=word['_id'])}}`"
+                    class="btn btn-outline-dark"><i class="fas fa-pencil-alt"></i></button>
 
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"
                     data-bs-target="#delete-word-{{word['_id']}}">
                     <i class="fas fa-trash"></i>
                 </button>
-                {% endif %}
             </div>
         </div>
 
