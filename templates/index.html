@@ -32,13 +32,13 @@
                         class="fas fa-stream"></i>&nbsp;&nbsp;Add sentence</button>
             </form>
 
-            <button onclick='$("#reset-modal").modal("show");' class="form-control btn-lg  btn btn-outline-dark mb-2"><i class="fas fa-info"></i>&nbsp;&nbsp;Reset
+            <button onclick='$("#reset-modal").modal("show");' class="form-control btn-lg  btn btn-outline-dark mb-1"><i class="fas fa-info"></i>&nbsp;&nbsp;Reset
                 difficulties</button>
 
             {% endif %}
             {% for type in types %}
             <div>
-                <div class="input-group mb-2 shadow">
+                <div class="input-group mt-2 shadow">
                     <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
                         class="btn-lg btn btn-outline-dark"><i class="fas fa-arrow-right"></i></button>
                     <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
