@@ -1,4 +1,4 @@
-# german
+# german-words
 
 ## Introduction
 Try out my weekend project to practice German and NoSQL with Flask:
