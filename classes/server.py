@@ -27,7 +27,7 @@ class Server:
     def word_background_fixer(self, var_list):
         if var_list[1] == "noun":
 
-            color_dic = {"der": "primary", "die": "danger", "das": "secondary"}
+            color_dic = {"der": "primary", "die": "danger", "das": "success"}
 
             value = color_dic.get(var_list[0], None)
 
