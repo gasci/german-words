@@ -103,19 +103,34 @@ class Database:
         if type:
             if diff != 2:
                 ids = self.words.find(
-                    {"user_id": ObjectId(user_id), "type": type, "difficulty": diff}
+                    {
+                        "user_id": ObjectId(user_id),
+                        "type": type,
+                        "difficulty": diff,
+                        "sentence": {"$ne": ""},
+                    }
                 ).distinct("_id")
             else:
                 ids = self.words.find(
-                    {"user_id": ObjectId(user_id), "type": type}
+                    {
+                        "user_id": ObjectId(user_id),
+                        "type": type,
+                        
+                    }
                 ).distinct("_id")
         else:
             if diff != 2:
                 ids = self.words.find(
-                    {"user_id": ObjectId(user_id), "difficulty": diff}
+                    {
+                        "user_id": ObjectId(user_id),
+                        "difficulty": diff,
+                        "sentence": {"$ne": ""},
+                    }
                 ).distinct("_id")
             else:
-                ids = self.words.find({"user_id": ObjectId(user_id)}).distinct("_id")
+                ids = self.words.find(
+                    {"user_id": ObjectId(user_id)}
+                ).distinct("_id")
         return ids
 
     def update_difficulty(self, word_id, diff):
@@ -146,16 +161,29 @@ class Database:
                                 "$match": {
                                     "difficulty": {"$exists": True},
                                     "type": {"$in": type_list},
+                                    "sentence": {"$ne": ""},
                                 }
                             },
                             {"$count": "All"},
                         ],
                         "Easy": [
-                            {"$match": {"difficulty": 0, "type": {"$in": type_list}}},
+                            {
+                                "$match": {
+                                    "difficulty": 0,
+                                    "type": {"$in": type_list},
+                                    "sentence": {"$ne": ""},
+                                }
+                            },
                             {"$count": "Easy"},
                         ],
                         "Hard": [
-                            {"$match": {"difficulty": 1, "type": {"$in": type_list}}},
+                            {
+                                "$match": {
+                                    "difficulty": 1,
+                                    "type": {"$in": type_list},
+                                    "sentence": {"$ne": ""},
+                                }
+                            },
                             {"$count": "Hard"},
                         ],
                     }
@@ -182,10 +210,7 @@ class Database:
 
         cursor = self.words.find(
             {
-                "word": {
-                    "$regex": f"{search_term}.*",
-                    "$options" :'i'
-                },
+                "word": {"$regex": f"{search_term}.*", "$options": "i"},
                 "user_id": ObjectId(user_id),
             }
         )
