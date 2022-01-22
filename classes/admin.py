@@ -50,6 +50,11 @@ class WordForm(form.Form):
 
 
 class WordView(ModelView):
+    
+    column_searchable_list = ['word', 'type']
+    # column_filters = ['admin', 'confirm email']
+    page_size = 50
+
     column_list = (
         "artikel",
         "word",

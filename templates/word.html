@@ -84,7 +84,7 @@
             <div>
                 <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["artikel"]}} {{word_dict["word"]}}
                 </div>
-                {% if word_dict["sentence"] %}
+                {% if (word_dict["sentence"] and not word_dict["type"] == "phrase") %}
                 <hr>
                 <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
                 {% endif %}

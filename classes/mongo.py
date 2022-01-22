@@ -32,12 +32,20 @@ class Database:
         self.words.create_index([("word", "text")])
 
     def add_update_word(self, word_id, word_dict, update=False):
+
         user_id = session["user_id"]
+        
         # don't add the same word twice
         self.delete_word_by_name(word_dict)
+
         # words are hard by default
         if not update:
             word_dict["difficulty"] = 1
+
+        #phrases have default sentences  
+        if word_dict["type"] == "phrase":
+            word_dict["sentence"] = "phrase"
+        
         self.words.update_one(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
             {"$set": word_dict},
@@ -142,6 +150,7 @@ class Database:
         )
 
     def count_words(self, type=""):
+        user_id = session["user_id"]
         type_list = []
 
         if type:
@@ -162,6 +171,7 @@ class Database:
                                     "difficulty": {"$exists": True},
                                     "type": {"$in": type_list},
                                     "sentence": {"$ne": ""},
+                                    "user_id": ObjectId(user_id),
                                 }
                             },
                             {"$count": "All"},
@@ -172,6 +182,7 @@ class Database:
                                     "difficulty": 0,
                                     "type": {"$in": type_list},
                                     "sentence": {"$ne": ""},
+                                    "user_id": ObjectId(user_id),
                                 }
                             },
                             {"$count": "Easy"},
@@ -182,6 +193,7 @@ class Database:
                                     "difficulty": 1,
                                     "type": {"$in": type_list},
                                     "sentence": {"$ne": ""},
+                                    "user_id": ObjectId(user_id),
                                 }
                             },
                             {"$count": "Hard"},
