@@ -209,25 +209,25 @@
         // only if screen width lower than a breakpoint
         document.onkeydown = (e) => {
 
-            var code = e.keyCode || e.which;
-            // console.log(code)
+            var code = e.key;
+            console.log(code)
             switch (code) {
-                case 37: // left
+                case "ArrowLeft": // left
                     $("#prev-word").click();
                     break;
-                case 39: // right
+                case "ArrowRight": // right
                     $("#next-word").click();
                     break;
-                case 40: // down
+                case "ö": // down
                     $("#easy-radio").click();
                     break;
-                case 190: // down
+                case "ç": // down
                     $("#medium-radio").click();
                     break;
-                case 38: // top
+                case ".": // top
                     $("#hard-radio").click();
                     break;
-                case 32: // space
+                case "": // space
                     $("#word-card-open-button").click();
                     break;
 
