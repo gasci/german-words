@@ -218,20 +218,18 @@
                 case "ArrowRight": // right
                     $("#next-word").click();
                     break;
-                case "ö": // down
+                case "a": // down
                     $("#easy-radio").click();
                     break;
-                case "ç": // down
+                case "s": // down
                     $("#medium-radio").click();
                     break;
-                case ".": // top
+                case "d": // top
                     $("#hard-radio").click();
                     break;
-                case "": // space
+                default:
                     $("#word-card-open-button").click();
                     break;
-
-                default: return; // exit this handler for other keys
             }
             e.preventDefault(); // prevent the default action (scroll / move caret)
 
