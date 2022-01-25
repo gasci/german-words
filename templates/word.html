@@ -227,9 +227,9 @@
                 case "d": // top
                     $("#hard-radio").click();
                     break;
-                default:
+                case "ArrowDown" || "ArrowUp": // top
                     $("#word-card-open-button").click();
-                    break;
+                default;
             }
             e.preventDefault(); // prevent the default action (scroll / move caret)
 
