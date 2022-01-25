@@ -55,7 +55,7 @@ class Database:
     def reset_word_difficulties(self):
         user_id = session["user_id"]
         self.words.update(
-            {"user_id": ObjectId(user_id)}, {"$set": {"difficulty": 1}}, multi=True
+            {"user_id": ObjectId(user_id)}, {"$set": {"difficulty": 2}}, multi=True
         )
 
     def list_types(self):
@@ -105,11 +105,11 @@ class Database:
         )
         return cursor[0]
 
-    def get_type_word_ids(self, type, diff=2):
+    def get_type_word_ids(self, type, diff=3):
 
         user_id = session["user_id"]
         if type:
-            if diff != 2:
+            if diff != 3:
                 ids = self.words.find(
                     {
                         "user_id": ObjectId(user_id),
@@ -127,7 +127,7 @@ class Database:
                     }
                 ).distinct("_id")
         else:
-            if diff != 2:
+            if diff != 3:
                 ids = self.words.find(
                     {
                         "user_id": ObjectId(user_id),
@@ -187,10 +187,21 @@ class Database:
                             },
                             {"$count": "Easy"},
                         ],
-                        "Hard": [
+                        "Medium": [
                             {
                                 "$match": {
                                     "difficulty": 1,
+                                    "type": {"$in": type_list},
+                                    "sentence": {"$ne": ""},
+                                    "user_id": ObjectId(user_id),
+                                }
+                            },
+                            {"$count": "Medium"},
+                        ],
+                        "Hard": [
+                            {
+                                "$match": {
+                                    "difficulty": 2,
                                     "type": {"$in": type_list},
                                     "sentence": {"$ne": ""},
                                     "user_id": ObjectId(user_id),
@@ -204,6 +215,7 @@ class Database:
                     "$project": {
                         "All": {"$arrayElemAt": ["$All.All", 0]},
                         "Easy": {"$arrayElemAt": ["$Easy.Easy", 0]},
+                        "Medium": {"$arrayElemAt": ["$Medium.Medium", 0]},
                         "Hard": {"$arrayElemAt": ["$Hard.Hard", 0]},
                     }
                 },

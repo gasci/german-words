@@ -26,12 +26,15 @@
 
             <div class="input-group">
                 <div class="btn-group w-100 shadow-sm" role="group" aria-label="Basic radio toggle button group">
+                    <input onclick="updateWordDifficulty(2)" type="radio" class="btn-check form-control"
+                        name="diff_radio" id="hard-radio" value="2">
+                    <label class="btn btn-lg btn-outline-dark" for="hard-radio">Hard</label>
                     <input onclick="updateWordDifficulty(1)" type="radio" class="btn-check form-control"
-                        name="diff_radio" id="hard-radio" value="1">
-                    <label class="btn btn-lg btn-outline-dark" for="hard-radio">Learning</label>
+                        name="diff_radio" id="medium-radio" value="1">
+                    <label class="btn btn-lg btn-outline-dark" for="medium-radio">Medium</label>
                     <input onclick="updateWordDifficulty(0)" type="radio" class="btn-check form-control"
                         name="diff_radio" id="easy-radio" value="0">
-                    <label class="btn btn-lg btn-outline-dark" for="easy-radio">Learned</label>
+                    <label class="btn btn-lg btn-outline-dark" for="easy-radio">Easy</label>
                 </div>
             </div>
 
@@ -185,6 +188,9 @@
                 $("#easy-radio").attr('checked', true);
                 break;
             case 1:
+                $("#medium-radio").attr('checked', true);
+                break;
+            case 2:
                 $("#hard-radio").attr('checked', true);
                 break;
             default:
@@ -215,6 +221,9 @@
                 case 40: // down
                     $("#hard-radio").click();
                     break;
+                case 190: // down
+                    $("#medium-radio").click();
+                    break;
                 case 38: // top
                     $("#easy-radio").click();
                     break;
@@ -234,7 +243,9 @@
         $("#word-collapse").collapse("toggle");
     }
 
-    updateWordDifficulty = (diff = 1) => {
+    updateWordDifficulty = (diff = 3) => {
+
+        console.log(diff)
 
         var csrftoken = "{{ csrf_token() }}"
         var word_id = "{{word_dict['_id']}}"
@@ -268,6 +279,9 @@
                 $("#easy-radio").attr('checked', true);
                 break;
             case 1:
+                $("#medium-radio").attr('checked', true);
+                break;
+            case 2:
                 $("#hard-radio").attr('checked', true);
                 break;
             default:

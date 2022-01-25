@@ -186,7 +186,7 @@ class WordView(FlaskView):
     @login_required
     def get_word(self):
         word_id = request.args.get("word_id", False)
-        difficulty = request.args.get("difficulty", 2)
+        difficulty = request.args.get("difficulty", 3)
         type = request.args.get("type", False)
         shuffle_study = request.args.get("shuffle_study", False)
         shuffle_words = request.args.get("shuffle_words", False)
