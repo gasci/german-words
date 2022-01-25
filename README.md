@@ -10,11 +10,11 @@ Using a NoSQL database benefits when you need just one type of database object w
 * The project is a simple but powerful replica of Anki.
 * The complete tech stack: `MongoDB, Flask, Bootstrap, jQuery`.
 
-<img src="assets/img/showcase/1.png" width="50" alt="My cool logo"/>&nbsp;
-<img src="assets/img/showcase/2.png" width="50" alt="My cool logo"/>&nbsp;
-<img src="assets/img/showcase/3.png" width="50" alt="My cool logo"/>&nbsp;
-<img src="assets/img/showcase/4.png" width="50" alt="My cool logo"/>&nbsp;
-<img src="assets/img/showcase/5.png" width="50" alt="My cool logo"/>
+<img src="assets/img/showcase/1.png" width="15%" alt="My cool logo"/>&nbsp;
+<img src="assets/img/showcase/2.png" width="15%" alt="My cool logo"/>&nbsp;
+<img src="assets/img/showcase/3.png" width="15%" alt="My cool logo"/>&nbsp;
+<img src="assets/img/showcase/4.png" width="15%" alt="My cool logo"/>&nbsp;
+<img src="assets/img/showcase/5.png" width="15%" alt="My cool logo"/>
 
 ## Local development
 The following environment variables are required in a `.env` file:
