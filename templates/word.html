@@ -212,23 +212,24 @@
             var code = e.key;
             // console.log(code)
             switch (code) {
-                case "ArrowLeft": // left
+                case "ArrowLeft":
                     $("#prev-word").click();
                     break;
-                case "ArrowRight": // right
+                case "ArrowRight":
                     $("#next-word").click();
                     break;
-                case "a": // down
+                case "a":
                     $("#easy-radio").click();
                     break;
-                case "s": // down
+                case "s":
                     $("#medium-radio").click();
                     break;
-                case "d": // top
+                case "d":
                     $("#hard-radio").click();
                     break;
-                case "ArrowDown" || "ArrowUp": // top
+                case "ArrowDown" || "ArrowUp":
                     $("#word-card-open-button").click();
+                    break;
             }
             e.preventDefault(); // prevent the default action (scroll / move caret)
 
