@@ -40,7 +40,7 @@ class Database:
 
         # words are hard by default
         if not update:
-            word_dict["difficulty"] = 1
+            word_dict["difficulty"] = 2
 
         #phrases have default sentences  
         if word_dict["type"] == "phrase":
