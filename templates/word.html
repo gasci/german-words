@@ -160,7 +160,7 @@
             <div class="modal-body">
                 <div class="mb-3 form-group">
                     <label for="go-to-word" class="mb-1">Word index:</label>
-                    <input type="number" min="1" max="5" class="form-control" id="go-to-word" value="{{current_index}}">
+                    <input type="number" min="1" max="5" class="form-control" id="go-to-word" value="{{current_index}}" autofocus>
                 </div>
             </div>
             <div class="modal-footer">
@@ -234,7 +234,7 @@
                     $("#word-card-open-button").click();
                     break;
             }
-            e.preventDefault(); // prevent the default action (scroll / move caret)
+
 
         };
     }
@@ -287,10 +287,17 @@
                 $("#hard-radio").attr('checked', true);
         }
 
+        $('#go-to-word').keypress(function (e) {
+            // Enter pressed?
+            if (e.which == 10 || e.which == 13) {
+                submitIndex()
+            }
+        });
+
     });
 
     showIndexModal = () => {
-        $('#index-modal').modal("show")
+        $('#index-modal').modal("show");
     }
 
     submitIndex = () => {
