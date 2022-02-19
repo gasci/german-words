@@ -89,23 +89,23 @@
                 </div>
                 {% if (word_dict["sentence"] and not word_dict["type"] == "phrase") %}
                 <hr>
-                <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
+                <div class="word-section {{word_dict['type']|word_text_color}}">{{word_dict["sentence"]}}</div>
                 {% endif %}
                 <div id="word-collapse" class="collapse">
                     {% if word_dict["sentence_eng"] %}
                     <hr>
-                    <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["sentence_eng"]}}</div>
+                    <div class="word-section {{word_dict['type']|word_text_color}}">{{word_dict["sentence_eng"]}}</div>
                     {% endif %}
                     {% if word_dict["plural"] %}
                     <hr>
-                    <div class="lead {{word_dict['type']|word_text_color}}">die {{word_dict["plural"]}}</div>
+                    <div class="word-section {{word_dict['type']|word_text_color}}">die {{word_dict["plural"]}}</div>
                     {% endif %}
                     {% if word_dict["pronunciation"] %}
                     <hr>
-                    <div class="lead {{word_dict['type']|word_text_color}}">{{word_dict["pronunciation"]}}</div>
+                    <div class="word-section {{word_dict['type']|word_text_color}}">{{word_dict["pronunciation"]}}</div>
                     {% endif %}
                     <hr>
-                    <div class="lead {{word_dict['type']|word_text_color}} fw-bold">{{word_dict["type"]}}</div>
+                    <div class="word-section {{word_dict['type']|word_text_color}} fw-bold">{{word_dict["type"]}}</div>
                 </div>
             </div>
             <div class="input-group mt-4 shadow-sm">
