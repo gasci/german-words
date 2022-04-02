@@ -24,7 +24,7 @@
     <div class="row justify-content-md-center">
         <div class="col-sm-12 col-md-5 col-lg-5 p-3 pb-1 pt-1 bg-white">
 
-            <div class="input-group {{word_dict['show_diff_selector']|hidden}}" >
+            <div onclick="$('#next-word').click();$(this).hide()" class="input-group {{word_dict['show_diff_selector']|hidden}}" >
                 <div class="btn-group w-100 shadow-sm" role="group" aria-label="Basic radio toggle button group">
                     <input onclick="updateWordDifficulty(0)" type="radio" class="btn-check form-control"
                         name="diff_radio" id="easy-radio" value="0">
@@ -183,19 +183,19 @@
     $(() => {
         var difficulty = parseInt('{{word_dict["difficulty"]}}')
 
-        switch (difficulty) {
-            case 0:
-                $("#easy-radio").attr('checked', true);
-                break;
-            case 1:
-                $("#medium-radio").attr('checked', true);
-                break;
-            case 2:
-                $("#hard-radio").attr('checked', true);
-                break;
-            default:
-                $("#hard-radio").attr('checked', true);
-        }
+        // switch (difficulty) {
+        //     case 0:
+        //         $("#easy-radio").attr('checked', true);
+        //         break;
+        //     case 1:
+        //         $("#medium-radio").attr('checked', true);
+        //         break;
+        //     case 2:
+        //         $("#hard-radio").attr('checked', true);
+        //         break;
+        //     default:
+        //         $("#hard-radio").attr('checked', true);
+        // }
 
         if ($(window).width() < 768) {
             $("#bottom-nav").addClass("fixed-bottom")
@@ -273,19 +273,19 @@
     $(() => {
         var difficulty = parseInt('{{word_dict["difficulty"]}}')
 
-        switch (difficulty) {
-            case 0:
-                $("#easy-radio").attr('checked', true);
-                break;
-            case 1:
-                $("#medium-radio").attr('checked', true);
-                break;
-            case 2:
-                $("#hard-radio").attr('checked', true);
-                break;
-            default:
-                $("#hard-radio").attr('checked', true);
-        }
+        // switch (difficulty) {
+        //     case 0:
+        //         $("#easy-radio").attr('checked', true);
+        //         break;
+        //     case 1:
+        //         $("#medium-radio").attr('checked', true);
+        //         break;
+        //     case 2:
+        //         $("#hard-radio").attr('checked', true);
+        //         break;
+        //     default:
+        //         $("#hard-radio").attr('checked', true);
+        // }
 
         $('#go-to-word').keypress(function (e) {
             // Enter pressed?

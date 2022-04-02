@@ -109,11 +109,20 @@ class Database:
 
         word_dict = cursor[0]
 
-        # can't update a words status for 12 hours
-        if word_dict["last_update"] > datetime.datetime.now() - datetime.timedelta(
-            hours=3
-        ):
-            show_diff_selector = False
+        now = datetime.datetime.now()
+
+        try:
+            # can't update a words status for 12 hours
+            if word_dict["last_update"] > now - datetime.timedelta(
+                hours=1
+            ):
+                show_diff_selector = False
+        except KeyError:
+            pass
+            # self.words.update(
+            #     {"_id": ObjectId(word_dict["_id"]), "user_id": ObjectId(user_id)},
+            #     {"$set": {"last_update": now}},
+            # )
 
         word_dict["show_diff_selector"] = show_diff_selector
 
@@ -181,7 +190,7 @@ class Database:
                 if (now - last_update).days > day_diff:
                     diff += 1
                     self.update_difficulty(word["_id"], min(diff, 2))
-            except:
+            except KeyError:
                 self.words.update(
                     {"_id": ObjectId(word["_id"]), "user_id": ObjectId(user_id)},
                     {"$set": {"difficulty": 2, "last_update": now}},
