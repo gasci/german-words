@@ -168,6 +168,7 @@ class Database:
         self.words.update(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
             {"$set": {"difficulty": diff, "last_update": last_update}},
+            multi=True
         )
 
     def auto_update_difficulty(self):
@@ -195,6 +196,7 @@ class Database:
                 self.words.update(
                     {"_id": ObjectId(word["_id"]), "user_id": ObjectId(user_id)},
                     {"$set": {"difficulty": 2, "last_update": now}},
+                    multi=True
                 )
 
     def count_words(self, type=""):
