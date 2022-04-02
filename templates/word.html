@@ -183,19 +183,19 @@
     $(() => {
         var difficulty = parseInt('{{word_dict["difficulty"]}}')
 
-        switch (difficulty) {
-            case 0:
-                $("#easy-radio").attr('checked', true);
-                break;
-            case 1:
-                $("#medium-radio").attr('checked', true);
-                break;
-            case 2:
-                $("#hard-radio").attr('checked', true);
-                break;
-            default:
-                $("#hard-radio").attr('checked', true);
-        }
+        // switch (difficulty) {
+        //     case 0:
+        //         $("#easy-radio").attr('checked', true);
+        //         break;
+        //     case 1:
+        //         $("#medium-radio").attr('checked', true);
+        //         break;
+        //     case 2:
+        //         $("#hard-radio").attr('checked', true);
+        //         break;
+        //     default:
+        //         $("#hard-radio").attr('checked', true);
+        // }
 
         if ($(window).width() < 768) {
             $("#bottom-nav").addClass("fixed-bottom")
@@ -273,19 +273,19 @@
     $(() => {
         var difficulty = parseInt('{{word_dict["difficulty"]}}')
 
-        switch (difficulty) {
-            case 0:
-                $("#easy-radio").attr('checked', true);
-                break;
-            case 1:
-                $("#medium-radio").attr('checked', true);
-                break;
-            case 2:
-                $("#hard-radio").attr('checked', true);
-                break;
-            default:
-                $("#hard-radio").attr('checked', true);
-        }
+        // switch (difficulty) {
+        //     case 0:
+        //         $("#easy-radio").attr('checked', true);
+        //         break;
+        //     case 1:
+        //         $("#medium-radio").attr('checked', true);
+        //         break;
+        //     case 2:
+        //         $("#hard-radio").attr('checked', true);
+        //         break;
+        //     default:
+        //         $("#hard-radio").attr('checked', true);
+        // }
 
         $('#go-to-word').keypress(function (e) {
             // Enter pressed?

@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from pymongo import MongoClient
+import datetime
 
 from bson.objectid import ObjectId
 from flask import session
@@ -142,12 +143,38 @@ class Database:
         return ids
 
     def update_difficulty(self, word_id, diff):
+
+        last_update = datetime.datetime.now()
         user_id = session["user_id"]
         self.words.update(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
-            {"$set": {"difficulty": diff}},
-            multi=True,
+            {"$set": {"difficulty": diff, "last_update": last_update}}
         )
+
+    def auto_update_difficulty(self):
+        user_id = session["user_id"]
+        words = self.words.find({"user_id": ObjectId(user_id), "difficulty": {"$lt": 2}})
+        now = datetime.datetime.now()
+
+        for word in words:
+            try:
+                last_update = word["last_update"]
+                diff = int(word["difficulty"])
+
+                if diff == 0:
+                    day_diff = 10
+                elif diff == 1:
+                    day_diff = 3
+
+                if (now - last_update).days > day_diff:
+                    diff += 1
+                    self.update_difficulty(word["_id"], min(diff, 2))
+            except:
+                self.words.update(
+                    {"_id": ObjectId(word['_id']), "user_id": ObjectId(user_id)},
+                    {"$set": {"difficulty": 2, "last_update": now}}
+                )
+                
 
     def count_words(self, type=""):
         user_id = session["user_id"]

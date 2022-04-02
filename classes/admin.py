@@ -7,8 +7,7 @@ from flask_admin.menu import MenuLink
 # overwrite methods in the class
 class ModelView(ModelView):
     def is_accessible(self):
-        session_username = session.get("username", None)
-        if session_username and session_username == "gokasci":
+        if session.get("admin", False) == True:
             return True
         else:
             return False
@@ -64,6 +63,7 @@ class WordView(ModelView):
         "sentence_eng",
         "plural",
         "pronunciation",
+        "last_update",
     )
     form = WordForm
 

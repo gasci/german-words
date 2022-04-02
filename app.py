@@ -165,6 +165,7 @@ class MainView(FlaskView):
     @login_required
     def index(self):
         types = db.list_types()
+        db.auto_update_difficulty()
         return render_template("index.html", types=types)
 
     @login_required
