@@ -35,7 +35,7 @@ class Database:
     def add_update_word(self, word_id, word_dict, update=False):
 
         user_id = session["user_id"]
-        
+
         # don't add the same word twice
         self.delete_word_by_name(word_dict)
 
@@ -43,10 +43,10 @@ class Database:
         if not update:
             word_dict["difficulty"] = 2
 
-        #phrases have default sentences  
+        # phrases have default sentences
         if word_dict["type"] == "phrase":
             word_dict["sentence"] = "phrase"
-        
+
         self.words.update_one(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
             {"$set": word_dict},
@@ -104,7 +104,20 @@ class Database:
         cursor = self.words.find(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)}
         )
-        return cursor[0]
+
+        show_diff_selector = True
+
+        word_dict = cursor[0]
+
+        # can't update a words status for 12 hours
+        if word_dict["last_update"] > datetime.datetime.now() - datetime.timedelta(
+            hours=3
+        ):
+            show_diff_selector = False
+
+        word_dict["show_diff_selector"] = show_diff_selector
+
+        return word_dict
 
     def get_type_word_ids(self, type, diff=3):
 
@@ -124,7 +137,6 @@ class Database:
                     {
                         "user_id": ObjectId(user_id),
                         "type": type,
-                        
                     }
                 ).distinct("_id")
         else:
@@ -137,9 +149,7 @@ class Database:
                     }
                 ).distinct("_id")
             else:
-                ids = self.words.find(
-                    {"user_id": ObjectId(user_id)}
-                ).distinct("_id")
+                ids = self.words.find({"user_id": ObjectId(user_id)}).distinct("_id")
         return ids
 
     def update_difficulty(self, word_id, diff):
@@ -148,12 +158,14 @@ class Database:
         user_id = session["user_id"]
         self.words.update(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
-            {"$set": {"difficulty": diff, "last_update": last_update}}
+            {"$set": {"difficulty": diff, "last_update": last_update}},
         )
 
     def auto_update_difficulty(self):
         user_id = session["user_id"]
-        words = self.words.find({"user_id": ObjectId(user_id), "difficulty": {"$lt": 2}})
+        words = self.words.find(
+            {"user_id": ObjectId(user_id), "difficulty": {"$lt": 2}}
+        )
         now = datetime.datetime.now()
 
         for word in words:
@@ -171,10 +183,9 @@ class Database:
                     self.update_difficulty(word["_id"], min(diff, 2))
             except:
                 self.words.update(
-                    {"_id": ObjectId(word['_id']), "user_id": ObjectId(user_id)},
-                    {"$set": {"difficulty": 2, "last_update": now}}
+                    {"_id": ObjectId(word["_id"]), "user_id": ObjectId(user_id)},
+                    {"$set": {"difficulty": 2, "last_update": now}},
                 )
-                
 
     def count_words(self, type=""):
         user_id = session["user_id"]
