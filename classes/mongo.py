@@ -14,6 +14,10 @@ class Database:
         # load variables
         load_dotenv(env_location)
 
+        self.word_diff_update_refractory_period = 1 #hours
+        self.auto_diff_easy_to_medium_period = 10 #days
+        self.auto_diff_medium_to_hard_period = 3 #days
+
         mongo_cli_username = os.environ.get("MONGO_CLI_USERNAME")
         mongo_cli_password = os.environ.get("MONGO_CLI_PW")
         mongo_cli_database = os.environ.get("MONGO_CLI_DATABASE")
@@ -114,15 +118,11 @@ class Database:
         try:
             # can't update a words status for 12 hours
             if word_dict["last_update"] > now - datetime.timedelta(
-                hours=1
+                hours=self.word_diff_update_refractory_period
             ):
                 show_diff_selector = False
         except KeyError:
             pass
-            # self.words.update(
-            #     {"_id": ObjectId(word_dict["_id"]), "user_id": ObjectId(user_id)},
-            #     {"$set": {"last_update": now}},
-            # )
 
         word_dict["show_diff_selector"] = show_diff_selector
 
@@ -183,9 +183,10 @@ class Database:
                 diff = int(word["difficulty"])
 
                 if diff == 0:
-                    day_diff = 10
+                    day_diff = self.auto_diff_easy_to_medium_period
+
                 elif diff == 1:
-                    day_diff = 3
+                    day_diff = self.auto_diff_medium_to_hard_period
 
                 if (now - last_update).days > day_diff:
                     diff += 1
