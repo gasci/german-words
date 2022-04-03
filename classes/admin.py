@@ -63,7 +63,7 @@ class WordView(ModelView):
         "sentence_eng",
         "plural",
         "pronunciation",
-        "last_update",
+        "last_diff_update",
     )
     form = WordForm
 

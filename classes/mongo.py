@@ -33,6 +33,8 @@ class Database:
         self.users = self.data["users"]
         self.words = self.data["words"]
 
+        #self.words.update({}, {'$rename': {'last_update': 'last_diff_update'}}, multi=True)
+
         # create index
         self.words.create_index([("word", "text")])
 
@@ -117,7 +119,7 @@ class Database:
 
         try:
             # can't update a words status for 12 hours
-            if word_dict["last_update"] > now - datetime.timedelta(
+            if word_dict["last_diff_update"] > now - datetime.timedelta(
                 hours=self.word_diff_update_refractory_period
             ):
                 show_diff_selector = False
@@ -163,11 +165,11 @@ class Database:
 
     def update_difficulty(self, word_id, diff):
 
-        last_update = datetime.datetime.now()
+        last_diff_update = datetime.datetime.now()
         user_id = session["user_id"]
         self.words.update(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
-            {"$set": {"difficulty": diff, "last_update": last_update}},
+            {"$set": {"difficulty": diff, "last_diff_update": last_diff_update}},
             multi=True
         )
 
@@ -180,7 +182,7 @@ class Database:
 
         for word in words:
             try:
-                last_update = word["last_update"]
+                last_diff_update = word["last_diff_update"]
                 diff = int(word["difficulty"])
 
                 if diff == 0:
@@ -189,13 +191,13 @@ class Database:
                 elif diff == 1:
                     day_diff = self.auto_diff_medium_to_hard_period
 
-                if (now - last_update).days > day_diff:
+                if (now - last_diff_update).days > day_diff:
                     diff += 1
                     self.update_difficulty(word["_id"], min(diff, 2))
             except KeyError:
                 self.words.update(
                     {"_id": ObjectId(word["_id"]), "user_id": ObjectId(user_id)},
-                    {"$set": {"difficulty": 2, "last_update": now}},
+                    {"$set": {"difficulty": 2, "last_diff_update": now}},
                     multi=True
                 )
 
