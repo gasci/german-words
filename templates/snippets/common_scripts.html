@@ -1,0 +1,19 @@
+<script>
+    getCounts = (type="") => {
+        $.ajax({
+            url: `{{url_for('WordView:get_counts')}}`,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            data: {
+                "type": type
+            },
+            success: (data) => {
+                $('select option:contains("Hard")').text(`Hard (${data["Hard"] || 0})`);
+                $('select option:contains("Medium")').text(`Medium (${data["Medium"] || 0})`);
+                $('select option:contains("Easy")').text(`Easy (${data["Easy"] || 0})`);
+                $('select option:contains("All")').text(`All (${data["All"]})`);
+            }
+        })
+    }
+</script>

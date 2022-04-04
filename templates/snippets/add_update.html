@@ -1,0 +1,174 @@
+<div class="mt-1">
+    {% if not update %}
+    <h5>Add new word / phrase:</h5>
+    <form class="d-flex" action="{{ url_for('WordView:add_update_word') }}">
+        <label class="w-100 mt-2">
+            <div class="input-group mb-3 shadow-sm">
+                {% include 'snippets/type_selector.html' %}
+            </div>
+
+            <div class="artikel-selector-div input-group mb-3 shadow-sm">
+                {% include 'snippets/artikel_selector.html' %}
+            </div>
+
+            <div class="input-group mb-3 shadow-sm">
+                <input id="word-name" type="text" class="form-control" name="word" placeholder="Word / Phrase" required value="">
+            </div>
+
+            <div class="plural-input input-group mb-3 shadow-sm">
+                <input type="text" class="form-control" name="plural" placeholder="Plural">
+            </div>
+
+            <div class="sentence-div input-group mb-3 shadow-sm">
+                <textarea class="form-control" name="sentence" placeholder="German sentence"></textarea>
+            </div>
+
+            <div class="sentence-eng-div input-group mb-3 shadow-sm">
+                <textarea class="form-control" name="sentence_eng" placeholder="English sentence"></textarea>
+            </div>
+
+            <div class="input-group mb-3 shadow-sm">
+                <input type="text" class="form-control" name="pronunciation" placeholder="Pronunciation">
+            </div>
+
+            <div class="input-group shadow-sm">
+                <button type="button" onclick="upsertWord(false)" class="btn-lg btn btn-outline-dark w-100"><i
+                        class="fas fa-plus"></i>&nbsp;&nbsp;Add</button>
+            </div>
+            <button type="button" data-bs-dismiss="modal"
+                class="shadow-sm btn-lg btn btn-outline-dark w-100 mt-1">Close</button>
+        </label>
+    </form>
+    {% endif %}
+    {% if update %}
+    <h5>Update a word:</h5>
+    <form class="d-flex" action="{{ url_for('AuthView:update_password_auth') }}">
+        <label class="w-100 mt-2">
+            <input type="hidden" name="word_id" value="{{word_dict['_id']}}">
+            <div class="input-group mb-3 shadow-sm">
+                {% include 'snippets/type_selector.html' %}
+            </div>
+
+            <div class="artikel-selector-div input-group mb-3 shadow-sm">
+                {% include 'snippets/artikel_selector.html' %}
+            </div>
+
+            <div class="input-group mb-3 shadow-sm">
+                <input id="word-name" type="text" class="form-control" name="word" placeholder="Word / Phrase" required
+                    value="{{word_dict['word']}}">
+            </div>
+
+            <div class="plural-input input-group mb-3 shadow-sm d-none">
+                <input type="text" class="form-control" name="plural" placeholder="Plural"
+                    value="{{word_dict['plural']}}">
+            </div>
+
+            <div class="sentence-div input-group mb-3 shadow-sm">
+                <textarea class="form-control" name="sentence"
+                    placeholder="German sentence">{{word_dict['sentence']}}</textarea>
+            </div>
+
+            <div class="sentence-eng-div input-group mb-3 shadow-sm">
+                <textarea class="form-control" name="sentence_eng"
+                    placeholder="English sentence">{{word_dict['sentence_eng']}}</textarea>
+            </div>
+
+            <div class="input-group mb-3 shadow-sm">
+                <input type="text" class="form-control" name="pronunciation" placeholder="Pronunciation"
+                    value="{{word_dict['pronunciation']}}">
+            </div>
+
+            <div class="input-group shadow-sm">
+                <button type="button" onclick="upsertWord(true)" class="btn-lg btn btn-outline-dark w-100"><i
+                        class="fas fa-save"></i>&nbsp;&nbsp;Update</button>
+            </div>
+            <button type="button" onclick="window.location.href = document.referrer;"
+                class="shadow-sm btn-lg btn btn-outline-dark w-100 mt-1">Close</button>
+        </label>
+    </form>
+    {% endif %}
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+
+<script>
+    $(() => {
+        $("#type-select").on('change', () => {
+
+            switch ($("#type-select").val()) {
+                case 'noun':
+                    $(".artikel-selector-div, .plural-input").removeClass("d-none")
+                    break;
+                case 'phrase':
+                    $(".artikel-selector-div, .sentence-div, .plural-input").addClass("d-none")
+                    break;
+                default:
+                    $(".artikel-selector-div, .plural-input").addClass("d-none")
+                    $(".sentence-div").removeClass("d-none")
+            }
+
+        });
+    })
+
+    upsertWord = (update = false) => {
+
+        data = {
+            "word": $("#word-name").val(),
+            "plural": $("[name='plural']").val(),
+            "sentence": $("[name='sentence']").val(),
+            "sentence_eng": $("[name='sentence_eng']").val(),
+            "pronunciation": $("[name='pronunciation']").val(),
+            "type": $("#type-select").val(),
+            "artikel": $("[name='artikel']").val(),
+            "update": update
+        }
+
+        "{% if update %}"
+        data['word_id'] = "{{word_dict['_id']}}";
+        data['difficulty'] = "{{word_dict['difficulty']}}";
+        // console.log("{{word_dict['difficulty']}}")
+        "{% endif %}"
+
+        $.ajax({
+            url: `{{url_for('WordView:add_update_word')}}`,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            data: data,
+            success: () => {
+                if (update) {
+                    window.location.href = document.referrer;
+                } else {
+                    // addWordModal()
+                    window.location.reload(false);
+                }
+
+            }
+        })
+    }
+</script>
+
+{% if update %}
+<script>
+    $(() => {
+        $("#type-select").val("{{word_dict['type']}}");
+
+        switch ($("#type-select").val()) {
+            case 'noun':
+                $(".plural-input, .sentence-div, .artikel-selector-div").removeClass("d-none")
+                $("#artikel-select").val("{{word_dict['artikel']}}");
+                break;
+            case 'phrase':
+                $(".sentence-div, .artikel-selector-div").addClass("d-none")
+                break;
+            default:
+                $(".artikel-selector-div, .plural-input").addClass("d-none")
+                $(".sentence-div").removeClass("d-none")
+        }
+
+    })
+</script>
+{% endif %}

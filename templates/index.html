@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}German Words{% endblock %}
+
+{% block body %}
+
+
+<div class="row p-2 justify-content-md-center">
+    <div class="col-sm-12 col-md-6 col-lg-5 mb-2 p-0">
+        <div class="p-3 card shadow">
+            <h5 class="mb-3">Study:</h5>
+            {% if not types %}
+            <div class="pb-2">No words</div>
+            {% endif %}
+            <form action="{{url_for('WordView:get_word')}}" id="shuffle-study">
+                <div class="input-group mb-1 shadow-sm">
+                    <input type="hidden" name="shuffle_words" value="" />
+                    <input type="hidden" name="shuffle_study" value="" />
+                    <input type="hidden" name="difficulty" value="" />
+                    <select class="form-select" id="difficulty-select">
+                        <option selected value="2">Hard</option>
+                        <option value="1">Medium</option>
+                        <option value="0">Easy</option>
+                        <option value="3">All</option>
+                    </select>
+                    <button onclick="shuffleStudy()" class="btn-lg btn btn-outline-dark"><i
+                            class="fas fa-random"></i>&nbsp;&nbsp;Study</button>
+                </div>
+            </form>
+            {% include 'snippets/add_update_button.html' %}
+            <form class="d-flex" action="{{url_for('WordView:get_words_without_sentence')}}">
+                <button type="submit" class="form-control btn-lg  btn btn-outline-dark mb-1"><i
+                        class="fas fa-stream"></i>&nbsp;&nbsp;Add sentence</button>
+            </form>
+
+            <button onclick='$("#reset-modal").modal("show");' class="form-control btn-lg  btn btn-outline-dark mb-1"><i class="fas fa-info"></i>&nbsp;&nbsp;Reset
+                difficulties</button>
+
+            
+            {% for type, count in types|zip(type_counts) %}
+            <div>
+                <div class="input-group mt-2 shadow">
+                    <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
+                        class="btn-lg btn btn-outline-dark"><i class="fas fa-arrow-right"></i></button>
+                    <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
+                        class="btn-lg form-control btn btn-outline-dark" style="text-align:left"
+                        type="button">{{type.title()}}s ({{count.count}})</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+<!-- {{words}} -->
+
+<!-- Modal -->
+<div class="modal fade" id="reset-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Word Difficulties</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reset the word difficulties?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form class="d-flex" action="{{url_for('WordView:reset_word_difficulties')}}">
+                    <button type="submit" class="btn btn-danger">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+{% if word_dict %}
+<script>
+
+    $(() => {
+        addWordModal()
+    });
+
+</script>
+{% endif %}
+
+<script>
+
+    $(() => {
+        getCounts()
+    });
+
+    shuffleStudy = () => {
+
+        var formInfo = document.forms['shuffle-study'];
+        formInfo.shuffle_words.value = true
+        formInfo.shuffle_study.value = true
+        formInfo.difficulty.value = $("#difficulty-select").val()
+        $("#shuffle-study").submit()
+
+    }
+
+</script>
+
+{% endblock %}

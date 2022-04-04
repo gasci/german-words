@@ -1,0 +1,28 @@
+<a class="navbar-brand" href="{{url_for('MainView:index')}}">German Words</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if session["admin"] %}
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('admin.index')}}">&nbsp;<i
+                    class="fas fa-cog"></i>&nbsp;&nbsp;Admin</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('MainView:profile')}}">&nbsp;<i
+                    class="fas fa-user"></i>&nbsp;&nbsp;Update Info</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('AuthView:logout_auth')}}">&nbsp;<i
+                    class="fas fa-sign-out"></i>&nbsp;&nbsp;Logout</a>
+        </li>
+    </ul>
+    <form class="d-flex" action="{{url_for('WordView:search')}}">
+        <input class="form-control me-2 shadow-sm" name="search_term" type="search" placeholder="Word"
+            aria-label="Search" required>
+        <button class="btn btn-warning shadow-sm" type="submit">Search</button>
+    </form>
+</div>

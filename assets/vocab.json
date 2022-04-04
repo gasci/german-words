@@ -1,0 +1,42 @@
+{
+    "verb": {
+        "gehören": {
+            "word": "gehören",
+            "english": "to belong",
+            "sentence": "Unser kleiner Sohn weiß genau, wo alle seine Spielsachen hingehören.",
+            "sentence_eng": "Our little son knows well where all his toys belong.",
+            "perfect": "",
+            "conjugation": "",
+            "request_count": 0
+        },
+        "bezahlen": {
+            "word": "bezahlen",
+            "english": "to pay",
+            "sentence": "Ich muss viele Rechnungen bezahlen.",
+            "sentence_eng": "I have a lot of bills to pay.",
+            "perfect": "",
+            "conjugation": "",
+            "request_count": 0
+        },
+        "tragen": {
+            "word": "tragen",
+            "english": "to wear",
+            "sentence": "Der junge Mann trägt immer eine Mütze.",
+            "sentence_eng": "The young man always wears a cap.",
+            "perfect": "",
+            "conjugation": "",
+            "request_count": 0
+        }
+    },
+    "noun": {
+        "rechnung": {
+            "word": "die Rechnung",
+            "english": "invoice",
+            "sentence": "Der Kunde bezahlte die Rechnung sofort.",
+            "sentence_eng": "The client paid the invoice right away.",
+            "perfect": "",
+            "conjugation": "",
+            "request_count": 0
+        }
+    }
+}
