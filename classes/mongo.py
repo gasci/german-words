@@ -14,9 +14,9 @@ class Database:
         # load variables
         load_dotenv(env_location)
 
-        self.word_diff_update_refractory_period = 1 #hours
-        self.auto_diff_easy_to_medium_period = 10 #days
-        self.auto_diff_medium_to_hard_period = 3 #days
+        self.word_diff_update_refractory_period = 1  # hours
+        self.auto_diff_easy_to_medium_period = 10  # days
+        self.auto_diff_medium_to_hard_period = 3  # days
 
         mongo_cli_username = os.environ.get("MONGO_CLI_USERNAME")
         mongo_cli_password = os.environ.get("MONGO_CLI_PW")
@@ -33,7 +33,7 @@ class Database:
         self.users = self.data["users"]
         self.words = self.data["words"]
 
-        #self.words.update({}, {'$rename': {'last_update': 'last_diff_update'}}, multi=True)
+        # self.words.update({}, {'$rename': {'last_update': 'last_diff_update'}}, multi=True)
 
         # create index
         self.words.create_index([("word", "text")])
@@ -65,9 +65,32 @@ class Database:
             {"user_id": ObjectId(user_id)}, {"$set": {"difficulty": 2}}, multi=True
         )
 
+    def count_words_type(self):
+
+        user_id = session["user_id"]
+
+        cursor = self.words.aggregate(
+            [
+                {"$match": {"user_id": ObjectId(user_id), "type": {"$not": {"$size": 0}}}},
+                {"$unwind": "$type"},
+                {"$group": {"_id": {"$toLower": "$type"}, "count": {"$sum": 1}}},
+                {"$match": {"count": {"$gte": 1}}},
+                {"$sort": {"count": -1}},
+                {"$limit": 100},
+                { "$sort" : { "_id" : 1 } }
+            ]
+        )
+
+        word_type_counts = []
+        for item in cursor:
+            word_type_counts.append(item)
+
+        return word_type_counts
+
     def list_types(self):
         user_id = session["user_id"]
         types = self.words.find({"user_id": ObjectId(user_id)}).distinct("type")
+
         return types
 
     def get_current_user(self):
@@ -170,7 +193,7 @@ class Database:
         self.words.update(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
             {"$set": {"difficulty": diff, "last_diff_update": last_diff_update}},
-            multi=True
+            multi=True,
         )
 
     def auto_update_difficulty(self):
@@ -198,10 +221,10 @@ class Database:
                 self.words.update(
                     {"_id": ObjectId(word["_id"]), "user_id": ObjectId(user_id)},
                     {"$set": {"difficulty": 2, "last_diff_update": now}},
-                    multi=True
+                    multi=True,
                 )
 
-    def count_words(self, type=""):
+    def count_words_diff(self, type=""):
         user_id = session["user_id"]
         type_list = []
 
@@ -209,9 +232,6 @@ class Database:
             type_list.append(type)
         else:
             type_list = self.list_types()
-
-        # print(type)
-        # print(type_list)
 
         cursor = self.words.aggregate(
             [

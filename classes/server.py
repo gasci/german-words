@@ -18,6 +18,7 @@ class Server:
             "word_text_color"
         ] = lambda var_list: self.word_text_color_fixer(var_list)
         self.app.jinja_env.filters["str"] = lambda u: str(u)
+        self.app.jinja_env.filters['zip'] = zip
         self.app.jinja_env.filters["hidden"] = lambda u: "d-none" if not u else ""
         self.app.jinja_env.filters["len"] = lambda u: len(u)
         self.app.jinja_env.filters["cap"] = lambda u: u.capitalize()

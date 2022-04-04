@@ -37,14 +37,14 @@
                 difficulties</button>
 
             
-            {% for type in types %}
+            {% for type, count in types|zip(type_counts) %}
             <div>
                 <div class="input-group mt-2 shadow">
                     <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
                         class="btn-lg btn btn-outline-dark"><i class="fas fa-arrow-right"></i></button>
                     <button onclick="location.href=`{{url_for('WordView:list', type=type)}}`"
                         class="btn-lg form-control btn btn-outline-dark" style="text-align:left"
-                        type="button">{{type.title()}}s</button>
+                        type="button">{{type.title()}}s ({{count.count}})</button>
                 </div>
             </div>
             {% endfor %}

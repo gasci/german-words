@@ -165,8 +165,11 @@ class MainView(FlaskView):
     @login_required
     def index(self):
         types = db.list_types()
+
         db.auto_update_difficulty()
-        return render_template("index.html", types=types)
+        type_counts = db.count_words_type()
+        
+        return render_template("index.html", types=types, type_counts=type_counts)
 
     @login_required
     def profile(self):
@@ -346,7 +349,7 @@ class WordView(FlaskView):
     @login_required
     def get_counts(self):
         type = request.args.get("type", False)
-        counts = db.count_words(type)
+        counts = db.count_words_diff(type)
         return counts, 200
 
 
