@@ -206,37 +206,53 @@
         }
     });
 
-    if ($(window).width() < 768 && '{{word_dict["show_diff_selector"]}}' === 'True') {
+    if ($(window).width() < 768) {
         // only if screen width lower than a breakpoint
         document.onkeydown = (e) => {
 
             var code = e.key;
             // console.log(code)
-            switch (code) {
-                case "ArrowLeft":
-                    $("#prev-word").click();
-                    break;
-                case "ArrowRight":
-                    $("#next-word").click();
-                    break;
-                case "a":
-                    $("#easy-radio").click();
-                    break;
-                case "s":
-                    $("#medium-radio").click();
-                    break;
-                case "d":
-                    $("#hard-radio").click();
-                    break;
-                case "ArrowDown":
-                    $("#word-card-open-button").click();
-                    break;
-                case "ArrowUp":
-                    $("#word-card-open-button").click();
-                    break;
+
+            if ('{{word_dict["show_diff_selector"]}}' === 'True') {
+                switch (code) {
+                    case "ArrowLeft":
+                        $("#prev-word").click();
+                        break;
+                    case "ArrowRight":
+                        $("#next-word").click();
+                        break;
+                    case "a":
+                        $("#easy-radio").click();
+                        break;
+                    case "s":
+                        $("#medium-radio").click();
+                        break;
+                    case "d":
+                        $("#hard-radio").click();
+                        break;
+                    case "ArrowDown":
+                        $("#word-card-open-button").click();
+                        break;
+                    case "ArrowUp":
+                        $("#word-card-open-button").click();
+                        break;
+                }
+            } else {
+                switch (code) {
+                    case "ArrowLeft":
+                        $("#prev-word").click();
+                        break;
+                    case "ArrowRight":
+                        $("#next-word").click();
+                        break;
+                    case "ArrowDown":
+                        $("#word-card-open-button").click();
+                        break;
+                    case "ArrowUp":
+                        $("#word-card-open-button").click();
+                        break;
+                }
             }
-
-
         };
     }
 
