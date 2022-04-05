@@ -1,4 +1,4 @@
-from flask import request, render_template, redirect, session, url_for
+from flask import request, render_template, redirect, session, url_for, make_response, jsonify
 from flask_classful import FlaskView, route
 
 from bson.objectid import ObjectId
@@ -244,7 +244,9 @@ class WordView(FlaskView):
         difficulty = request.json["difficulty"]
 
         db.update_difficulty(word_id, int(difficulty))
-        return "success", 200
+
+        data = {'message': 'Done', 'code': 'SUCCESS'}
+        return make_response(jsonify(data), 200)
 
     @login_required
     def reset_word_difficulties(self):
