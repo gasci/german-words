@@ -5,7 +5,7 @@ from pymongo import MongoClient
 import datetime
 
 from bson.objectid import ObjectId
-from flask import session
+from flask import session, make_response, jsonify
 
 
 class Database:
@@ -41,7 +41,7 @@ class Database:
     def add_update_word(self, word_id, word_dict, update=False):
 
         user_id = session["user_id"]
-
+             
         # don't add the same word twice
         self.delete_word_by_name(word_dict)
 

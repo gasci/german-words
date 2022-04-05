@@ -267,6 +267,11 @@ class WordView(FlaskView):
         sentence_eng = request.args.get("sentence_eng")
         pronunciation = request.args.get("pronunciation")
         update = request.args.get("update", False)
+        
+        # word type white list
+        if type not in ["noun", "verb", "adjective", "adverb", "phrase", "preposition", "pronoun", "conjunction"]:
+            data = {'message': 'Incorrect type', 'code': 'BAD_REQUEST'}
+            return make_response(jsonify(data), 400)
 
         if update == "false":
             update = False
