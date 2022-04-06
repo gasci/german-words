@@ -1,42 +1,28 @@
-import os
 
-from dotenv import load_dotenv
-from pymongo import MongoClient
 import datetime
 
 from bson.objectid import ObjectId
-from flask import session, make_response, jsonify
+from flask import session #, make_response, jsonify
+from classes.connection import Connection
 
 
 class Database:
     def __init__(self, env_location):
 
-        # load variables
-        load_dotenv(env_location)
+        conn = Connection(env_location)
+
+        self.users = conn.data["users"]
+        self.words = conn.data["words"]
+
+        # create index
+        self.words.create_index([("word", "text")])
+
+        # update a col name
+        # self.words.update({}, {'$rename': {'last_update': 'last_diff_update'}}, multi=True)
 
         self.word_diff_update_refractory_period = 1  # hours
         self.auto_diff_easy_to_medium_period = 10  # days
         self.auto_diff_medium_to_hard_period = 2  # days
-
-        mongo_cli_username = os.environ.get("MONGO_CLI_USERNAME")
-        mongo_cli_password = os.environ.get("MONGO_CLI_PW")
-        mongo_cli_database = os.environ.get("MONGO_CLI_DATABASE")
-        cluster_name = os.environ.get("MONGO_CLI_CLUSTER")
-
-        self.client = MongoClient(
-            "mongodb+srv://{}:{}@{}.plop5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE".format(
-                mongo_cli_username, mongo_cli_password, cluster_name
-            )
-        )
-
-        self.data = self.client[mongo_cli_database]
-        self.users = self.data["users"]
-        self.words = self.data["words"]
-
-        # self.words.update({}, {'$rename': {'last_update': 'last_diff_update'}}, multi=True)
-
-        # create index
-        self.words.create_index([("word", "text")])
 
     def add_update_word(self, word_id, word_dict, update=False):
 
