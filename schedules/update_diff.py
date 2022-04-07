@@ -14,7 +14,7 @@ class AutoUpdate:
         self.words = conn.data["words"]
         
         self.auto_diff_easy_to_medium_period = 10  # days
-        self.auto_diff_medium_to_hard_period = 2  # days
+        self.auto_diff_medium_to_hard_period = 1  # days
 
     def update_difficulty(self, word_id, diff):
 
