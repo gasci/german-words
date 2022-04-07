@@ -166,7 +166,6 @@ class MainView(FlaskView):
     def index(self):
         types = db.list_types()
 
-        db.auto_update_difficulty()
         type_counts = db.count_words_type()
         
         return render_template("index.html", types=types, type_counts=type_counts)

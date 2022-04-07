@@ -17,12 +17,10 @@ class Database:
         # create index
         self.words.create_index([("word", "text")])
 
+        self.word_diff_update_refractory_period = 1  # hours
+
         # update a col name
         # self.words.update({}, {'$rename': {'last_update': 'last_diff_update'}}, multi=True)
-
-        self.word_diff_update_refractory_period = 1  # hours
-        self.auto_diff_easy_to_medium_period = 10  # days
-        self.auto_diff_medium_to_hard_period = 2  # days
 
     def add_update_word(self, word_id, word_dict, update=False):
 
@@ -181,34 +179,6 @@ class Database:
             {"$set": {"difficulty": diff, "last_diff_update": last_diff_update}},
             multi=True,
         )
-
-    def auto_update_difficulty(self):
-        user_id = session["user_id"]
-        words = self.words.find(
-            {"user_id": ObjectId(user_id), "difficulty": {"$lt": 2}}
-        )
-        now = datetime.datetime.now()
-
-        for word in words:
-            try:
-                last_diff_update = word["last_diff_update"]
-                diff = int(word["difficulty"])
-
-                if diff == 0:
-                    day_diff = self.auto_diff_easy_to_medium_period
-
-                elif diff == 1:
-                    day_diff = self.auto_diff_medium_to_hard_period
-
-                if (now - last_diff_update).days > day_diff:
-                    diff += 1
-                    self.update_difficulty(word["_id"], min(diff, 2))
-            except KeyError:
-                self.words.update(
-                    {"_id": ObjectId(word["_id"]), "user_id": ObjectId(user_id)},
-                    {"$set": {"difficulty": 2, "last_diff_update": now}},
-                    multi=True,
-                )
 
     def count_words_diff(self, type=""):
         user_id = session["user_id"]
