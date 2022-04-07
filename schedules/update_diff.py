@@ -19,7 +19,7 @@ class AutoUpdate:
     def update_difficulty(self, word_id, diff):
 
             last_diff_update = datetime.datetime.now()
-            self.words.update(
+            self.words.update_many(
                 {"_id": ObjectId(word_id)},
                 {"$set": {"difficulty": diff, "last_diff_update": last_diff_update}},
                 multi=True,
@@ -47,7 +47,7 @@ class AutoUpdate:
 
                     self.update_difficulty(word["_id"], min(diff, 2))
             except KeyError:
-                self.words.update(
+                self.words.update_many(
                     {"_id": ObjectId(word["_id"])},
                     {"$set": {"difficulty": 2, "last_diff_update": now}},
                     multi=True,

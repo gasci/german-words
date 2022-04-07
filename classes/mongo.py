@@ -45,7 +45,7 @@ class Database:
 
     def reset_word_difficulties(self):
         user_id = session["user_id"]
-        self.words.update(
+        self.words.update_many(
             {"user_id": ObjectId(user_id)}, {"$set": {"difficulty": 2}}, multi=True
         )
 
@@ -174,7 +174,7 @@ class Database:
 
         last_diff_update = datetime.datetime.now()
         user_id = session["user_id"]
-        self.words.update(
+        self.words.update_many(
             {"_id": ObjectId(word_id), "user_id": ObjectId(user_id)},
             {"$set": {"difficulty": diff, "last_diff_update": last_diff_update}},
             multi=True,
