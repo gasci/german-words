@@ -193,6 +193,7 @@ class WordView(FlaskView):
         type = request.args.get("type", False)
         shuffle_study = request.args.get("shuffle_study", False)
         shuffle_words = request.args.get("shuffle_words", False)
+        word_count = request.args.get("word_count", False)
 
         if shuffle_study:
             shuffle_study = True
@@ -207,8 +208,13 @@ class WordView(FlaskView):
 
         if shuffle_words and shuffle_study:
             # print("shuffled")
-            ids = [str(x) for x in db.get_type_word_ids(type, difficulty)]
-            shuffle(ids)
+            ids_temp = [str(x) for x in db.get_type_word_ids(type, difficulty)]
+            shuffle(ids_temp)
+
+            if word_count:
+                ids = ids_temp[:int(word_count)]
+            else:
+                ids = ids_temp
             # print(ids)
             session["word_ids"] = ids
             if ids:
