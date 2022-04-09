@@ -36,6 +36,7 @@ class WordForm(form.Form):
     sentence = fields.StringField("sentence")
     sentence_eng = fields.StringField("sentence_eng")
     difficulty = fields.IntegerField("difficulty")
+    verb_tenses = fields.IntegerField("verb_tenses")
 
     def is_accessible(self):
         if session.get("admin", False) == True:
@@ -64,6 +65,7 @@ class WordView(ModelView):
         "plural",
         "pronunciation",
         "last_diff_update",
+        "verb_tenses",
     )
     form = WordForm
 

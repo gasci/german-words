@@ -96,10 +96,6 @@
                     <hr>
                     <div class="word-section {{word_dict['type']|word_text_color}}">{{word_dict["sentence_eng"]}}</div>
                     {% endif %}
-                    {% if word_dict["verb_tenses"] %}
-                    <hr>
-                    <div class="word-section {{word_dict['type']|word_text_color}}">{{word_dict["verb_tenses"]}}</div>
-                    {% endif %}
                     {% if word_dict["plural"] %}
                     <hr>
                     <div class="word-section {{word_dict['type']|word_text_color}}">die {{word_dict["plural"]}}</div>
@@ -110,6 +106,10 @@
                     {% endif %}
                     <hr>
                     <div class="word-section {{word_dict['type']|word_text_color}} fw-bold">{{word_dict["type"]}}</div>
+                    {% if word_dict["verb_tenses"] %}
+                    <hr>
+                    <div class="word-section {{word_dict['type']|word_text_color}}">{{word_dict["verb_tenses"]}}</div>
+                    {% endif %}
                 </div>
             </div>
             <div class="input-group mt-4 shadow-sm">
