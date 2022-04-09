@@ -7,27 +7,32 @@
                 {% include 'snippets/type_selector.html' %}
             </div>
 
-            <div class="artikel-selector-div input-group mb-3 shadow-sm">
+            <div class="artikel-selector-div input-group mb-3 shadow-sm d-none">
                 {% include 'snippets/artikel_selector.html' %}
             </div>
 
-            <div class="input-group mb-3 shadow-sm">
-                <input id="word-name" type="text" class="form-control" name="word" placeholder="Word / Phrase" required value="">
+            <div class="name-div input-group mb-3 shadow-sm d-none">
+                <input id="word-name" type="text" class="form-control" name="word" placeholder="Word / Phrase" required
+                    value="">
             </div>
 
-            <div class="plural-input input-group mb-3 shadow-sm">
+            <div class="plural-div input-group mb-3 shadow-sm d-none">
                 <input type="text" class="form-control" name="plural" placeholder="Plural">
             </div>
 
-            <div class="sentence-div input-group mb-3 shadow-sm">
+            <div class="sentence-ger-div input-group mb-3 shadow-sm d-none">
                 <textarea class="form-control" name="sentence" placeholder="German sentence"></textarea>
             </div>
 
-            <div class="sentence-eng-div input-group mb-3 shadow-sm">
+            <div class="sentence-eng-div input-group mb-3 shadow-sm d-none">
                 <textarea class="form-control" name="sentence_eng" placeholder="English sentence"></textarea>
             </div>
 
-            <div class="input-group mb-3 shadow-sm">
+            <div class="verb-tenses-div input-group mb-3 shadow-sm d-none">
+                <textarea class="form-control" name="verb_tenses" placeholder="Verb tenses"></textarea>
+            </div>
+
+            <div class="pronunciation-div input-group mb-3 shadow-sm d-none">
                 <input type="text" class="form-control" name="pronunciation" placeholder="Pronunciation">
             </div>
 
@@ -49,31 +54,36 @@
                 {% include 'snippets/type_selector.html' %}
             </div>
 
-            <div class="artikel-selector-div input-group mb-3 shadow-sm">
+            <div class="artikel-selector-div input-group mb-3 shadow-sm d-none">
                 {% include 'snippets/artikel_selector.html' %}
             </div>
 
-            <div class="input-group mb-3 shadow-sm">
+            <div class="name-div input-group mb-3 shadow-sm d-none">
                 <input id="word-name" type="text" class="form-control" name="word" placeholder="Word / Phrase" required
                     value="{{word_dict['word']}}">
             </div>
 
-            <div class="plural-input input-group mb-3 shadow-sm d-none">
+            <div class="plural-div input-group mb-3 shadow-sm d-none">
                 <input type="text" class="form-control" name="plural" placeholder="Plural"
                     value="{{word_dict['plural']}}">
             </div>
 
-            <div class="sentence-div input-group mb-3 shadow-sm">
+            <div class="sentence-ger-div input-group mb-3 shadow-sm d-none">
                 <textarea class="form-control" name="sentence"
                     placeholder="German sentence">{{word_dict['sentence']}}</textarea>
             </div>
 
-            <div class="sentence-eng-div input-group mb-3 shadow-sm">
+            <div class="sentence-eng-div input-group mb-3 shadow-sm d-none">
                 <textarea class="form-control" name="sentence_eng"
                     placeholder="English sentence">{{word_dict['sentence_eng']}}</textarea>
             </div>
 
-            <div class="input-group mb-3 shadow-sm">
+            <div class="verb-tenses-div input-group mb-3 shadow-sm d-none">
+                <textarea class="form-control" name="sentence"
+                    placeholder="Verb tenses">{{word_dict['verb_tenses']}}</textarea>
+            </div>
+
+            <div class="pronunciation-div input-group mb-3 shadow-sm d-none">
                 <input type="text" class="form-control" name="pronunciation" placeholder="Pronunciation"
                     value="{{word_dict['pronunciation']}}">
             </div>
@@ -95,23 +105,44 @@
 
 
 <script>
-    $(() => {
-        $("#type-select").on('change', () => {
 
-            switch ($("#type-select").val()) {
-                case 'noun':
-                    $(".artikel-selector-div, .plural-input").removeClass("d-none")
-                    break;
-                case 'phrase':
-                    $(".artikel-selector-div, .sentence-div, .plural-input").addClass("d-none")
-                    break;
-                default:
-                    $(".artikel-selector-div, .plural-input").addClass("d-none")
-                    $(".sentence-div").removeClass("d-none")
-            }
+    defaultHide = () => {
+        $(".name-div, .artikel-selector-div, .plural-div, .verb-tenses-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").addClass("d-none")
+    }
 
-        });
-    })
+    typeSelectCase = () => {
+
+        defaultHide();
+
+        switch ($("#type-select").val()) {
+            case 'noun':
+                $(".name-div, .artikel-selector-div, .plural-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                break;
+            case 'verb':
+                $(".name-div, .verb-tenses-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                break;
+            case 'adjective':
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                break;
+            case 'adverb':
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                break;
+            case 'phrase':
+                $(".name-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                break;
+            case 'preposition':
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                break;
+            case 'pronoun':
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                break;
+            case 'conjunction':
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                break;
+            default:
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+        }
+    }
 
     upsertWord = (update = false) => {
 
@@ -121,6 +152,7 @@
             "sentence": $("[name='sentence']").val(),
             "sentence_eng": $("[name='sentence_eng']").val(),
             "pronunciation": $("[name='pronunciation']").val(),
+            "verb_tenses": $("[name='verb_tenses']").val(),
             "type": $("#type-select").val(),
             "artikel": $("[name='artikel']").val(),
             "update": update
@@ -154,21 +186,27 @@
 {% if update %}
 <script>
     $(() => {
+
         $("#type-select").val("{{word_dict['type']}}");
 
-        switch ($("#type-select").val()) {
-            case 'noun':
-                $(".plural-input, .sentence-div, .artikel-selector-div").removeClass("d-none")
-                $("#artikel-select").val("{{word_dict['artikel']}}");
-                break;
-            case 'phrase':
-                $(".sentence-div, .artikel-selector-div").addClass("d-none")
-                break;
-            default:
-                $(".artikel-selector-div, .plural-input").addClass("d-none")
-                $(".sentence-div").removeClass("d-none")
-        }
+        typeSelectCase();
 
     })
 </script>
+
+{% else %}
+
+<script>
+    $(() => {
+
+        $(".name-div, .artikel-selector-div, .plural-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+
+        $("#type-select").on('change', () => {
+
+            typeSelectCase();
+
+        });
+    })
+</script>
+
 {% endif %}

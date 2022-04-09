@@ -271,6 +271,7 @@ class WordView(FlaskView):
         difficulty = request.args.get("difficulty", 1)
         sentence_eng = request.args.get("sentence_eng")
         pronunciation = request.args.get("pronunciation")
+        verb_tenses = request.args.get("verb_tenses")
         update = request.args.get("update", False)
         
         # word type white list
@@ -288,6 +289,7 @@ class WordView(FlaskView):
             "sentence": sentence,
             "sentence_eng": sentence_eng,
             "pronunciation": pronunciation,
+            "verb_tenses": verb_tenses,
             "difficulty": int(difficulty),
         }
         
