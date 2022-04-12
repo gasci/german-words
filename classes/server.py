@@ -6,7 +6,7 @@ import os
 class Server:
     def __init__(self):
         self.app = Flask(__name__, template_folder="../templates", static_folder="../static")
-        self.app.secret_key = os.environ.get("FLASK_SECRET_KEY")
+        self.app.secret_key = os.getenv("FLASK_SECRET_KEY")
         self.is_authenticated = False
 
         # app config

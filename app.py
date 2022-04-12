@@ -19,7 +19,7 @@ app = server.app
 db = Database(".env")
 admin = FlaskAdmin(app, db)
 
-can_register = os.environ.get("CAN_REGISTER")
+can_register = os.getenv("CAN_REGISTER")
 
 
 @app.route("/", methods=["POST", "GET"])
