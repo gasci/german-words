@@ -28,13 +28,16 @@
                 <div class="btn-group w-100 shadow-sm" role="group" aria-label="Basic radio toggle button group">
                     <input onclick="updateWordDifficulty(0)" type="radio" class="btn-check form-control"
                         name="diff_radio" id="easy-radio" value="0">
-                    <label class="btn btn-lg btn-outline-dark" for="easy-radio">Easy</label>
+                    <label class="btn btn-lg btn-outline-dark" for="easy-radio"><b>Easy</b><br>
+                        <span class="reminder-days">{{periods["easy_to_med_per"]}} days</span></label>
                     <input onclick="updateWordDifficulty(1)" type="radio" class="btn-check form-control"
                         name="diff_radio" id="medium-radio" value="1">
-                    <label class="btn btn-lg btn-outline-dark" for="medium-radio">Medium</label>
+                    <label class="btn btn-lg btn-outline-dark" for="medium-radio"><b>Medium</b><br>
+                        <span class="reminder-days">{{periods["med_to_hard_per"]}} days</span></label>
                     <input onclick="updateWordDifficulty(2)" type="radio" class="btn-check form-control"
                         name="diff_radio" id="hard-radio" value="2">
-                    <label class="btn btn-lg btn-outline-dark" for="hard-radio">Hard</label>
+                    <label class="btn btn-lg btn-outline-dark" for="hard-radio"><b>Hard</b><br>
+                        <span class="reminder-days">{{periods["hard_per"]}} days</span></label>
                 </div>
             </div>
 

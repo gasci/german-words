@@ -4,10 +4,13 @@ import datetime
 from bson.objectid import ObjectId
 from flask import session #, make_response, jsonify
 from classes.connection import Connection
+from classes.static_vars import StaticVars
 
 
-class Database:
+class Database(StaticVars):
     def __init__(self, env_location):
+
+        super().__init__()
 
         conn = Connection(env_location)
 
@@ -16,8 +19,6 @@ class Database:
 
         # create index
         self.words.create_index([("word", "text")])
-
-        self.word_diff_update_refractory_period = 1  # hours
 
         # update a col name
         # self.words.update({}, {'$rename': {'last_update': 'last_diff_update'}}, multi=True)
@@ -127,7 +128,7 @@ class Database:
         try:
             # can't update a words status for 12 hours
             if word_dict["last_diff_update"] > now - datetime.timedelta(
-                hours=self.word_diff_update_refractory_period
+                hours=self.WORD_DIFF_UPDATE_REFRACTORY_PERIOD
             ):
                 show_diff_selector = False
         except KeyError:

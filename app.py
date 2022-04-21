@@ -1,4 +1,12 @@
-from flask import request, render_template, redirect, session, url_for, make_response, jsonify
+from flask import (
+    request,
+    render_template,
+    redirect,
+    session,
+    url_for,
+    make_response,
+    jsonify,
+)
 from flask_classful import FlaskView, route
 
 from bson.objectid import ObjectId
@@ -6,6 +14,7 @@ from bson.objectid import ObjectId
 from classes.mongo import Database
 from classes.server import Server
 from classes.admin import FlaskAdmin
+from classes.static_vars import StaticVars
 
 import json
 import bcrypt
@@ -167,7 +176,7 @@ class MainView(FlaskView):
         types = db.list_types()
 
         type_counts = db.count_words_type()
-        
+
         return render_template("index.html", types=types, type_counts=type_counts)
 
     @login_required
@@ -176,9 +185,12 @@ class MainView(FlaskView):
         return render_template("profile.html", user_dict=user_dict)
 
 
-class WordView(FlaskView):
+class WordView(FlaskView, StaticVars):
 
     default_methods = ["GET", "POST"]
+
+    def __init__(self):
+        super().__init__()
 
     @login_required
     def list(self):
@@ -188,6 +200,7 @@ class WordView(FlaskView):
 
     @login_required
     def get_word(self):
+
         word_id = request.args.get("word_id", False)
         difficulty = request.args.get("difficulty", 3)
         type = request.args.get("type", False)
@@ -212,7 +225,7 @@ class WordView(FlaskView):
             shuffle(ids_temp)
 
             if word_count:
-                ids = ids_temp[:int(word_count)]
+                ids = ids_temp[: int(word_count)]
             else:
                 ids = ids_temp
             # print(ids)
@@ -239,7 +252,15 @@ class WordView(FlaskView):
             return render_template("index.html", types=types, message="No words")
 
         return render_template(
-            "word.html", word_dict=word_dict, ids=ids, shuffle_study=shuffle_study
+            "word.html",
+            word_dict=word_dict,
+            ids=ids,
+            shuffle_study=shuffle_study,
+            periods={
+                "easy_to_med_per": self.AUTO_DIFF_EASY_TO_MEDIUM_PERIOD,
+                "med_to_hard_per": self.AUTO_DIFF_MEDIUM_TO_HARD_PERIOD,
+                "hard_per": self.HARD_PERIOD,
+            },
         )
 
     @login_required
@@ -250,14 +271,16 @@ class WordView(FlaskView):
 
         db.update_difficulty(word_id, int(difficulty))
 
-        data = {'message': 'Done', 'code': 'SUCCESS'}
+        data = {"message": "Done", "code": "SUCCESS"}
         return make_response(jsonify(data), 200)
 
     @login_required
     def reset_word_difficulties(self):
         db.reset_word_difficulties()
         types = db.list_types()
-        return render_template("index.html", types=types, message="Word difficulties resetted")
+        return render_template(
+            "index.html", types=types, message="Word difficulties resetted"
+        )
 
     @login_required
     def add_update_word(self):
@@ -273,10 +296,19 @@ class WordView(FlaskView):
         pronunciation = request.args.get("pronunciation")
         verb_tenses = request.args.get("verb_tenses")
         update = request.args.get("update", False)
-        
+
         # word type white list
-        if type not in ["noun", "verb", "adjective", "adverb", "phrase", "preposition", "pronoun", "conjunction"]:
-            data = {'message': 'Incorrect type', 'code': 'BAD_REQUEST'}
+        if type not in [
+            "noun",
+            "verb",
+            "adjective",
+            "adverb",
+            "phrase",
+            "preposition",
+            "pronoun",
+            "conjunction",
+        ]:
+            data = {"message": "Incorrect type", "code": "BAD_REQUEST"}
             return make_response(jsonify(data), 400)
 
         if update == "false":
@@ -292,7 +324,7 @@ class WordView(FlaskView):
             "verb_tenses": verb_tenses,
             "difficulty": int(difficulty),
         }
-        
+
         if type == "noun":
             new_word["artikel"] = artikel
             new_word["plural"] = plural
