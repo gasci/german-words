@@ -35,6 +35,7 @@ class WordForm(form.Form):
     type = fields.StringField("type")
     sentence = fields.StringField("sentence")
     sentence_eng = fields.StringField("sentence_eng")
+    sentence_user = fields.StringField("sentence_user")
     difficulty = fields.IntegerField("difficulty")
     verb_tenses = fields.IntegerField("verb_tenses")
 
@@ -62,6 +63,7 @@ class WordView(ModelView):
         "type",
         "sentence",
         "sentence_eng",
+        "sentence_user",
         "plural",
         "pronunciation",
         "last_diff_update",

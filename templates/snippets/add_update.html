@@ -28,6 +28,10 @@
                 <textarea class="form-control" name="sentence_eng" placeholder="English sentence"></textarea>
             </div>
 
+            <div class="sentence-user-div input-group mb-3 shadow-sm d-none">
+                <textarea class="form-control" name="sentence_user" placeholder="Your sentence"></textarea>
+            </div>
+
             <div class="verb-tenses-div input-group mb-3 shadow-sm d-none">
                 <textarea class="form-control" name="verb_tenses" placeholder="Verb tenses"></textarea>
             </div>
@@ -78,6 +82,11 @@
                     placeholder="English sentence">{{word_dict['sentence_eng']}}</textarea>
             </div>
 
+            <div class="sentence-user-div input-group mb-3 shadow-sm d-none">
+                <textarea class="form-control" name="sentence_user"
+                    placeholder="Your sentence">{{word_dict['sentence_user']}}</textarea>
+            </div>
+
             <div class="verb-tenses-div input-group mb-3 shadow-sm d-none">
                 <textarea class="form-control" name="verb_tenses"
                     placeholder="Verb tenses">{{word_dict['verb_tenses']}}</textarea>
@@ -116,31 +125,31 @@
 
         switch ($("#type-select").val()) {
             case 'noun':
-                $(".name-div, .artikel-selector-div, .plural-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                $(".name-div, .artikel-selector-div, .plural-div, .sentence-ger-div, .sentence-user-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
                 break;
             case 'verb':
-                $(".name-div, .verb-tenses-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                $(".name-div, .verb-tenses-div, .sentence-ger-div, .sentence-eng-div, .sentence-user-div, .pronunciation-div").removeClass("d-none")
                 break;
             case 'adjective':
-                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .sentence-user-div, .pronunciation-div").removeClass("d-none")
                 break;
             case 'adverb':
-                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .sentence-user-div, .pronunciation-div").removeClass("d-none")
                 break;
             case 'phrase':
-                $(".name-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                $(".name-div, .sentence-eng-div, .sentence-user-div, .pronunciation-div").removeClass("d-none")
                 break;
             case 'preposition':
-                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .sentence-user-div, .pronunciation-div").removeClass("d-none")
                 break;
             case 'pronoun':
-                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .sentence-user-div, .pronunciation-div").removeClass("d-none")
                 break;
             case 'conjunction':
-                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .sentence-user-div, .pronunciation-div").removeClass("d-none")
                 break;
             default:
-                $(".name-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+                $(".name-div, .sentence-ger-div, .sentence-eng-div, .sentence-user-div, .pronunciation-div").removeClass("d-none")
         }
     }
 
@@ -151,6 +160,7 @@
             "plural": $("[name='plural']").val(),
             "sentence": $("[name='sentence']").val(),
             "sentence_eng": $("[name='sentence_eng']").val(),
+            "sentence_user": $("[name='sentence_user']").val(),
             "pronunciation": $("[name='pronunciation']").val(),
             "verb_tenses": $("[name='verb_tenses']").val(),
             "type": $("#type-select").val(),
@@ -161,7 +171,6 @@
         "{% if update %}"
         data['word_id'] = "{{word_dict['_id']}}";
         data['difficulty'] = "{{word_dict['difficulty']}}";
-        // console.log("{{word_dict['difficulty']}}")
         "{% endif %}"
 
         $.ajax({
@@ -199,7 +208,7 @@
 <script>
     $(() => {
 
-        $(".name-div, .artikel-selector-div, .plural-div, .sentence-ger-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
+        $(".name-div, .artikel-selector-div, .plural-div, .sentence-ger-div, .sentence-user-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
 
         $("#type-select").on('change', () => {
 

@@ -293,6 +293,7 @@ class WordView(FlaskView, StaticVars):
         sentence = request.args.get("sentence")
         difficulty = request.args.get("difficulty", 1)
         sentence_eng = request.args.get("sentence_eng")
+        sentence_user = request.args.get("sentence_user")
         pronunciation = request.args.get("pronunciation")
         verb_tenses = request.args.get("verb_tenses")
         update = request.args.get("update", False)
@@ -320,6 +321,7 @@ class WordView(FlaskView, StaticVars):
             "user_id": ObjectId(user_id),
             "sentence": sentence,
             "sentence_eng": sentence_eng,
+            "sentence_user": sentence_user,
             "pronunciation": pronunciation,
             "verb_tenses": verb_tenses,
             "difficulty": int(difficulty),
