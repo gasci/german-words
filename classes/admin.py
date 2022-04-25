@@ -19,10 +19,10 @@ class UserForm(form.Form):
     username = fields.StringField("username")
     email = fields.StringField("email")
     admin = fields.BooleanField("admin")
-    
+
 
 class UserView(ModelView):
-    column_list = ("first_name", "last_name", "username", "admin", "email")
+    column_list = ("_id", "first_name", "last_name", "username", "admin", "email")
     form = UserForm
 
 
@@ -47,16 +47,19 @@ class WordForm(form.Form):
 
     def inaccessible_callback(self, name, **kwargs):
         # redirect to login page if user doesn't have access
-        return redirect(url_for('AuthView:login_auth'), message="You don't have permission")
+        return redirect(
+            url_for("AuthView:login_auth"), message="You don't have permission"
+        )
 
 
 class WordView(ModelView):
-    
-    column_searchable_list = ['word', 'type']
+
+    column_searchable_list = ["word", "type"]
     # column_filters = ['admin', 'confirm email']
     page_size = 50
 
     column_list = (
+        "user_id",
         "artikel",
         "word",
         "difficulty",
@@ -69,6 +72,12 @@ class WordView(ModelView):
         "last_diff_update",
         "verb_tenses",
     )
+
+    column_sortable_list = [
+        "user_id",
+        "artikel",
+    ]
+
     form = WordForm
 
 
