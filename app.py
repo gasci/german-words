@@ -308,6 +308,7 @@ class WordView(FlaskView, StaticVars):
             "preposition",
             "pronoun",
             "conjunction",
+            "interjection",
         ]:
             data = {"message": "Incorrect type", "code": "BAD_REQUEST"}
             return make_response(jsonify(data), 400)
