@@ -31,6 +31,9 @@ FLASK_SECRET_KEY
 
 # allow registration
 CAN_REGISTER=True
+
+# development or production
+DEVELOPMENT_MODE=development
 ```
 
 ```bash

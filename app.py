@@ -8,6 +8,8 @@ from flask import (
     jsonify,
 )
 from flask_classful import FlaskView, route
+from flask_swagger import swagger
+
 
 from bson.objectid import ObjectId
 
@@ -15,26 +17,39 @@ from classes.mongo import Database
 from classes.server import Server
 from classes.admin import FlaskAdmin
 from classes.static_vars import StaticVars
+from classes.swagger import APIDocUI, APIDoc
 
 import json
 import bcrypt
 import os
 from random import shuffle
 
-# import asyncio
+from dotenv import load_dotenv
+
+# load variables
+load_dotenv()
 
 server = Server()
 app = server.app
 db = Database(".env")
 admin = FlaskAdmin(app, db)
 
-can_register = os.getenv("CAN_REGISTER")
-
+CAN_REGISTER = os.getenv("CAN_REGISTER")
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE")
 
 @app.route("/", methods=["POST", "GET"])
 def starting_url():
     return redirect(url_for("AuthView:login_auth"))
 
+
+@app.route("/spec")
+def spec():
+    swag = swagger(app)
+    api_doc = APIDoc(swag)
+    return jsonify(api_doc.get_swag())    
+
+api_doc_ui = APIDocUI()
+app.register_blueprint(api_doc_ui.get_blueprint())
 
 def login_required(func):
     def wrapper(*args, **kwargs):
@@ -51,8 +66,57 @@ class AuthView(FlaskView):
 
     @route("/register", methods=["GET", "POST"])
     def register_auth(self):
+        """
+        Create a new user
+        ---
+        tags:
+          - users
+        definitions:
+          - schema:
+              id: Group
+              properties:
+                name:
+                 type: string
+                 description: the group's name
+        parameters:
+          - in: body
+            name: body
+            schema:
+              id: User
+              required:
+                - email
+                - name
+              properties:
+                email:
+                  type: string
+                  description: email for user
+                name:
+                  type: string
+                  description: name for user
+                address:
+                  description: address for user
+                  schema:
+                    id: Address
+                    properties:
+                      street:
+                        type: string
+                      state:
+                        type: string
+                      country:
+                        type: string
+                      postalcode:
+                        type: string
+                groups:
+                  type: array
+                  description: list of groups
+                  items:
+                    $ref: "#/definitions/Group"
+        responses:
+          201:
+            description: User created
+        """
 
-        if not can_register == "True":
+        if not CAN_REGISTER == "True":
             message = "Currently, registration is not allowed. Contact: drgoktugasci@gmail.com"
             return render_template("auth/login.html", message=message)
 
