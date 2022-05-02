@@ -199,9 +199,14 @@
 <script>
     $(() => {
 
-        $("#type-select").val("{{word_dict['type']}}");
-
         typeSelectCase();
+
+        $("#type-select").on('change', () => {
+            typeSelectCase();
+
+        });
+
+        $("#type-select").val("{{word_dict['type']}}");
 
     })
 </script>
@@ -214,9 +219,7 @@
         $(".name-div, .artikel-selector-div, .plural-div, .sentence-ger-div, .sentence-user-div, .sentence-eng-div, .pronunciation-div").removeClass("d-none")
 
         $("#type-select").on('change', () => {
-
             typeSelectCase();
-
         });
     })
 </script>
