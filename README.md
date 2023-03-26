@@ -5,7 +5,7 @@ Try out my free German learning project.
 Using a NoSQL database benefits when you need just one type of database object with varying fields. For example, a noun has "artikel" and "plural" fields whereas a verb has a "perfect" field. With NoSQL, instead of defining two models ("noun", "verb"), it is enough to define just one "word" model since the entries can accept different types of fields just like a JSON object.
 
 * The project is a simple but powerful replica of Anki.
-* The complete tech stack: `MongoDB, Flask, Bootstrap, jQuery, Heroku`.
+* The complete tech stack: `MongoDB, Flask, Bootstrap, jQuery`.
 
 ## Screenshots
 <img src="static/img/showcase/1.png" width="18%" alt="My cool logo"/>&nbsp;
